@@ -1,0 +1,746 @@
+openapi: 3.0.1
+info:
+  title: Codacy API
+  description: >-
+    Codacy API v3 for managing organizations, repositories, issues, pull
+    requests, coverage, security, and quality settings on the Codacy automated
+    code quality and security platform. All authenticated endpoints use an
+    account API token passed in the api-token header.
+  termsOfService: https://www.codacy.com/terms
+  contact:
+    name: Codacy Support
+    url: https://www.codacy.com
+    email: support@codacy.com
+  version: '3.0'
+servers:
+  - url: https://api.codacy.com/api/v3
+    description: Codacy Cloud API v3
+security:
+  - api-token: []
+tags:
+  - name: Account
+    description: Authenticated user account and API token operations.
+  - name: Organizations
+    description: Git provider organizations the account belongs to.
+  - name: Repositories
+    description: Repository management and analysis state.
+  - name: Issues
+    description: Static analysis issues for a repository.
+  - name: Pull Requests
+    description: Pull request analysis, files, issues, and AI review.
+  - name: Coverage
+    description: Code coverage for pull requests and files.
+  - name: Quality Settings
+    description: Quality and security gating settings for commits and pull requests.
+  - name: Security
+    description: Repository SSH key administration.
+paths:
+  /user:
+    get:
+      operationId: getUser
+      tags:
+        - Account
+      summary: Get the authenticated user.
+      responses:
+        '200':
+          description: The authenticated user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /user/organizations/{provider}:
+    get:
+      operationId: listOrganizations
+      tags:
+        - Organizations
+      summary: List the account's organizations for a Git provider.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: A paginated list of organizations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationListResponse'
+  /user/organizations/{provider}/{remoteOrganizationName}:
+    get:
+      operationId: getUserOrganization
+      tags:
+        - Organizations
+      summary: Get a single organization the account belongs to.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+      responses:
+        '200':
+          description: The organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories:
+    get:
+      operationId: listOrganizationRepositoriesWithAnalysis
+      tags:
+        - Repositories
+      summary: List an organization's repositories with their analysis state.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: A paginated list of repositories with analysis.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryWithAnalysisListResponse'
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}:
+    get:
+      operationId: getRepositoryWithAnalysis
+      tags:
+        - Repositories
+      summary: Get a repository with its analysis state.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+      responses:
+        '200':
+          description: The repository with analysis.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryWithAnalysisResponse'
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/follow:
+    post:
+      operationId: followAddedRepository
+      tags:
+        - Repositories
+      summary: Follow a repository already added to Codacy.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+      responses:
+        '204':
+          description: The repository is now followed.
+    delete:
+      operationId: unfollowRepository
+      tags:
+        - Repositories
+      summary: Unfollow a repository.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+      responses:
+        '204':
+          description: The repository is no longer followed.
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/search:
+    post:
+      operationId: searchRepositoryIssues
+      tags:
+        - Issues
+      summary: Search a repository's issues.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRepositoryIssuesBody'
+      responses:
+        '200':
+          description: A paginated list of matching issues.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchRepositoryIssuesListResponse'
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/{issueId}:
+    get:
+      operationId: getIssue
+      tags:
+        - Issues
+      summary: Get a single issue.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The issue.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitIssueResponse'
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests:
+    get:
+      operationId: listRepositoryPullRequests
+      tags:
+        - Pull Requests
+      summary: List a repository's pull requests with analysis.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: A paginated list of pull requests with analysis.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestWithAnalysisListResponse'
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}:
+    get:
+      operationId: getRepositoryPullRequest
+      tags:
+        - Pull Requests
+      summary: Get a single pull request with analysis.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+        - $ref: '#/components/parameters/pullRequestNumber'
+      responses:
+        '200':
+          description: The pull request with analysis.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestWithAnalysisResponse'
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/issues:
+    get:
+      operationId: listPullRequestIssues
+      tags:
+        - Pull Requests
+      summary: List the issues introduced or fixed in a pull request.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+        - $ref: '#/components/parameters/pullRequestNumber'
+      responses:
+        '200':
+          description: A list of pull request issues.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestIssuesListResponse'
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/ai-reviewer/trigger:
+    post:
+      operationId: triggerPullRequestAiReview
+      tags:
+        - Pull Requests
+      summary: Trigger the AI Reviewer on a pull request.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+        - $ref: '#/components/parameters/pullRequestNumber'
+      responses:
+        '204':
+          description: The AI review was triggered.
+  /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}:
+    get:
+      operationId: getRepositoryPullRequestCoverage
+      tags:
+        - Coverage
+      summary: Get coverage for a pull request.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+        - $ref: '#/components/parameters/pullRequestNumber'
+      responses:
+        '200':
+          description: Pull request coverage.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestWithCoverageResponse'
+  /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/files:
+    get:
+      operationId: getRepositoryPullRequestFilesCoverage
+      tags:
+        - Coverage
+      summary: Get per-file coverage for a pull request.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+        - $ref: '#/components/parameters/pullRequestNumber'
+      responses:
+        '200':
+          description: Per-file pull request coverage.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestFilesCoverageResponse'
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/pull-requests:
+    get:
+      operationId: getPullRequestQualitySettings
+      tags:
+        - Quality Settings
+      summary: Get the pull request quality gate settings.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+      responses:
+        '200':
+          description: The pull request quality settings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+    put:
+      operationId: updatePullRequestQualitySettings
+      tags:
+        - Quality Settings
+      summary: Update the pull request quality gate settings.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QualitySettings'
+      responses:
+        '200':
+          description: The updated pull request quality settings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/stored-ssh-key:
+    get:
+      operationId: getRepositoryPublicSshKey
+      tags:
+        - Security
+      summary: Get the repository's stored public SSH key.
+      parameters:
+        - $ref: '#/components/parameters/provider'
+        - $ref: '#/components/parameters/remoteOrganizationName'
+        - $ref: '#/components/parameters/repositoryName'
+      responses:
+        '200':
+          description: The stored public SSH key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshKeyResponse'
+components:
+  securitySchemes:
+    api-token:
+      type: apiKey
+      in: header
+      name: api-token
+      description: Account API token created in your Codacy account settings.
+  parameters:
+    provider:
+      name: provider
+      in: path
+      required: true
+      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
+      schema:
+        type: string
+        enum: [gh, ghe, gl, gle, bb, bbe]
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
+    pullRequestNumber:
+      name: pullRequestNumber
+      in: path
+      required: true
+      description: Pull request number on the Git provider.
+      schema:
+        type: integer
+        format: int64
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return (max 1000).
+      schema:
+        type: integer
+        default: 100
+        maximum: 1000
+  schemas:
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        mainEmail:
+          type: string
+        created:
+          type: string
+          format: date-time
+    UserResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/User'
+    Organization:
+      type: object
+      properties:
+        identifier:
+          type: string
+        name:
+          type: string
+        provider:
+          type: string
+        remoteIdentifier:
+          type: string
+        joinMode:
+          type: string
+    OrganizationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Organization'
+    OrganizationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    Repository:
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          format: int64
+        provider:
+          type: string
+        owner:
+          type: string
+        name:
+          type: string
+        fullPath:
+          type: string
+        visibility:
+          type: string
+        defaultBranch:
+          type: object
+          properties:
+            name:
+              type: string
+            branchId:
+              type: integer
+              format: int64
+    RepositoryWithAnalysis:
+      type: object
+      properties:
+        repository:
+          $ref: '#/components/schemas/Repository'
+        grade:
+          type: integer
+        gradeLetter:
+          type: string
+        issuesPercentage:
+          type: number
+        coverage:
+          type: object
+          properties:
+            filesUncovered:
+              type: integer
+            filesWithLowCoverage:
+              type: integer
+            coveragePercentage:
+              type: number
+        lastAnalysedCommit:
+          type: string
+    RepositoryWithAnalysisResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RepositoryWithAnalysis'
+    RepositoryWithAnalysisListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepositoryWithAnalysis'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    SearchRepositoryIssuesBody:
+      type: object
+      properties:
+        branchName:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+        levels:
+          type: array
+          items:
+            type: string
+            enum: [Info, Warning, Error]
+        languages:
+          type: array
+          items:
+            type: string
+        patterns:
+          type: array
+          items:
+            type: string
+        authorEmails:
+          type: array
+          items:
+            type: string
+    CommitIssue:
+      type: object
+      properties:
+        issueId:
+          type: string
+        commitIssue:
+          type: object
+          properties:
+            patternInfo:
+              type: object
+              properties:
+                id:
+                  type: string
+                category:
+                  type: string
+                subCategory:
+                  type: string
+                level:
+                  type: string
+                severityLevel:
+                  type: string
+                title:
+                  type: string
+            filePath:
+              type: string
+            lineNumber:
+              type: integer
+            message:
+              type: string
+            language:
+              type: string
+            toolInfo:
+              type: object
+              properties:
+                name:
+                  type: string
+                uuid:
+                  type: string
+    CommitIssueResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CommitIssue'
+    SearchRepositoryIssuesListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PullRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        number:
+          type: integer
+        updated:
+          type: string
+          format: date-time
+        status:
+          type: string
+        title:
+          type: string
+        owner:
+          $ref: '#/components/schemas/GitUser'
+        originBranch:
+          type: string
+        targetBranch:
+          type: string
+    GitUser:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        avatarUrl:
+          type: string
+    PullRequestWithAnalysis:
+      type: object
+      properties:
+        pullRequest:
+          $ref: '#/components/schemas/PullRequest'
+        isUpToStandards:
+          type: boolean
+        isAnalysing:
+          type: boolean
+        newIssues:
+          type: integer
+        fixedIssues:
+          type: integer
+        deltaCoverageWithDecimals:
+          type: number
+        coverage:
+          type: object
+          properties:
+            deltaCoverage:
+              type: number
+            diffCoverage:
+              type: number
+    PullRequestWithAnalysisResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PullRequestWithAnalysis'
+    PullRequestWithAnalysisListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PullRequestWithAnalysis'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PullRequestIssuesListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PullRequestWithCoverageResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            coverage:
+              type: object
+              properties:
+                deltaCoverage:
+                  type: number
+                diffCoverage:
+                  type: number
+                coverageStatus:
+                  type: string
+    FileCoverage:
+      type: object
+      properties:
+        filePath:
+          type: string
+        totalCoverage:
+          type: number
+        diffCoverage:
+          type: number
+        coverageStatus:
+          type: string
+    PullRequestFilesCoverageResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileCoverage'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    QualitySettings:
+      type: object
+      properties:
+        issueThreshold:
+          type: object
+          properties:
+            threshold:
+              type: integer
+            minimumSeverity:
+              type: string
+              enum: [Info, Warning, Error]
+        securityIssueThreshold:
+          type: integer
+        coverageThresholdWithDecimals:
+          type: number
+        diffCoverageThreshold:
+          type: integer
+        duplicationThreshold:
+          type: integer
+        complexityThreshold:
+          type: integer
+    QualitySettingsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/QualitySettings'
+    SshKeyResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            publicKey:
+              type: string

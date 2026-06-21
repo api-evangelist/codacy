@@ -1,0 +1,49 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Codacy
+providerId: codacy
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: true
+tags:
+- Code Quality
+- Static Analysis
+- Security
+- Code Coverage
+- DevOps
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  The Codacy Cloud API v3 enforces a documented rate limit of 2500 requests
+  per 5 minutes per source IP address. List endpoints use cursor-based
+  pagination with a configurable limit capped at 1000 items per page.
+  Self-hosted Codacy instances may apply different limits.
+notes: >-
+  Rate limit and pagination cap are as documented for Codacy Cloud; confirm
+  against the using-the-codacy-api documentation during reconciliation.
+sources:
+- https://docs.codacy.com/codacy-api/using-the-codacy-api/
+- https://api.codacy.com/api/api-docs
+responseCodes:
+  throttled: 429
+limits:
+- name: Requests Per 5 Minutes
+  scope: source-ip
+  metric: requests
+  limit: 2500 per 5 minutes
+  notes: Enforced per source IP address on Codacy Cloud.
+- name: Pagination Limit
+  scope: request
+  metric: items
+  limit: 1000 maximum per page
+  notes: Cursor-based pagination; the limit query parameter is capped at 1000.
+policies:
+- name: Cursor Pagination
+  description: List endpoints return a cursor in the pagination object to fetch subsequent pages.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter on HTTP 429 responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

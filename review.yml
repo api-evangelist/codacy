@@ -1,0 +1,65 @@
+aid: codacy
+name: Codacy
+review:
+  question: Does Codacy expose a documented public WebSocket API?
+  answer: false
+  date: '2026-06-21'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was created. Codacy's documented public API surface
+    is REST-only over HTTPS under https://api.codacy.com/api/v3. No
+    Server-Sent Events (SSE) stream and no WebSocket surface are documented
+    in the Codacy API v3 reference, so there is no event-driven transport to
+    model with AsyncAPI.
+findings:
+  summary: |
+    Codacy does not publish a documented public WebSocket API. The Codacy
+    API v3 is a synchronous REST (HTTPS) API under
+    https://api.codacy.com/api/v3, authenticated with an account API token
+    in the api-token header. Asynchronous outcomes (analysis completion,
+    coverage results, quality gate status) are surfaced through the Git
+    provider's commit/pull-request status checks and through polling the
+    REST analysis and coverage endpoints, not through a WebSocket or SSE
+    stream. No realtime, bidirectional, or streaming WebSocket (ws:// or
+    wss://) endpoint is documented.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.codacy.com/api/v3
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in Codacy's API v3 reference or product documentation as of the review date.
+  endpointsConfirmedRest:
+    - GET  https://api.codacy.com/api/v3/user
+    - GET  https://api.codacy.com/api/v3/user/organizations/{provider}
+    - GET  https://api.codacy.com/api/v3/user/organizations/{provider}/{remoteOrganizationName}
+    - GET  https://api.codacy.com/api/v3/analysis/organizations/{provider}/{remoteOrganizationName}/repositories
+    - GET  https://api.codacy.com/api/v3/analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}
+    - POST https://api.codacy.com/api/v3/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/follow
+    - POST https://api.codacy.com/api/v3/analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/search
+    - GET  https://api.codacy.com/api/v3/analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests
+    - GET  https://api.codacy.com/api/v3/analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}
+    - POST https://api.codacy.com/api/v3/analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/ai-reviewer/trigger
+    - GET  https://api.codacy.com/api/v3/coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}
+    - GET  https://api.codacy.com/api/v3/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/pull-requests
+    - GET  https://api.codacy.com/api/v3/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/stored-ssh-key
+sources:
+  - url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+    type: Documentation
+    note: Describes the REST API v3 base URL, api-token header auth, cursor pagination, and the 2500/5min rate limit; no WebSocket mentioned.
+  - url: https://api.codacy.com/api/api-docs
+    type: APIReference
+    note: Swagger/OpenAPI reference; all documented endpoints are HTTPS REST.
+  - url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+    type: Documentation
+    note: Issue retrieval uses POST to the REST issues/search endpoint; no streaming transport.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket or SSE protocol surface exists in Codacy's documented public
+    API, so no AsyncAPI document was authored. The apis.yml catalogs the
+    REST API v3 surface only.

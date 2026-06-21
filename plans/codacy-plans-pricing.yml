@@ -1,0 +1,122 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Codacy
+providerId: codacy
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: true
+tags:
+- Code Quality
+- Static Analysis
+- Security
+- Code Coverage
+- DevOps
+- Plans
+description: >-
+  Codacy uses a per-developer (per-seat) subscription model billed monthly or
+  annually. A seat is required for each unique Git contributor who commits to a
+  private repository added to Codacy. The Developer plan is free; the Team plan
+  is paid per developer with a 30-developer cap; and Business is custom-priced
+  for larger organizations with advanced security and governance needs.
+  Open-source projects are free.
+notes: >-
+  Per-seat rates as published on the Codacy pricing page; verify current rates
+  and seat definitions on the pricing page during reconciliation.
+sources:
+- https://www.codacy.com/pricing
+- https://docs.codacy.com
+plans:
+- id: codacy-developer
+  name: Developer
+  type: free
+  description: >-
+    Free-forever plan with IDE plugins (VSCode, JetBrains, Cursor),
+    scan-as-you-type, SAST/SCA/secrets and code quality scans, and AI
+    auto-fix handoff for JS/TS, Python, and Java.
+  entries:
+  - label: Developer Seat
+    name: developer
+    type: flat
+    metric: seat
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0
+    userMultiplied: true
+  elements:
+  - name: IDE Plugins
+  - name: Scan-as-you-type
+  - name: SAST / SCA / Secrets Scans
+  - name: Code Quality Scans
+  - name: AI Auto-fix Handoff
+- id: codacy-team
+  name: Team
+  type: subscription
+  description: >-
+    Everything in Developer plus cloud-hosted quality and security scans,
+    GitHub/GitLab/Bitbucket integration, AI Reviewer and merge gates,
+    coverage reports, team trend analytics, and Jira/Slack integration.
+    Up to 30 developers and up to 100 private repos. Free for open source.
+  entries:
+  - label: Team Seat (annual)
+    name: team_annual
+    type: flat
+    metric: seat
+    limit: 30
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $18 per developer / month billed annually
+    userMultiplied: true
+  - label: Team Seat (monthly)
+    name: team_monthly
+    type: flat
+    metric: seat
+    limit: 30
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $21 per developer / month billed monthly
+    userMultiplied: true
+  elements:
+  - name: Cloud Quality and Security Scans
+  - name: Git Provider Integration
+  - name: AI Reviewer and Merge Gates
+  - name: Coverage Reports
+  - name: Team Trend Analytics
+  - name: Jira and Slack Integration
+- id: codacy-business
+  name: Business
+  type: enterprise
+  description: >-
+    Everything in Team plus unlimited private projects, priority scan queue,
+    daily CVE re-scans, AI Inventory and AI Risk Hub, license scanning, DAST,
+    container image scanning, custom rules, SSO/SAML with audit logs, and a
+    dedicated customer success manager. For organizations with 30+
+    contributors or 100+ private projects.
+  entries:
+  - label: Business Agreement
+    name: business
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Unlimited Private Projects
+  - name: Priority Scan Queue
+  - name: Daily CVE Re-scans
+  - name: AI Inventory and AI Risk Hub
+  - name: License Scanning
+  - name: DAST
+  - name: Container Image Scanning
+  - name: SSO/SAML with Audit Logs
+  - name: Dedicated Customer Success Manager
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

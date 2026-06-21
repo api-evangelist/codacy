@@ -1,0 +1,89 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Codacy
+providerId: codacy
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: true
+tags:
+- Code Quality
+- Static Analysis
+- Security
+- Code Coverage
+- DevOps
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Codacy spend. Codacy bills on a per-developer (per-seat)
+  subscription model rather than per-API-call. Cost is driven by the number of
+  unique Git contributors committing to private repositories added to Codacy,
+  the chosen plan (Developer free, Team, or Business), and the monthly vs.
+  annual billing term. Open-source projects are free.
+notes: >-
+  Per-seat rates are subject to change; verify against the Codacy pricing page
+  during reconciliation. The Codacy API itself is included with a subscription
+  and is not separately metered beyond rate limits.
+sources:
+- https://www.codacy.com/pricing
+- https://docs.codacy.com
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Codacy
+serviceCategory: Developer Tools
+billingModel:
+  pricingCategory: Subscription-Based
+  billingFrequency: Monthly or Annual
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Codacy
+  ServiceCategory: Developer Tools
+  ProviderName: Codacy
+  PublisherName: Codacy
+  InvoiceIssuerName: Codacy
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Subscription-Based
+meters:
+- name: developer_seats
+  description: Unique Git contributors committing to private repositories, billed per seat per plan.
+  unit: seats
+  aggregation: max
+  dimensions:
+  - organization
+  - plan
+- name: private_repositories
+  description: Private repositories added to Codacy; capped at 100 on the Team plan, unlimited on Business.
+  unit: repositories
+  aggregation: max
+  dimensions:
+  - organization
+- name: api_requests
+  description: API v3 requests; not separately billed but subject to the 2500 per 5 minutes per-IP rate limit.
+  unit: requests
+  aggregation: sum
+  dimensions:
+  - organization
+  - source_ip
+principles:
+- name: Visibility
+  description: Track active committer seats per organization and reconcile against the Codacy subscription.
+- name: Allocation
+  description: Map Codacy seats and private repositories to internal teams and cost centers.
+- name: Optimization
+  description: Keep open-source repos on the free tier; right-size the plan to active committer count; consolidate inactive contributors.
+- name: Accountability
+  description: Assign plan ownership; review seat counts and plan tier against budget on each renewal.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

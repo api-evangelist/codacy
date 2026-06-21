@@ -1,0 +1,181 @@
+{
+  "info": {
+    "name": "Codacy API",
+    "description": "Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings. Authenticate with an account API token in the api-token header.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "api-token" },
+      { "key": "value", "value": "{{apiToken}}" },
+      { "key": "in", "value": "header" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.codacy.com/api/v3" },
+    { "key": "apiToken", "value": "" },
+    { "key": "provider", "value": "gh" },
+    { "key": "remoteOrganizationName", "value": "" },
+    { "key": "repositoryName", "value": "" },
+    { "key": "pullRequestNumber", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Account",
+      "item": [
+        {
+          "name": "Get the authenticated user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/user", "host": ["{{baseUrl}}"], "path": ["user"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Organizations",
+      "item": [
+        {
+          "name": "List organizations for a provider",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/user/organizations/{{provider}}", "host": ["{{baseUrl}}"], "path": ["user", "organizations", "{{provider}}"] }
+          }
+        },
+        {
+          "name": "Get a single organization",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/user/organizations/{{provider}}/{{remoteOrganizationName}}", "host": ["{{baseUrl}}"], "path": ["user", "organizations", "{{provider}}", "{{remoteOrganizationName}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Repositories",
+      "item": [
+        {
+          "name": "List organization repositories with analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/analysis/organizations/{{provider}}/{{remoteOrganizationName}}/repositories", "host": ["{{baseUrl}}"], "path": ["analysis", "organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories"] }
+          }
+        },
+        {
+          "name": "Get a repository with analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/analysis/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}", "host": ["{{baseUrl}}"], "path": ["analysis", "organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}"] }
+          }
+        },
+        {
+          "name": "Follow a repository",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/follow", "host": ["{{baseUrl}}"], "path": ["organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "follow"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Issues",
+      "item": [
+        {
+          "name": "Search repository issues",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"levels\": [\"Error\", \"Warning\"],\n  \"categories\": [\"Security\"]\n}", "options": { "raw": { "language": "json" } } },
+            "url": { "raw": "{{baseUrl}}/analysis/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/issues/search", "host": ["{{baseUrl}}"], "path": ["analysis", "organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "issues", "search"] }
+          }
+        },
+        {
+          "name": "Get a single issue",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/analysis/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/issues/:issueId", "host": ["{{baseUrl}}"], "path": ["analysis", "organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "issues", ":issueId"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pull Requests",
+      "item": [
+        {
+          "name": "List repository pull requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/analysis/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/pull-requests", "host": ["{{baseUrl}}"], "path": ["analysis", "organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "pull-requests"] }
+          }
+        },
+        {
+          "name": "Get a pull request with analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/analysis/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/pull-requests/{{pullRequestNumber}}", "host": ["{{baseUrl}}"], "path": ["analysis", "organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "pull-requests", "{{pullRequestNumber}}"] }
+          }
+        },
+        {
+          "name": "Trigger AI Reviewer on a pull request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/analysis/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/pull-requests/{{pullRequestNumber}}/ai-reviewer/trigger", "host": ["{{baseUrl}}"], "path": ["analysis", "organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "pull-requests", "{{pullRequestNumber}}", "ai-reviewer", "trigger"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Coverage",
+      "item": [
+        {
+          "name": "Get pull request coverage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/coverage/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/pull-requests/{{pullRequestNumber}}", "host": ["{{baseUrl}}"], "path": ["coverage", "organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "pull-requests", "{{pullRequestNumber}}"] }
+          }
+        },
+        {
+          "name": "Get per-file pull request coverage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/coverage/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/pull-requests/{{pullRequestNumber}}/files", "host": ["{{baseUrl}}"], "path": ["coverage", "organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "pull-requests", "{{pullRequestNumber}}", "files"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Security",
+      "item": [
+        {
+          "name": "Get pull request quality settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/settings/quality/pull-requests", "host": ["{{baseUrl}}"], "path": ["organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "settings", "quality", "pull-requests"] }
+          }
+        },
+        {
+          "name": "Get repository public SSH key",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/organizations/{{provider}}/{{remoteOrganizationName}}/repositories/{{repositoryName}}/settings/stored-ssh-key", "host": ["{{baseUrl}}"], "path": ["organizations", "{{provider}}", "{{remoteOrganizationName}}", "repositories", "{{repositoryName}}", "settings", "stored-ssh-key"] }
+          }
+        }
+      ]
+    }
+  ]
+}

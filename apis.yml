@@ -1,0 +1,148 @@
+aid: codacy
+url: https://raw.githubusercontent.com/api-evangelist/codacy/refs/heads/main/apis.yml
+name: Codacy
+kind: company
+description: Codacy is an automated code quality and security platform that analyzes
+  commits and pull requests across 49+ languages, surfacing issues, coverage, and
+  security findings. The Codacy API v3 lets teams manage organizations, repositories,
+  issues, pull requests, coverage, security, and quality settings programmatically.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Code Quality
+- Static Analysis
+- Security
+- Code Coverage
+- DevOps
+created: '2026-06-21'
+modified: '2026-06-21'
+specificationVersion: '0.19'
+apis:
+- aid: codacy:organizations
+  name: Codacy Organizations API
+  tags:
+  - Organizations
+  - Accounts
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  baseURL: https://api.codacy.com/api/v3
+  properties:
+  - url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+    type: Documentation
+  - url: https://api.codacy.com/api/api-docs
+    type: APIReference
+  - url: openapi/codacy-openapi.yml
+    type: OpenAPI
+  description: List and inspect the Git provider organizations a Codacy account belongs
+    to, manage join requests, and retrieve organization-level analysis context across
+    GitHub, GitLab, and Bitbucket.
+- aid: codacy:repositories
+  name: Codacy Repositories API
+  tags:
+  - Repositories
+  - Analysis
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+  baseURL: https://api.codacy.com/api/v3
+  properties:
+  - url: https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+    type: Documentation
+  - url: https://api.codacy.com/api/api-docs
+    type: APIReference
+  - url: openapi/codacy-openapi.yml
+    type: OpenAPI
+  description: Add, follow, unfollow, and synchronize repositories with their Git
+    provider, and retrieve per-repository analysis state including the first-analysis
+    progress overview.
+- aid: codacy:issues
+  name: Codacy Issues API
+  tags:
+  - Issues
+  - Static Analysis
+  - Quality
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+  baseURL: https://api.codacy.com/api/v3
+  properties:
+  - url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+    type: Documentation
+  - url: https://api.codacy.com/api/api-docs
+    type: APIReference
+  - url: openapi/codacy-openapi.yml
+    type: OpenAPI
+  description: Search repository issues by category and severity, view an issues overview,
+    update issue state, ignore false positives, and bulk-ignore issues surfaced by
+    static analysis.
+- aid: codacy:pull-requests
+  name: Codacy Pull Requests API
+  tags:
+  - Pull Requests
+  - Code Review
+  - AI Reviewer
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  baseURL: https://api.codacy.com/api/v3
+  properties:
+  - url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+    type: Documentation
+  - url: https://api.codacy.com/api/api-docs
+    type: APIReference
+  - url: openapi/codacy-openapi.yml
+    type: OpenAPI
+  description: List and inspect pull requests with their analysis results, files,
+    issues, and commits, trigger the AI Reviewer, and bypass pull-request analysis
+    gates across an organization.
+- aid: codacy:coverage
+  name: Codacy Coverage API
+  tags:
+  - Code Coverage
+  - Pull Requests
+  - Reports
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.codacy.com/coverage-reporter/
+  baseURL: https://api.codacy.com/api/v3
+  properties:
+  - url: https://docs.codacy.com/coverage-reporter/
+    type: Documentation
+  - url: https://api.codacy.com/api/api-docs
+    type: APIReference
+  - url: openapi/codacy-openapi.yml
+    type: OpenAPI
+  description: Retrieve code coverage for pull requests and individual files, inspect
+    coverage report status, and trigger coverage reanalysis for a repository pull
+    request.
+- aid: codacy:security
+  name: Codacy Security API
+  tags:
+  - Security
+  - SAST
+  - Quality Settings
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.codacy.com/organizations/security-monitor/
+  baseURL: https://api.codacy.com/api/v3
+  properties:
+  - url: https://docs.codacy.com/organizations/security-monitor/
+    type: Documentation
+  - url: https://api.codacy.com/api/api-docs
+    type: APIReference
+  - url: openapi/codacy-openapi.yml
+    type: OpenAPI
+  description: Manage repository quality and security gating settings for commits and
+    pull requests, and administer repository SSH keys used for secure source access.
+common:
+- type: GitHubOrganization
+  url: https://github.com/codacy
+- type: LinkedIn
+  url: https://www.linkedin.com/company/codacy
+- type: Website
+  url: https://www.codacy.com
+- type: Documentation
+  url: https://docs.codacy.com
+- type: Plans
+  url: plans/codacy-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/codacy-rate-limits.yml
+- type: FinOps
+  url: finops/codacy-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
