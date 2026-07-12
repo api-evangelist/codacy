@@ -129,6 +129,10 @@ apis:
   description: Manage repository quality and security gating settings for commits and
     pull requests, and administer repository SSH keys used for secure source access.
 common:
+- type: DomainSecurity
+  url: security/codacy-domain-security.yml
+- type: Authentication
+  url: authentication/codacy-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/codacy
 - type: LinkedIn
@@ -143,6 +147,8 @@ common:
   url: rate-limits/codacy-rate-limits.yml
 - type: FinOps
   url: finops/codacy-finops.yml
+- type: Blog
+  url: https://blog.codacy.com/rss.xml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

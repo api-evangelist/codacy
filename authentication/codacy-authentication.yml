@@ -1,0 +1,16 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/codacy-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: api-token
+  type: apiKey
+  in: header
+  parameter: api-token
+  description: Account API token created in your Codacy account settings.
+  sources:
+  - openapi/codacy-openapi.yml
