@@ -1,0 +1,13 @@
+{
+  "repo": "codacy",
+  "feeds": [
+    {
+      "source": "https://www.codacy.com",
+      "feed_url": "https://blog.codacy.com/rss.xml",
+      "title": "Codacy | Blog - Automate your code quality",
+      "saved": 3
+    }
+  ],
+  "fetched": "2026-07-11T11:43:46Z",
+  "post_count": 13
+}
