@@ -129,6 +129,8 @@ apis:
   description: Manage repository quality and security gating settings for commits and
     pull requests, and administer repository SSH keys used for secure source access.
 common:
+- type: AgenticAccess
+  url: agentic-access/codacy-agentic-access.yml
 - type: DomainSecurity
   url: security/codacy-domain-security.yml
 - type: Authentication
