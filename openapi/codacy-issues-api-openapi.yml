@@ -1,0 +1,209 @@
+openapi: 3.0.1
+info:
+  title: Codacy Account Issues API
+  description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
+  termsOfService: https://www.codacy.com/terms
+  contact:
+    name: Codacy Support
+    url: https://www.codacy.com
+    email: support@codacy.com
+  version: '3.0'
+servers:
+- url: https://api.codacy.com/api/v3
+  description: Codacy Cloud API v3
+security:
+- api-token: []
+tags:
+- name: Issues
+  description: Static analysis issues for a repository.
+paths:
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/search:
+    post:
+      operationId: searchRepositoryIssues
+      tags:
+      - Issues
+      summary: Search a repository's issues.
+      parameters:
+      - $ref: '#/components/parameters/provider'
+      - $ref: '#/components/parameters/remoteOrganizationName'
+      - $ref: '#/components/parameters/repositoryName'
+      - $ref: '#/components/parameters/cursor'
+      - $ref: '#/components/parameters/limit'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRepositoryIssuesBody'
+      responses:
+        '200':
+          description: A paginated list of matching issues.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchRepositoryIssuesListResponse'
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/{issueId}:
+    get:
+      operationId: getIssue
+      tags:
+      - Issues
+      summary: Get a single issue.
+      parameters:
+      - $ref: '#/components/parameters/provider'
+      - $ref: '#/components/parameters/remoteOrganizationName'
+      - $ref: '#/components/parameters/repositoryName'
+      - name: issueId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The issue.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitIssueResponse'
+components:
+  schemas:
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    SearchRepositoryIssuesBody:
+      type: object
+      properties:
+        branchName:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+        levels:
+          type: array
+          items:
+            type: string
+            enum:
+            - Info
+            - Warning
+            - Error
+        languages:
+          type: array
+          items:
+            type: string
+        patterns:
+          type: array
+          items:
+            type: string
+        authorEmails:
+          type: array
+          items:
+            type: string
+    CommitIssue:
+      type: object
+      properties:
+        issueId:
+          type: string
+        commitIssue:
+          type: object
+          properties:
+            patternInfo:
+              type: object
+              properties:
+                id:
+                  type: string
+                category:
+                  type: string
+                subCategory:
+                  type: string
+                level:
+                  type: string
+                severityLevel:
+                  type: string
+                title:
+                  type: string
+            filePath:
+              type: string
+            lineNumber:
+              type: integer
+            message:
+              type: string
+            language:
+              type: string
+            toolInfo:
+              type: object
+              properties:
+                name:
+                  type: string
+                uuid:
+                  type: string
+    SearchRepositoryIssuesListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    CommitIssueResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CommitIssue'
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return (max 1000).
+      schema:
+        type: integer
+        default: 100
+        maximum: 1000
+    provider:
+      name: provider
+      in: path
+      required: true
+      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
+      schema:
+        type: string
+        enum:
+        - gh
+        - ghe
+        - gl
+        - gle
+        - bb
+        - bbe
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
+  securitySchemes:
+    api-token:
+      type: apiKey
+      in: header
+      name: api-token
+      description: Account API token created in your Codacy account settings.

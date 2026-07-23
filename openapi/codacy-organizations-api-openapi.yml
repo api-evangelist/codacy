@@ -1,0 +1,134 @@
+openapi: 3.0.1
+info:
+  title: Codacy Account Organizations API
+  description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
+  termsOfService: https://www.codacy.com/terms
+  contact:
+    name: Codacy Support
+    url: https://www.codacy.com
+    email: support@codacy.com
+  version: '3.0'
+servers:
+- url: https://api.codacy.com/api/v3
+  description: Codacy Cloud API v3
+security:
+- api-token: []
+tags:
+- name: Organizations
+  description: Git provider organizations the account belongs to.
+paths:
+  /user/organizations/{provider}:
+    get:
+      operationId: listOrganizations
+      tags:
+      - Organizations
+      summary: List the account's organizations for a Git provider.
+      parameters:
+      - $ref: '#/components/parameters/provider'
+      - $ref: '#/components/parameters/cursor'
+      - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: A paginated list of organizations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationListResponse'
+  /user/organizations/{provider}/{remoteOrganizationName}:
+    get:
+      operationId: getUserOrganization
+      tags:
+      - Organizations
+      summary: Get a single organization the account belongs to.
+      parameters:
+      - $ref: '#/components/parameters/provider'
+      - $ref: '#/components/parameters/remoteOrganizationName'
+      responses:
+        '200':
+          description: The organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+components:
+  schemas:
+    OrganizationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    OrganizationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Organization'
+    Organization:
+      type: object
+      properties:
+        identifier:
+          type: string
+        name:
+          type: string
+        provider:
+          type: string
+        remoteIdentifier:
+          type: string
+        joinMode:
+          type: string
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return (max 1000).
+      schema:
+        type: integer
+        default: 100
+        maximum: 1000
+    provider:
+      name: provider
+      in: path
+      required: true
+      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
+      schema:
+        type: string
+        enum:
+        - gh
+        - ghe
+        - gl
+        - gle
+        - bb
+        - bbe
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
+  securitySchemes:
+    api-token:
+      type: apiKey
+      in: header
+      name: api-token
+      description: Account API token created in your Codacy account settings.

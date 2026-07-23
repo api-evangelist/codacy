@@ -1,0 +1,81 @@
+openapi: 3.0.1
+info:
+  title: Codacy Account Security API
+  description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
+  termsOfService: https://www.codacy.com/terms
+  contact:
+    name: Codacy Support
+    url: https://www.codacy.com
+    email: support@codacy.com
+  version: '3.0'
+servers:
+- url: https://api.codacy.com/api/v3
+  description: Codacy Cloud API v3
+security:
+- api-token: []
+tags:
+- name: Security
+  description: Repository SSH key administration.
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/stored-ssh-key:
+    get:
+      operationId: getRepositoryPublicSshKey
+      tags:
+      - Security
+      summary: Get the repository's stored public SSH key.
+      parameters:
+      - $ref: '#/components/parameters/provider'
+      - $ref: '#/components/parameters/remoteOrganizationName'
+      - $ref: '#/components/parameters/repositoryName'
+      responses:
+        '200':
+          description: The stored public SSH key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshKeyResponse'
+components:
+  parameters:
+    provider:
+      name: provider
+      in: path
+      required: true
+      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
+      schema:
+        type: string
+        enum:
+        - gh
+        - ghe
+        - gl
+        - gle
+        - bb
+        - bbe
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
+  schemas:
+    SshKeyResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            publicKey:
+              type: string
+  securitySchemes:
+    api-token:
+      type: apiKey
+      in: header
+      name: api-token
+      description: Account API token created in your Codacy account settings.

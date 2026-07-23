@@ -1,0 +1,144 @@
+openapi: 3.0.1
+info:
+  title: Codacy Account Coverage API
+  description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
+  termsOfService: https://www.codacy.com/terms
+  contact:
+    name: Codacy Support
+    url: https://www.codacy.com
+    email: support@codacy.com
+  version: '3.0'
+servers:
+- url: https://api.codacy.com/api/v3
+  description: Codacy Cloud API v3
+security:
+- api-token: []
+tags:
+- name: Coverage
+  description: Code coverage for pull requests and files.
+paths:
+  ? /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}
+  : get:
+      operationId: getRepositoryPullRequestCoverage
+      tags:
+      - Coverage
+      summary: Get coverage for a pull request.
+      parameters:
+      - $ref: '#/components/parameters/provider'
+      - $ref: '#/components/parameters/remoteOrganizationName'
+      - $ref: '#/components/parameters/repositoryName'
+      - $ref: '#/components/parameters/pullRequestNumber'
+      responses:
+        '200':
+          description: Pull request coverage.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestWithCoverageResponse'
+  ? /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/files
+  : get:
+      operationId: getRepositoryPullRequestFilesCoverage
+      tags:
+      - Coverage
+      summary: Get per-file coverage for a pull request.
+      parameters:
+      - $ref: '#/components/parameters/provider'
+      - $ref: '#/components/parameters/remoteOrganizationName'
+      - $ref: '#/components/parameters/repositoryName'
+      - $ref: '#/components/parameters/pullRequestNumber'
+      responses:
+        '200':
+          description: Per-file pull request coverage.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestFilesCoverageResponse'
+components:
+  parameters:
+    pullRequestNumber:
+      name: pullRequestNumber
+      in: path
+      required: true
+      description: Pull request number on the Git provider.
+      schema:
+        type: integer
+        format: int64
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
+    provider:
+      name: provider
+      in: path
+      required: true
+      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
+      schema:
+        type: string
+        enum:
+        - gh
+        - ghe
+        - gl
+        - gle
+        - bb
+        - bbe
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
+  schemas:
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    FileCoverage:
+      type: object
+      properties:
+        filePath:
+          type: string
+        totalCoverage:
+          type: number
+        diffCoverage:
+          type: number
+        coverageStatus:
+          type: string
+    PullRequestWithCoverageResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            coverage:
+              type: object
+              properties:
+                deltaCoverage:
+                  type: number
+                diffCoverage:
+                  type: number
+                coverageStatus:
+                  type: string
+    PullRequestFilesCoverageResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileCoverage'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+  securitySchemes:
+    api-token:
+      type: apiKey
+      in: header
+      name: api-token
+      description: Account API token created in your Codacy account settings.

@@ -1,0 +1,60 @@
+openapi: 3.0.1
+info:
+  title: Codacy Account API
+  description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
+  termsOfService: https://www.codacy.com/terms
+  contact:
+    name: Codacy Support
+    url: https://www.codacy.com
+    email: support@codacy.com
+  version: '3.0'
+servers:
+- url: https://api.codacy.com/api/v3
+  description: Codacy Cloud API v3
+security:
+- api-token: []
+tags:
+- name: Account
+  description: Authenticated user account and API token operations.
+paths:
+  /user:
+    get:
+      operationId: getUser
+      tags:
+      - Account
+      summary: Get the authenticated user.
+      responses:
+        '200':
+          description: The authenticated user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        mainEmail:
+          type: string
+        created:
+          type: string
+          format: date-time
+    UserResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/User'
+  securitySchemes:
+    api-token:
+      type: apiKey
+      in: header
+      name: api-token
+      description: Account API token created in your Codacy account settings.

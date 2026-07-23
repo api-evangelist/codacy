@@ -1,0 +1,124 @@
+openapi: 3.0.1
+info:
+  title: Codacy Account Quality Settings API
+  description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
+  termsOfService: https://www.codacy.com/terms
+  contact:
+    name: Codacy Support
+    url: https://www.codacy.com
+    email: support@codacy.com
+  version: '3.0'
+servers:
+- url: https://api.codacy.com/api/v3
+  description: Codacy Cloud API v3
+security:
+- api-token: []
+tags:
+- name: Quality Settings
+  description: Quality and security gating settings for commits and pull requests.
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/pull-requests:
+    get:
+      operationId: getPullRequestQualitySettings
+      tags:
+      - Quality Settings
+      summary: Get the pull request quality gate settings.
+      parameters:
+      - $ref: '#/components/parameters/provider'
+      - $ref: '#/components/parameters/remoteOrganizationName'
+      - $ref: '#/components/parameters/repositoryName'
+      responses:
+        '200':
+          description: The pull request quality settings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+    put:
+      operationId: updatePullRequestQualitySettings
+      tags:
+      - Quality Settings
+      summary: Update the pull request quality gate settings.
+      parameters:
+      - $ref: '#/components/parameters/provider'
+      - $ref: '#/components/parameters/remoteOrganizationName'
+      - $ref: '#/components/parameters/repositoryName'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QualitySettings'
+      responses:
+        '200':
+          description: The updated pull request quality settings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+components:
+  parameters:
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
+    provider:
+      name: provider
+      in: path
+      required: true
+      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
+      schema:
+        type: string
+        enum:
+        - gh
+        - ghe
+        - gl
+        - gle
+        - bb
+        - bbe
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
+  schemas:
+    QualitySettings:
+      type: object
+      properties:
+        issueThreshold:
+          type: object
+          properties:
+            threshold:
+              type: integer
+            minimumSeverity:
+              type: string
+              enum:
+              - Info
+              - Warning
+              - Error
+        securityIssueThreshold:
+          type: integer
+        coverageThresholdWithDecimals:
+          type: number
+        diffCoverageThreshold:
+          type: integer
+        duplicationThreshold:
+          type: integer
+        complexityThreshold:
+          type: integer
+    QualitySettingsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/QualitySettings'
+  securitySchemes:
+    api-token:
+      type: apiKey
+      in: header
+      name: api-token
+      description: Account API token created in your Codacy account settings.
