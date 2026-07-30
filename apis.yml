@@ -6,7 +6,20 @@ description: Codacy is an automated code quality and security platform that anal
   commits and pull requests across 49+ languages, surfacing issues, coverage, and
   security findings. The Codacy API v3 lets teams manage organizations, repositories,
   issues, pull requests, coverage, security, and quality settings programmatically.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/codacy.png
 tags:
 - Code Quality
 - Static Analysis
@@ -17,117 +30,190 @@ created: '2026-06-21'
 modified: '2026-06-21'
 specificationVersion: '0.19'
 apis:
-- aid: codacy:organizations
-  name: Codacy Organizations API
-  tags:
-  - Organizations
-  - Accounts
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+- aid: codacy:codacy-account-api
+  name: Codacy Account API
+  description: Authenticated user account and API token operations.
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
-  properties:
-  - url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
-    type: Documentation
-  - url: https://api.codacy.com/api/api-docs
-    type: APIReference
-  - url: openapi/codacy-openapi.yml
-    type: OpenAPI
-  description: List and inspect the Git provider organizations a Codacy account belongs
-    to, manage join requests, and retrieve organization-level analysis context across
-    GitHub, GitLab, and Bitbucket.
-- aid: codacy:repositories
-  name: Codacy Repositories API
   tags:
-  - Repositories
-  - Analysis
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
-  baseURL: https://api.codacy.com/api/v3
+  - Account
   properties:
-  - url: https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
-    type: Documentation
-  - url: https://api.codacy.com/api/api-docs
-    type: APIReference
-  - url: openapi/codacy-openapi.yml
-    type: OpenAPI
-  description: Add, follow, unfollow, and synchronize repositories with their Git
-    provider, and retrieve per-repository analysis state including the first-analysis
-    progress overview.
-- aid: codacy:issues
+  - type: OpenAPI
+    url: openapi/codacy-account-api-openapi.yml
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  - type: APIReference
+    url: https://api.codacy.com/api/api-docs
+  - type: Documentation
+    url: >-
+      https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+  - type: Documentation
+    url: https://docs.codacy.com/coverage-reporter/
+  - type: Documentation
+    url: https://docs.codacy.com/organizations/security-monitor/
+- aid: codacy:codacy-coverage-api
+  name: Codacy Coverage API
+  description: Code coverage for pull requests and files.
+  humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  baseURL: https://api.codacy.com/api/v3
+  tags:
+  - Coverage
+  properties:
+  - type: OpenAPI
+    url: openapi/codacy-coverage-api-openapi.yml
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  - type: APIReference
+    url: https://api.codacy.com/api/api-docs
+  - type: Documentation
+    url: >-
+      https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+  - type: Documentation
+    url: https://docs.codacy.com/coverage-reporter/
+  - type: Documentation
+    url: https://docs.codacy.com/organizations/security-monitor/
+- aid: codacy:codacy-issues-api
   name: Codacy Issues API
+  description: Static analysis issues for a repository.
+  humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  baseURL: https://api.codacy.com/api/v3
   tags:
   - Issues
-  - Static Analysis
-  - Quality
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
-  baseURL: https://api.codacy.com/api/v3
   properties:
-  - url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
-    type: Documentation
-  - url: https://api.codacy.com/api/api-docs
-    type: APIReference
-  - url: openapi/codacy-openapi.yml
-    type: OpenAPI
-  description: Search repository issues by category and severity, view an issues overview,
-    update issue state, ignore false positives, and bulk-ignore issues surfaced by
-    static analysis.
-- aid: codacy:pull-requests
-  name: Codacy Pull Requests API
-  tags:
-  - Pull Requests
-  - Code Review
-  - AI Reviewer
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  - type: OpenAPI
+    url: openapi/codacy-issues-api-openapi.yml
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  - type: APIReference
+    url: https://api.codacy.com/api/api-docs
+  - type: Documentation
+    url: >-
+      https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+  - type: Documentation
+    url: https://docs.codacy.com/coverage-reporter/
+  - type: Documentation
+    url: https://docs.codacy.com/organizations/security-monitor/
+- aid: codacy:codacy-organizations-api
+  name: Codacy Organizations API
+  description: Git provider organizations the account belongs to.
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
-  properties:
-  - url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
-    type: Documentation
-  - url: https://api.codacy.com/api/api-docs
-    type: APIReference
-  - url: openapi/codacy-openapi.yml
-    type: OpenAPI
-  description: List and inspect pull requests with their analysis results, files,
-    issues, and commits, trigger the AI Reviewer, and bypass pull-request analysis
-    gates across an organization.
-- aid: codacy:coverage
-  name: Codacy Coverage API
   tags:
-  - Code Coverage
-  - Pull Requests
-  - Reports
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.codacy.com/coverage-reporter/
-  baseURL: https://api.codacy.com/api/v3
+  - Organizations
   properties:
-  - url: https://docs.codacy.com/coverage-reporter/
-    type: Documentation
-  - url: https://api.codacy.com/api/api-docs
-    type: APIReference
-  - url: openapi/codacy-openapi.yml
-    type: OpenAPI
-  description: Retrieve code coverage for pull requests and individual files, inspect
-    coverage report status, and trigger coverage reanalysis for a repository pull
-    request.
-- aid: codacy:security
+  - type: OpenAPI
+    url: openapi/codacy-organizations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  - type: APIReference
+    url: https://api.codacy.com/api/api-docs
+  - type: Documentation
+    url: >-
+      https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+  - type: Documentation
+    url: https://docs.codacy.com/coverage-reporter/
+  - type: Documentation
+    url: https://docs.codacy.com/organizations/security-monitor/
+- aid: codacy:codacy-pull-requests-api
+  name: Codacy Pull Requests API
+  description: Pull request analysis, files, issues, and AI review.
+  humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  baseURL: https://api.codacy.com/api/v3
+  tags:
+  - Pull Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/codacy-pull-requests-api-openapi.yml
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  - type: APIReference
+    url: https://api.codacy.com/api/api-docs
+  - type: Documentation
+    url: >-
+      https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+  - type: Documentation
+    url: https://docs.codacy.com/coverage-reporter/
+  - type: Documentation
+    url: https://docs.codacy.com/organizations/security-monitor/
+- aid: codacy:codacy-quality-settings-api
+  name: Codacy Quality Settings API
+  description: Quality and security gating settings for commits and pull requests.
+  humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  baseURL: https://api.codacy.com/api/v3
+  tags:
+  - Quality Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/codacy-quality-settings-api-openapi.yml
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  - type: APIReference
+    url: https://api.codacy.com/api/api-docs
+  - type: Documentation
+    url: >-
+      https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+  - type: Documentation
+    url: https://docs.codacy.com/coverage-reporter/
+  - type: Documentation
+    url: https://docs.codacy.com/organizations/security-monitor/
+- aid: codacy:codacy-repositories-api
+  name: Codacy Repositories API
+  description: Repository management and analysis state.
+  humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  baseURL: https://api.codacy.com/api/v3
+  tags:
+  - Repositories
+  properties:
+  - type: OpenAPI
+    url: openapi/codacy-repositories-api-openapi.yml
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  - type: APIReference
+    url: https://api.codacy.com/api/api-docs
+  - type: Documentation
+    url: >-
+      https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+  - type: Documentation
+    url: https://docs.codacy.com/coverage-reporter/
+  - type: Documentation
+    url: https://docs.codacy.com/organizations/security-monitor/
+- aid: codacy:codacy-security-api
   name: Codacy Security API
+  description: Repository SSH key administration.
+  humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  baseURL: https://api.codacy.com/api/v3
   tags:
   - Security
-  - SAST
-  - Quality Settings
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.codacy.com/organizations/security-monitor/
-  baseURL: https://api.codacy.com/api/v3
   properties:
-  - url: https://docs.codacy.com/organizations/security-monitor/
-    type: Documentation
-  - url: https://api.codacy.com/api/api-docs
-    type: APIReference
-  - url: openapi/codacy-openapi.yml
-    type: OpenAPI
-  description: Manage repository quality and security gating settings for commits and
-    pull requests, and administer repository SSH keys used for secure source access.
+  - type: OpenAPI
+    url: openapi/codacy-security-api-openapi.yml
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/using-the-codacy-api/
+  - type: APIReference
+    url: https://api.codacy.com/api/api-docs
+  - type: Documentation
+    url: >-
+      https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/
+  - type: Documentation
+    url: https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/
+  - type: Documentation
+    url: https://docs.codacy.com/coverage-reporter/
+  - type: Documentation
+    url: https://docs.codacy.com/organizations/security-monitor/
 common:
 - type: AgenticAccess
   url: agentic-access/codacy-agentic-access.yml
