@@ -1,0 +1,28 @@
+{
+  "provider": "codacy",
+  "sources": [
+    "codacy-account-api-openapi.yml",
+    "codacy-coverage-api-openapi.yml",
+    "codacy-issues-api-openapi.yml",
+    "codacy-organizations-api-openapi.yml",
+    "codacy-pull-requests-api-openapi.yml",
+    "codacy-quality-settings-api-openapi.yml",
+    "codacy-repositories-api-openapi.yml",
+    "codacy-security-api-openapi.yml"
+  ],
+  "outputs": [
+    "codacy-account-api-openapi.yml",
+    "codacy-coverage-api-openapi.yml",
+    "codacy-issues-api-openapi.yml",
+    "codacy-organizations-api-openapi.yml",
+    "codacy-pull-requests-api-openapi.yml",
+    "codacy-quality-settings-api-openapi.yml",
+    "codacy-repositories-api-openapi.yml",
+    "codacy-security-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
