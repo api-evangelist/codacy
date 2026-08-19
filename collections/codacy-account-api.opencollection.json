@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Codacy Account API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api-token",
+      "value": "{{api-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the authenticated user.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/user"
+          },
+          "docs": "Get the authenticated user."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

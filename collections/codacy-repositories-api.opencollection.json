@@ -1,0 +1,156 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Codacy Account Repositories API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api-token",
+      "value": "{{api-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Repositories",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List an organization's repositories with their analysis state.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/analysis/organizations/:provider/:remoteOrganizationName/repositories",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return (max 1000)."
+              }
+            ]
+          },
+          "docs": "List an organization's repositories with their analysis state."
+        },
+        {
+          "info": {
+            "name": "Get a repository with its analysis state.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/analysis/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              }
+            ]
+          },
+          "docs": "Get a repository with its analysis state."
+        },
+        {
+          "info": {
+            "name": "Follow a repository already added to Codacy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.codacy.com/api/v3/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/follow",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              }
+            ]
+          },
+          "docs": "Follow a repository already added to Codacy."
+        },
+        {
+          "info": {
+            "name": "Unfollow a repository.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.codacy.com/api/v3/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/follow",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              }
+            ]
+          },
+          "docs": "Unfollow a repository."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

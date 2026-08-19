@@ -1,0 +1,277 @@
+{
+  "item": [
+    {
+      "id": "98eed4c8-16df-467c-bccc-d3c3b3376a82",
+      "name": "Organizations",
+      "description": {
+        "content": "Git provider organizations the account belongs to.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "57a9f455-ce71-47d2-a75d-ceadd3e5db82",
+          "name": "List the account's organizations for a Git provider.",
+          "request": {
+            "name": "List the account's organizations for a Git provider.",
+            "description": {},
+            "url": {
+              "path": [
+                "user",
+                "organizations",
+                ":provider"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Cursor for the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Maximum number of items to return (max 1000)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f78cc6d8-2c47-4a05-83ce-b2af13236859",
+              "name": "A paginated list of organizations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "user",
+                    "organizations",
+                    ":provider"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"identifier\": \"string\",\n      \"name\": \"string\",\n      \"provider\": \"string\",\n      \"remoteIdentifier\": \"string\",\n      \"joinMode\": \"string\"\n    },\n    {\n      \"identifier\": \"string\",\n      \"name\": \"string\",\n      \"provider\": \"string\",\n      \"remoteIdentifier\": \"string\",\n      \"joinMode\": \"string\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 9399,\n    \"total\": 4973\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9744774a-3465-4140-b651-97b247772c32",
+          "name": "Get a single organization the account belongs to.",
+          "request": {
+            "name": "Get a single organization the account belongs to.",
+            "description": {},
+            "url": {
+              "path": [
+                "user",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ae1d37cc-e178-4d16-bab2-7319559fdeff",
+              "name": "The organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "user",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"identifier\": \"string\",\n    \"name\": \"string\",\n    \"provider\": \"string\",\n    \"remoteIdentifier\": \"string\",\n    \"joinMode\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.codacy.com/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2f624c45-9e57-4cad-9004-7b5c17f45efe",
+    "name": "Codacy Account Organizations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.\n\nContact Support:\n Name: Codacy Support\n Email: support@codacy.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Codacy Account Issues API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api-token",
+      "value": "{{api-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Issues",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search a repository's issues.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.codacy.com/api/v3/analysis/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/issues/search",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return (max 1000)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search a repository's issues."
+        },
+        {
+          "info": {
+            "name": "Get a single issue.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/analysis/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/issues/:issueId",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              },
+              {
+                "name": "issueId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single issue."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

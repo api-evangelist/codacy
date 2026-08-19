@@ -1,0 +1,124 @@
+{
+  "item": [
+    {
+      "id": "1a3fbc9e-0804-44ca-af59-1f4729c2a1ce",
+      "name": "Account",
+      "description": {
+        "content": "Authenticated user account and API token operations.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c29ac22e-6a2a-4ef7-882d-c72b1c84ddb8",
+          "name": "Get the authenticated user.",
+          "request": {
+            "name": "Get the authenticated user.",
+            "description": {},
+            "url": {
+              "path": [
+                "user"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d13e5407-e283-48a8-adc9-458e5c692056",
+              "name": "The authenticated user.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "user"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 2846,\n    \"name\": \"string\",\n    \"email\": \"string\",\n    \"mainEmail\": \"string\",\n    \"created\": \"2012-03-22T02:06:00.934Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.codacy.com/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "748b1fb4-307b-4227-8e84-3ba475de2fad",
+    "name": "Codacy Account API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.\n\nContact Support:\n Name: Codacy Support\n Email: support@codacy.com",
+      "type": "text/plain"
+    }
+  }
+}

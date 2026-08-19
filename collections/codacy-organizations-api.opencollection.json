@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Codacy Account Organizations API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api-token",
+      "value": "{{api-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List the account's organizations for a Git provider.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/user/organizations/:provider",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return (max 1000)."
+              }
+            ]
+          },
+          "docs": "List the account's organizations for a Git provider."
+        },
+        {
+          "info": {
+            "name": "Get a single organization the account belongs to.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/user/organizations/:provider/:remoteOrganizationName",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              }
+            ]
+          },
+          "docs": "Get a single organization the account belongs to."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

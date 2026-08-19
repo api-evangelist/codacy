@@ -1,0 +1,639 @@
+{
+  "item": [
+    {
+      "id": "833c1bc2-94c2-490c-9454-cf29071ca22c",
+      "name": "Pull Requests",
+      "description": {
+        "content": "Pull request analysis, files, issues, and AI review.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2d45b586-993e-4c4f-b25b-9c84e01b4033",
+          "name": "List a repository's pull requests with analysis.",
+          "request": {
+            "name": "List a repository's pull requests with analysis.",
+            "description": {},
+            "url": {
+              "path": [
+                "analysis",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "pull-requests"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Cursor for the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Maximum number of items to return (max 1000)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9ec029ff-b1e2-4cef-b799-af3199fe0bdc",
+              "name": "A paginated list of pull requests with analysis.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analysis",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "pull-requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"pullRequest\": {\n        \"id\": 7961,\n        \"number\": 7071,\n        \"updated\": \"1950-03-19T01:02:04.826Z\",\n        \"status\": \"string\",\n        \"title\": \"string\",\n        \"owner\": {\n          \"username\": \"string\",\n          \"name\": \"string\",\n          \"email\": \"string\",\n          \"avatarUrl\": \"string\"\n        },\n        \"originBranch\": \"string\",\n        \"targetBranch\": \"string\"\n      },\n      \"isUpToStandards\": false,\n      \"isAnalysing\": false,\n      \"newIssues\": 5080,\n      \"fixedIssues\": 4026,\n      \"deltaCoverageWithDecimals\": 2222.8740568114013,\n      \"coverage\": {\n        \"deltaCoverage\": 6354.547588692043,\n        \"diffCoverage\": 5424.65225825657\n      }\n    },\n    {\n      \"pullRequest\": {\n        \"id\": 9891,\n        \"number\": 2326,\n        \"updated\": \"1986-12-18T15:03:24.328Z\",\n        \"status\": \"string\",\n        \"title\": \"string\",\n        \"owner\": {\n          \"username\": \"string\",\n          \"name\": \"string\",\n          \"email\": \"string\",\n          \"avatarUrl\": \"string\"\n        },\n        \"originBranch\": \"string\",\n        \"targetBranch\": \"string\"\n      },\n      \"isUpToStandards\": false,\n      \"isAnalysing\": true,\n      \"newIssues\": 9432,\n      \"fixedIssues\": 891,\n      \"deltaCoverageWithDecimals\": 3013.872716012661,\n      \"coverage\": {\n        \"deltaCoverage\": 6901.586090628868,\n        \"diffCoverage\": 144.19205989961713\n      }\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 7192,\n    \"total\": 7932\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b094f78f-fb4e-49ad-b5f1-59b3b44e7335",
+          "name": "Get a single pull request with analysis.",
+          "request": {
+            "name": "Get a single pull request with analysis.",
+            "description": {},
+            "url": {
+              "path": [
+                "analysis",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "pull-requests",
+                ":pullRequestNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "pullRequestNumber",
+                  "description": "(Required) Pull request number on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "df709190-d203-421d-9f62-f275a617dbc5",
+              "name": "The pull request with analysis.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analysis",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "pull-requests",
+                    ":pullRequestNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "pullRequestNumber",
+                      "description": "(Required) Pull request number on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"pullRequest\": {\n      \"id\": 2647,\n      \"number\": 77,\n      \"updated\": \"2015-06-09T01:05:53.722Z\",\n      \"status\": \"string\",\n      \"title\": \"string\",\n      \"owner\": {\n        \"username\": \"string\",\n        \"name\": \"string\",\n        \"email\": \"string\",\n        \"avatarUrl\": \"string\"\n      },\n      \"originBranch\": \"string\",\n      \"targetBranch\": \"string\"\n    },\n    \"isUpToStandards\": false,\n    \"isAnalysing\": true,\n    \"newIssues\": 9142,\n    \"fixedIssues\": 9443,\n    \"deltaCoverageWithDecimals\": 7026.303379547735,\n    \"coverage\": {\n      \"deltaCoverage\": 2694.6570480629784,\n      \"diffCoverage\": 2431.6294089255084\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "441b203e-d4a4-4e1b-8424-1f85d1736019",
+          "name": "List the issues introduced or fixed in a pull request.",
+          "request": {
+            "name": "List the issues introduced or fixed in a pull request.",
+            "description": {},
+            "url": {
+              "path": [
+                "analysis",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "pull-requests",
+                ":pullRequestNumber",
+                "issues"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "pullRequestNumber",
+                  "description": "(Required) Pull request number on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "50d088cf-e6bd-46f9-ba1c-1d37766fa5a7",
+              "name": "A list of pull request issues.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analysis",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "pull-requests",
+                    ":pullRequestNumber",
+                    "issues"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "pullRequestNumber",
+                      "description": "(Required) Pull request number on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"issueId\": \"string\",\n      \"commitIssue\": {\n        \"patternInfo\": {\n          \"id\": \"string\",\n          \"category\": \"string\",\n          \"subCategory\": \"string\",\n          \"level\": \"string\",\n          \"severityLevel\": \"string\",\n          \"title\": \"string\"\n        },\n        \"filePath\": \"string\",\n        \"lineNumber\": 9800,\n        \"message\": \"string\",\n        \"language\": \"string\",\n        \"toolInfo\": {\n          \"name\": \"string\",\n          \"uuid\": \"string\"\n        }\n      }\n    },\n    {\n      \"issueId\": \"string\",\n      \"commitIssue\": {\n        \"patternInfo\": {\n          \"id\": \"string\",\n          \"category\": \"string\",\n          \"subCategory\": \"string\",\n          \"level\": \"string\",\n          \"severityLevel\": \"string\",\n          \"title\": \"string\"\n        },\n        \"filePath\": \"string\",\n        \"lineNumber\": 3693,\n        \"message\": \"string\",\n        \"language\": \"string\",\n        \"toolInfo\": {\n          \"name\": \"string\",\n          \"uuid\": \"string\"\n        }\n      }\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 8595,\n    \"total\": 2902\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ed83b5ff-0acc-4887-bcd3-f4d984c01bba",
+          "name": "Trigger the AI Reviewer on a pull request.",
+          "request": {
+            "name": "Trigger the AI Reviewer on a pull request.",
+            "description": {},
+            "url": {
+              "path": [
+                "analysis",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "pull-requests",
+                ":pullRequestNumber",
+                "ai-reviewer",
+                "trigger"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "pullRequestNumber",
+                  "description": "(Required) Pull request number on the Git provider."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8482afcf-4b14-4604-949c-32c90dd57e67",
+              "name": "The AI review was triggered.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analysis",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "pull-requests",
+                    ":pullRequestNumber",
+                    "ai-reviewer",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "pullRequestNumber",
+                      "description": "(Required) Pull request number on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.codacy.com/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e51c98cc-37de-431b-aa67-eb239680f222",
+    "name": "Codacy Account Pull Requests API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.\n\nContact Support:\n Name: Codacy Support\n Email: support@codacy.com",
+      "type": "text/plain"
+    }
+  }
+}

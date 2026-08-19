@@ -1,0 +1,372 @@
+{
+  "item": [
+    {
+      "id": "7678199e-b101-4868-8aea-eeecff594134",
+      "name": "Issues",
+      "description": {
+        "content": "Static analysis issues for a repository.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "18aecd3b-df2a-4cb8-8fae-26c2882407fa",
+          "name": "Search a repository's issues.",
+          "request": {
+            "name": "Search a repository's issues.",
+            "description": {},
+            "url": {
+              "path": [
+                "analysis",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "issues",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Cursor for the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Maximum number of items to return (max 1000)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branchName\": \"<string>\",\n  \"categories\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"levels\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"languages\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"patterns\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"authorEmails\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b81cb8fa-d706-4574-a450-838da1424e0f",
+              "name": "A paginated list of matching issues.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analysis",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "issues",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"branchName\": \"<string>\",\n  \"categories\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"levels\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"languages\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"patterns\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"authorEmails\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"issueId\": \"string\",\n      \"commitIssue\": {\n        \"patternInfo\": {\n          \"id\": \"string\",\n          \"category\": \"string\",\n          \"subCategory\": \"string\",\n          \"level\": \"string\",\n          \"severityLevel\": \"string\",\n          \"title\": \"string\"\n        },\n        \"filePath\": \"string\",\n        \"lineNumber\": 6328,\n        \"message\": \"string\",\n        \"language\": \"string\",\n        \"toolInfo\": {\n          \"name\": \"string\",\n          \"uuid\": \"string\"\n        }\n      }\n    },\n    {\n      \"issueId\": \"string\",\n      \"commitIssue\": {\n        \"patternInfo\": {\n          \"id\": \"string\",\n          \"category\": \"string\",\n          \"subCategory\": \"string\",\n          \"level\": \"string\",\n          \"severityLevel\": \"string\",\n          \"title\": \"string\"\n        },\n        \"filePath\": \"string\",\n        \"lineNumber\": 2380,\n        \"message\": \"string\",\n        \"language\": \"string\",\n        \"toolInfo\": {\n          \"name\": \"string\",\n          \"uuid\": \"string\"\n        }\n      }\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 3658,\n    \"total\": 646\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f4ff0882-f3cb-4113-be7d-e559b7b9a43b",
+          "name": "Get a single issue.",
+          "request": {
+            "name": "Get a single issue.",
+            "description": {},
+            "url": {
+              "path": [
+                "analysis",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "issues",
+                ":issueId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issueId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b031fb98-23ce-4e9d-9cba-b7007f4e5ee1",
+              "name": "The issue.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analysis",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "issues",
+                    ":issueId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issueId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"issueId\": \"string\",\n    \"commitIssue\": {\n      \"patternInfo\": {\n        \"id\": \"string\",\n        \"category\": \"string\",\n        \"subCategory\": \"string\",\n        \"level\": \"string\",\n        \"severityLevel\": \"string\",\n        \"title\": \"string\"\n      },\n      \"filePath\": \"string\",\n      \"lineNumber\": 5616,\n      \"message\": \"string\",\n      \"language\": \"string\",\n      \"toolInfo\": {\n        \"name\": \"string\",\n        \"uuid\": \"string\"\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.codacy.com/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a8f60515-9ce0-45dd-8154-c3a07c2d3271",
+    "name": "Codacy Account Issues API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.\n\nContact Support:\n Name: Codacy Support\n Email: support@codacy.com",
+      "type": "text/plain"
+    }
+  }
+}

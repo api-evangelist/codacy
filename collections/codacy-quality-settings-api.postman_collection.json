@@ -1,0 +1,336 @@
+{
+  "item": [
+    {
+      "id": "8e5ab3a9-a688-4a68-a18b-5e8971b24da7",
+      "name": "Quality Settings",
+      "description": {
+        "content": "Quality and security gating settings for commits and pull requests.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bea88de2-b3d1-4739-bcfc-2c6398c01dfd",
+          "name": "Get the pull request quality gate settings.",
+          "request": {
+            "name": "Get the pull request quality gate settings.",
+            "description": {},
+            "url": {
+              "path": [
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "settings",
+                "quality",
+                "pull-requests"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d0e6a8c9-12e3-4713-80c3-6184097c9a1a",
+              "name": "The pull request quality settings.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "settings",
+                    "quality",
+                    "pull-requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"issueThreshold\": {\n      \"threshold\": 8144,\n      \"minimumSeverity\": \"Warning\"\n    },\n    \"securityIssueThreshold\": 8505,\n    \"coverageThresholdWithDecimals\": 7186.469149353142,\n    \"diffCoverageThreshold\": 7006,\n    \"duplicationThreshold\": 8695,\n    \"complexityThreshold\": 1633\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ded679d8-33d0-4eb1-89cf-98d88719f4b3",
+          "name": "Update the pull request quality gate settings.",
+          "request": {
+            "name": "Update the pull request quality gate settings.",
+            "description": {},
+            "url": {
+              "path": [
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "settings",
+                "quality",
+                "pull-requests"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"issueThreshold\": {\n    \"threshold\": \"<integer>\",\n    \"minimumSeverity\": \"<string>\"\n  },\n  \"securityIssueThreshold\": \"<integer>\",\n  \"coverageThresholdWithDecimals\": \"<number>\",\n  \"diffCoverageThreshold\": \"<integer>\",\n  \"duplicationThreshold\": \"<integer>\",\n  \"complexityThreshold\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3a8f440a-e33b-40dc-9479-ad9dc2a8e78c",
+              "name": "The updated pull request quality settings.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "settings",
+                    "quality",
+                    "pull-requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issueThreshold\": {\n    \"threshold\": \"<integer>\",\n    \"minimumSeverity\": \"<string>\"\n  },\n  \"securityIssueThreshold\": \"<integer>\",\n  \"coverageThresholdWithDecimals\": \"<number>\",\n  \"diffCoverageThreshold\": \"<integer>\",\n  \"duplicationThreshold\": \"<integer>\",\n  \"complexityThreshold\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"issueThreshold\": {\n      \"threshold\": \"<integer>\",\n      \"minimumSeverity\": \"<string>\"\n    },\n    \"securityIssueThreshold\": \"<integer>\",\n    \"coverageThresholdWithDecimals\": \"<number>\",\n    \"diffCoverageThreshold\": \"<integer>\",\n    \"duplicationThreshold\": \"<integer>\",\n    \"complexityThreshold\": \"<integer>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.codacy.com/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c824590d-d29d-4ea5-91c7-8ae5f27787f1",
+    "name": "Codacy Account Quality Settings API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.\n\nContact Support:\n Name: Codacy Support\n Email: support@codacy.com",
+      "type": "text/plain"
+    }
+  }
+}

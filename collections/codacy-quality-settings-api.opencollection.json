@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Codacy Account Quality Settings API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api-token",
+      "value": "{{api-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quality Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the pull request quality gate settings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/settings/quality/pull-requests",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              }
+            ]
+          },
+          "docs": "Get the pull request quality gate settings."
+        },
+        {
+          "info": {
+            "name": "Update the pull request quality gate settings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.codacy.com/api/v3/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/settings/quality/pull-requests",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the pull request quality gate settings."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

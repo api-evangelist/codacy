@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Codacy Account Coverage API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api-token",
+      "value": "{{api-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Coverage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get coverage for a pull request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/coverage/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/pull-requests/:pullRequestNumber",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              },
+              {
+                "name": "pullRequestNumber",
+                "value": "",
+                "type": "path",
+                "description": "Pull request number on the Git provider."
+              }
+            ]
+          },
+          "docs": "Get coverage for a pull request."
+        },
+        {
+          "info": {
+            "name": "Get per-file coverage for a pull request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/coverage/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/pull-requests/:pullRequestNumber/files",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              },
+              {
+                "name": "pullRequestNumber",
+                "value": "",
+                "type": "path",
+                "description": "Pull request number on the Git provider."
+              }
+            ]
+          },
+          "docs": "Get per-file coverage for a pull request."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

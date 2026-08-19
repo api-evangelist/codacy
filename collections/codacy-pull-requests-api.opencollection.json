@@ -1,0 +1,180 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Codacy Account Pull Requests API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api-token",
+      "value": "{{api-token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pull Requests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List a repository's pull requests with analysis.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/analysis/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/pull-requests",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return (max 1000)."
+              }
+            ]
+          },
+          "docs": "List a repository's pull requests with analysis."
+        },
+        {
+          "info": {
+            "name": "Get a single pull request with analysis.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/analysis/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/pull-requests/:pullRequestNumber",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              },
+              {
+                "name": "pullRequestNumber",
+                "value": "",
+                "type": "path",
+                "description": "Pull request number on the Git provider."
+              }
+            ]
+          },
+          "docs": "Get a single pull request with analysis."
+        },
+        {
+          "info": {
+            "name": "List the issues introduced or fixed in a pull request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.codacy.com/api/v3/analysis/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/pull-requests/:pullRequestNumber/issues",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              },
+              {
+                "name": "pullRequestNumber",
+                "value": "",
+                "type": "path",
+                "description": "Pull request number on the Git provider."
+              }
+            ]
+          },
+          "docs": "List the issues introduced or fixed in a pull request."
+        },
+        {
+          "info": {
+            "name": "Trigger the AI Reviewer on a pull request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.codacy.com/api/v3/analysis/organizations/:provider/:remoteOrganizationName/repositories/:repositoryName/pull-requests/:pullRequestNumber/ai-reviewer/trigger",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path",
+                "description": "Git provider code (gh, ghe, gl, gle, bb, bbe)."
+              },
+              {
+                "name": "remoteOrganizationName",
+                "value": "",
+                "type": "path",
+                "description": "Organization name on the Git provider."
+              },
+              {
+                "name": "repositoryName",
+                "value": "",
+                "type": "path",
+                "description": "Repository name on the Git provider."
+              },
+              {
+                "name": "pullRequestNumber",
+                "value": "",
+                "type": "path",
+                "description": "Pull request number on the Git provider."
+              }
+            ]
+          },
+          "docs": "Trigger the AI Reviewer on a pull request."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

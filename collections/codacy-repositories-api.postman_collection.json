@@ -1,0 +1,551 @@
+{
+  "item": [
+    {
+      "id": "1179fd66-025e-4c04-ac3d-c56a517fc64d",
+      "name": "Repositories",
+      "description": {
+        "content": "Repository management and analysis state.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1939481b-9cc6-4311-a8ae-b422e6c890c1",
+          "name": "List an organization's repositories with their analysis state.",
+          "request": {
+            "name": "List an organization's repositories with their analysis state.",
+            "description": {},
+            "url": {
+              "path": [
+                "analysis",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Cursor for the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Maximum number of items to return (max 1000)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7e746457-8c5a-4617-a873-bf60c2e8c1cd",
+              "name": "A paginated list of repositories with analysis.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analysis",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"repository\": {\n        \"repositoryId\": 4984,\n        \"provider\": \"string\",\n        \"owner\": \"string\",\n        \"name\": \"string\",\n        \"fullPath\": \"string\",\n        \"visibility\": \"string\",\n        \"defaultBranch\": {\n          \"name\": \"string\",\n          \"branchId\": 5179\n        }\n      },\n      \"grade\": 3552,\n      \"gradeLetter\": \"string\",\n      \"issuesPercentage\": 5191.3530794868475,\n      \"coverage\": {\n        \"filesUncovered\": 2721,\n        \"filesWithLowCoverage\": 7064,\n        \"coveragePercentage\": 5707.266293668167\n      },\n      \"lastAnalysedCommit\": \"string\"\n    },\n    {\n      \"repository\": {\n        \"repositoryId\": 1412,\n        \"provider\": \"string\",\n        \"owner\": \"string\",\n        \"name\": \"string\",\n        \"fullPath\": \"string\",\n        \"visibility\": \"string\",\n        \"defaultBranch\": {\n          \"name\": \"string\",\n          \"branchId\": 7498\n        }\n      },\n      \"grade\": 6209,\n      \"gradeLetter\": \"string\",\n      \"issuesPercentage\": 9857.317497530968,\n      \"coverage\": {\n        \"filesUncovered\": 2158,\n        \"filesWithLowCoverage\": 5741,\n        \"coveragePercentage\": 9059.93091176605\n      },\n      \"lastAnalysedCommit\": \"string\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 4775,\n    \"total\": 8274\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4ec8298-0191-495f-922b-4bbcf2815765",
+          "name": "Get a repository with its analysis state.",
+          "request": {
+            "name": "Get a repository with its analysis state.",
+            "description": {},
+            "url": {
+              "path": [
+                "analysis",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "27afe002-c990-4941-98e4-87b51309c824",
+              "name": "The repository with analysis.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analysis",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"repository\": {\n      \"repositoryId\": 4844,\n      \"provider\": \"string\",\n      \"owner\": \"string\",\n      \"name\": \"string\",\n      \"fullPath\": \"string\",\n      \"visibility\": \"string\",\n      \"defaultBranch\": {\n        \"name\": \"string\",\n        \"branchId\": 5817\n      }\n    },\n    \"grade\": 1652,\n    \"gradeLetter\": \"string\",\n    \"issuesPercentage\": 6294.720367485606,\n    \"coverage\": {\n      \"filesUncovered\": 1412,\n      \"filesWithLowCoverage\": 2246,\n      \"coveragePercentage\": 5171.270956516726\n    },\n    \"lastAnalysedCommit\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ec3318a4-506a-4ad3-9e37-31c071ef14b0",
+          "name": "Follow a repository already added to Codacy.",
+          "request": {
+            "name": "Follow a repository already added to Codacy.",
+            "description": {},
+            "url": {
+              "path": [
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "follow"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a8dccc60-831b-4fa0-bdb5-485f2ce39247",
+              "name": "The repository is now followed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "follow"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5477b6d3-f472-4fde-b554-c5b5df1bb5c3",
+          "name": "Unfollow a repository.",
+          "request": {
+            "name": "Unfollow a repository.",
+            "description": {},
+            "url": {
+              "path": [
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "follow"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "10062460-1c4d-468d-9547-6019e5047c6b",
+              "name": "The repository is no longer followed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "follow"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.codacy.com/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b4e53909-126e-49b7-a47e-266266f244b3",
+    "name": "Codacy Account Repositories API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.\n\nContact Support:\n Name: Codacy Support\n Email: support@codacy.com",
+      "type": "text/plain"
+    }
+  }
+}

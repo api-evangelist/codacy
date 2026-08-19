@@ -1,0 +1,345 @@
+{
+  "item": [
+    {
+      "id": "8988e7d4-0c78-46e6-8c00-c82b93a55ce7",
+      "name": "Coverage",
+      "description": {
+        "content": "Code coverage for pull requests and files.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "edd58d67-1053-4cf8-95cf-d61203548006",
+          "name": "Get coverage for a pull request.",
+          "request": {
+            "name": "Get coverage for a pull request.",
+            "description": {},
+            "url": {
+              "path": [
+                "coverage",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "pull-requests",
+                ":pullRequestNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "pullRequestNumber",
+                  "description": "(Required) Pull request number on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ac0d2e39-963b-4fae-a7f0-72b3b050137b",
+              "name": "Pull request coverage.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "coverage",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "pull-requests",
+                    ":pullRequestNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "pullRequestNumber",
+                      "description": "(Required) Pull request number on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"coverage\": {\n      \"deltaCoverage\": 8009.603946978049,\n      \"diffCoverage\": 2625.3114377242114,\n      \"coverageStatus\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e3db261-9fa4-45fc-80b3-1e280ba359fc",
+          "name": "Get per-file coverage for a pull request.",
+          "request": {
+            "name": "Get per-file coverage for a pull request.",
+            "description": {},
+            "url": {
+              "path": [
+                "coverage",
+                "organizations",
+                ":provider",
+                ":remoteOrganizationName",
+                "repositories",
+                ":repositoryName",
+                "pull-requests",
+                ":pullRequestNumber",
+                "files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider",
+                  "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "remoteOrganizationName",
+                  "description": "(Required) Organization name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repositoryName",
+                  "description": "(Required) Repository name on the Git provider."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "pullRequestNumber",
+                  "description": "(Required) Pull request number on the Git provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a2e3e1eb-4870-4e54-8546-85f62e97e97b",
+              "name": "Per-file pull request coverage.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "coverage",
+                    "organizations",
+                    ":provider",
+                    ":remoteOrganizationName",
+                    "repositories",
+                    ":repositoryName",
+                    "pull-requests",
+                    ":pullRequestNumber",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider",
+                      "description": "(Required) Git provider code (gh, ghe, gl, gle, bb, bbe)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "remoteOrganizationName",
+                      "description": "(Required) Organization name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repositoryName",
+                      "description": "(Required) Repository name on the Git provider."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "pullRequestNumber",
+                      "description": "(Required) Pull request number on the Git provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api-token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"filePath\": \"string\",\n      \"totalCoverage\": 1356.0974080842548,\n      \"diffCoverage\": 1199.1797902312262,\n      \"coverageStatus\": \"string\"\n    },\n    {\n      \"filePath\": \"string\",\n      \"totalCoverage\": 9098.55122465526,\n      \"diffCoverage\": 5351.791876041501,\n      \"coverageStatus\": \"string\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 8861,\n    \"total\": 8378\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.codacy.com/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d89f5767-21ab-4651-82b9-8e5b56838ff5",
+    "name": "Codacy Account Coverage API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.\n\nContact Support:\n Name: Codacy Support\n Email: support@codacy.com",
+      "type": "text/plain"
+    }
+  }
+}
