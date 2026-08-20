@@ -105,6 +105,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
