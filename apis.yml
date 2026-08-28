@@ -6,6 +6,18 @@ description: Codacy is an automated code quality and security platform that anal
   commits and pull requests across 49+ languages, surfacing issues, coverage, and
   security findings. The Codacy API v3 lets teams manage organizations, repositories,
   issues, pull requests, coverage, security, and quality settings programmatically.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
