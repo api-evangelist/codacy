@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Codacy Account Coverage API
+  title: Codacy Coverage API
   description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
   termsOfService: https://www.codacy.com/terms
   contact:
@@ -22,7 +22,7 @@ paths:
       operationId: getRepositoryPullRequestCoverage
       tags:
       - Coverage
-      summary: Get coverage for a pull request.
+      summary: Get coverage for a pull request
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -40,7 +40,7 @@ paths:
       operationId: getRepositoryPullRequestFilesCoverage
       tags:
       - Coverage
-      summary: Get per-file coverage for a pull request.
+      summary: Get per-file coverage for a pull request
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -55,21 +55,6 @@ paths:
                 $ref: '#/components/schemas/PullRequestFilesCoverageResponse'
 components:
   parameters:
-    pullRequestNumber:
-      name: pullRequestNumber
-      in: path
-      required: true
-      description: Pull request number on the Git provider.
-      schema:
-        type: integer
-        format: int64
-    repositoryName:
-      name: repositoryName
-      in: path
-      required: true
-      description: Repository name on the Git provider.
-      schema:
-        type: string
     provider:
       name: provider
       in: path
@@ -91,16 +76,31 @@ components:
       description: Organization name on the Git provider.
       schema:
         type: string
+    pullRequestNumber:
+      name: pullRequestNumber
+      in: path
+      required: true
+      description: Pull request number on the Git provider.
+      schema:
+        type: integer
+        format: int64
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
   schemas:
-    PaginationInfo:
+    PullRequestFilesCoverageResponse:
       type: object
       properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileCoverage'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
     FileCoverage:
       type: object
       properties:
@@ -112,6 +112,15 @@ components:
           type: number
         coverageStatus:
           type: string
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
     PullRequestWithCoverageResponse:
       type: object
       properties:
@@ -127,15 +136,6 @@ components:
                   type: number
                 coverageStatus:
                   type: string
-    PullRequestFilesCoverageResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileCoverage'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
   securitySchemes:
     api-token:
       type: apiKey

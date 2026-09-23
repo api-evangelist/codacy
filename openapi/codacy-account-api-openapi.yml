@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Codacy Account API
   description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
@@ -22,7 +22,7 @@ paths:
       operationId: getUser
       tags:
       - Account
-      summary: Get the authenticated user.
+      summary: Get the authenticated user
       responses:
         '200':
           description: The authenticated user.

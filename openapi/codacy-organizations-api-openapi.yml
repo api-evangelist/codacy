@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Codacy Account Organizations API
+  title: Codacy Organizations API
   description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
   termsOfService: https://www.codacy.com/terms
   contact:
@@ -22,7 +22,7 @@ paths:
       operationId: listOrganizations
       tags:
       - Organizations
-      summary: List the account's organizations for a Git provider.
+      summary: List the account's organizations for a Git provider
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/cursor'
@@ -39,7 +39,7 @@ paths:
       operationId: getUserOrganization
       tags:
       - Organizations
-      summary: Get a single organization the account belongs to.
+      summary: Get a single organization the account belongs to
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -51,60 +51,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrganizationResponse'
 components:
-  schemas:
-    OrganizationListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Organization'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
-    PaginationInfo:
-      type: object
-      properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
-    OrganizationResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Organization'
-    Organization:
-      type: object
-      properties:
-        identifier:
-          type: string
-        name:
-          type: string
-        provider:
-          type: string
-        remoteIdentifier:
-          type: string
-        joinMode:
-          type: string
   parameters:
-    cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Cursor for the next page of results.
-      schema:
-        type: string
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of items to return (max 1000).
-      schema:
-        type: integer
-        default: 100
-        maximum: 1000
     provider:
       name: provider
       in: path
@@ -119,6 +66,15 @@ components:
         - gle
         - bb
         - bbe
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return (max 1000).
+      schema:
+        type: integer
+        default: 100
+        maximum: 1000
     remoteOrganizationName:
       name: remoteOrganizationName
       in: path
@@ -126,6 +82,50 @@ components:
       description: Organization name on the Git provider.
       schema:
         type: string
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
+  schemas:
+    OrganizationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    OrganizationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Organization'
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    Organization:
+      type: object
+      properties:
+        identifier:
+          type: string
+        name:
+          type: string
+        provider:
+          type: string
+        remoteIdentifier:
+          type: string
+        joinMode:
+          type: string
   securitySchemes:
     api-token:
       type: apiKey

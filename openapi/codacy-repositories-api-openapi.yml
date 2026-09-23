@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Codacy Account Repositories API
+  title: Codacy Repositories API
   description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
   termsOfService: https://www.codacy.com/terms
   contact:
@@ -22,7 +22,7 @@ paths:
       operationId: listOrganizationRepositoriesWithAnalysis
       tags:
       - Repositories
-      summary: List an organization's repositories with their analysis state.
+      summary: List an organization's repositories with their analysis state
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -40,7 +40,7 @@ paths:
       operationId: getRepositoryWithAnalysis
       tags:
       - Repositories
-      summary: Get a repository with its analysis state.
+      summary: Get a repository with its analysis state
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -57,7 +57,7 @@ paths:
       operationId: followAddedRepository
       tags:
       - Repositories
-      summary: Follow a repository already added to Codacy.
+      summary: Follow a repository already added to Codacy
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -69,7 +69,7 @@ paths:
       operationId: unfollowRepository
       tags:
       - Repositories
-      summary: Unfollow a repository.
+      summary: Unfollow a repository
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -78,7 +78,97 @@ paths:
         '204':
           description: The repository is no longer followed.
 components:
+  parameters:
+    provider:
+      name: provider
+      in: path
+      required: true
+      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
+      schema:
+        type: string
+        enum:
+        - gh
+        - ghe
+        - gl
+        - gle
+        - bb
+        - bbe
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return (max 1000).
+      schema:
+        type: integer
+        default: 100
+        maximum: 1000
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
   schemas:
+    RepositoryWithAnalysis:
+      type: object
+      properties:
+        repository:
+          $ref: '#/components/schemas/Repository'
+        grade:
+          type: integer
+        gradeLetter:
+          type: string
+        issuesPercentage:
+          type: number
+        coverage:
+          type: object
+          properties:
+            filesUncovered:
+              type: integer
+            filesWithLowCoverage:
+              type: integer
+            coveragePercentage:
+              type: number
+        lastAnalysedCommit:
+          type: string
+    RepositoryWithAnalysisListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepositoryWithAnalysis'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    RepositoryWithAnalysisResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RepositoryWithAnalysis'
     Repository:
       type: object
       properties:
@@ -103,96 +193,6 @@ components:
             branchId:
               type: integer
               format: int64
-    PaginationInfo:
-      type: object
-      properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
-    RepositoryWithAnalysis:
-      type: object
-      properties:
-        repository:
-          $ref: '#/components/schemas/Repository'
-        grade:
-          type: integer
-        gradeLetter:
-          type: string
-        issuesPercentage:
-          type: number
-        coverage:
-          type: object
-          properties:
-            filesUncovered:
-              type: integer
-            filesWithLowCoverage:
-              type: integer
-            coveragePercentage:
-              type: number
-        lastAnalysedCommit:
-          type: string
-    RepositoryWithAnalysisResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/RepositoryWithAnalysis'
-    RepositoryWithAnalysisListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/RepositoryWithAnalysis'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
-  parameters:
-    cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Cursor for the next page of results.
-      schema:
-        type: string
-    repositoryName:
-      name: repositoryName
-      in: path
-      required: true
-      description: Repository name on the Git provider.
-      schema:
-        type: string
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of items to return (max 1000).
-      schema:
-        type: integer
-        default: 100
-        maximum: 1000
-    provider:
-      name: provider
-      in: path
-      required: true
-      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
-      schema:
-        type: string
-        enum:
-        - gh
-        - ghe
-        - gl
-        - gle
-        - bb
-        - bbe
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
-      schema:
-        type: string
   securitySchemes:
     api-token:
       type: apiKey

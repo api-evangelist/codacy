@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Codacy Account Issues API
+  title: Codacy Issues API
   description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
   termsOfService: https://www.codacy.com/terms
   contact:
@@ -22,7 +22,7 @@ paths:
       operationId: searchRepositoryIssues
       tags:
       - Issues
-      summary: Search a repository's issues.
+      summary: Search a repository's issues
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -47,7 +47,7 @@ paths:
       operationId: getIssue
       tags:
       - Issues
-      summary: Get a single issue.
+      summary: Get a single issue
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -66,15 +66,20 @@ paths:
                 $ref: '#/components/schemas/CommitIssueResponse'
 components:
   schemas:
-    PaginationInfo:
+    SearchRepositoryIssuesListResponse:
       type: object
       properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    CommitIssueResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CommitIssue'
     SearchRepositoryIssuesBody:
       type: object
       properties:
@@ -104,6 +109,15 @@ components:
           type: array
           items:
             type: string
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
     CommitIssue:
       type: object
       properties:
@@ -142,44 +156,7 @@ components:
                   type: string
                 uuid:
                   type: string
-    SearchRepositoryIssuesListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommitIssue'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
-    CommitIssueResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/CommitIssue'
   parameters:
-    cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Cursor for the next page of results.
-      schema:
-        type: string
-    repositoryName:
-      name: repositoryName
-      in: path
-      required: true
-      description: Repository name on the Git provider.
-      schema:
-        type: string
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of items to return (max 1000).
-      schema:
-        type: integer
-        default: 100
-        maximum: 1000
     provider:
       name: provider
       in: path
@@ -199,6 +176,29 @@ components:
       in: path
       required: true
       description: Organization name on the Git provider.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return (max 1000).
+      schema:
+        type: integer
+        default: 100
+        maximum: 1000
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
       schema:
         type: string
   securitySchemes:

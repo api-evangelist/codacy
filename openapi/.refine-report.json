@@ -1,14 +1,7 @@
 {
   "provider": "codacy",
   "sources": [
-    "codacy-account-api-openapi.yml",
-    "codacy-coverage-api-openapi.yml",
-    "codacy-issues-api-openapi.yml",
-    "codacy-organizations-api-openapi.yml",
-    "codacy-pull-requests-api-openapi.yml",
-    "codacy-quality-settings-api-openapi.yml",
-    "codacy-repositories-api-openapi.yml",
-    "codacy-security-api-openapi.yml"
+    "_original/codacy-openapi.yml"
   ],
   "outputs": [
     "codacy-account-api-openapi.yml",
@@ -23,6 +16,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "codacy-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "codacy-account-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "codacy-coverage-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "codacy-issues-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "codacy-organizations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "codacy-pull-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "codacy-quality-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "codacy-repositories-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "codacy-security-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

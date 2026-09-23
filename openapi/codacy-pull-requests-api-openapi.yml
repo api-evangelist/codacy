@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Codacy Account Pull Requests API
+  title: Codacy Pull Requests API
   description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
   termsOfService: https://www.codacy.com/terms
   contact:
@@ -22,7 +22,7 @@ paths:
       operationId: listRepositoryPullRequests
       tags:
       - Pull Requests
-      summary: List a repository's pull requests with analysis.
+      summary: List a repository's pull requests with analysis
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -41,7 +41,7 @@ paths:
       operationId: getRepositoryPullRequest
       tags:
       - Pull Requests
-      summary: Get a single pull request with analysis.
+      summary: Get a single pull request with analysis
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -59,7 +59,7 @@ paths:
       operationId: listPullRequestIssues
       tags:
       - Pull Requests
-      summary: List the issues introduced or fixed in a pull request.
+      summary: List the issues introduced or fixed in a pull request
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -77,7 +77,7 @@ paths:
       operationId: triggerPullRequestAiReview
       tags:
       - Pull Requests
-      summary: Trigger the AI Reviewer on a pull request.
+      summary: Trigger the AI Reviewer on a pull request
       parameters:
       - $ref: '#/components/parameters/provider'
       - $ref: '#/components/parameters/remoteOrganizationName'
@@ -87,82 +87,32 @@ paths:
         '204':
           description: The AI review was triggered.
 components:
-  parameters:
-    pullRequestNumber:
-      name: pullRequestNumber
-      in: path
-      required: true
-      description: Pull request number on the Git provider.
-      schema:
-        type: integer
-        format: int64
-    cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Cursor for the next page of results.
-      schema:
-        type: string
-    repositoryName:
-      name: repositoryName
-      in: path
-      required: true
-      description: Repository name on the Git provider.
-      schema:
-        type: string
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of items to return (max 1000).
-      schema:
-        type: integer
-        default: 100
-        maximum: 1000
-    provider:
-      name: provider
-      in: path
-      required: true
-      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
-      schema:
-        type: string
-        enum:
-        - gh
-        - ghe
-        - gl
-        - gle
-        - bb
-        - bbe
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
-      schema:
-        type: string
   schemas:
-    PullRequestWithAnalysis:
+    GitUser:
       type: object
       properties:
-        pullRequest:
-          $ref: '#/components/schemas/PullRequest'
-        isUpToStandards:
-          type: boolean
-        isAnalysing:
-          type: boolean
-        newIssues:
-          type: integer
-        fixedIssues:
-          type: integer
-        deltaCoverageWithDecimals:
-          type: number
-        coverage:
-          type: object
-          properties:
-            deltaCoverage:
-              type: number
-            diffCoverage:
-              type: number
+        username:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        avatarUrl:
+          type: string
+    PullRequestWithAnalysisResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PullRequestWithAnalysis'
+    PullRequestIssuesListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
     PaginationInfo:
       type: object
       properties:
@@ -172,20 +122,6 @@ components:
           type: integer
         total:
           type: integer
-    PullRequestWithAnalysisResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/PullRequestWithAnalysis'
-    PullRequestWithAnalysisListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PullRequestWithAnalysis'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
     PullRequest:
       type: object
       properties:
@@ -206,17 +142,6 @@ components:
         originBranch:
           type: string
         targetBranch:
-          type: string
-    GitUser:
-      type: object
-      properties:
-        username:
-          type: string
-        name:
-          type: string
-        email:
-          type: string
-        avatarUrl:
           type: string
     CommitIssue:
       type: object
@@ -256,15 +181,90 @@ components:
                   type: string
                 uuid:
                   type: string
-    PullRequestIssuesListResponse:
+    PullRequestWithAnalysisListResponse:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/CommitIssue'
+            $ref: '#/components/schemas/PullRequestWithAnalysis'
         pagination:
           $ref: '#/components/schemas/PaginationInfo'
+    PullRequestWithAnalysis:
+      type: object
+      properties:
+        pullRequest:
+          $ref: '#/components/schemas/PullRequest'
+        isUpToStandards:
+          type: boolean
+        isAnalysing:
+          type: boolean
+        newIssues:
+          type: integer
+        fixedIssues:
+          type: integer
+        deltaCoverageWithDecimals:
+          type: number
+        coverage:
+          type: object
+          properties:
+            deltaCoverage:
+              type: number
+            diffCoverage:
+              type: number
+  parameters:
+    provider:
+      name: provider
+      in: path
+      required: true
+      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
+      schema:
+        type: string
+        enum:
+        - gh
+        - ghe
+        - gl
+        - gle
+        - bb
+        - bbe
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return (max 1000).
+      schema:
+        type: integer
+        default: 100
+        maximum: 1000
+    pullRequestNumber:
+      name: pullRequestNumber
+      in: path
+      required: true
+      description: Pull request number on the Git provider.
+      schema:
+        type: integer
+        format: int64
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
   securitySchemes:
     api-token:
       type: apiKey
