@@ -88,31 +88,11 @@ paths:
           description: The AI review was triggered.
 components:
   schemas:
-    GitUser:
-      type: object
-      properties:
-        username:
-          type: string
-        name:
-          type: string
-        email:
-          type: string
-        avatarUrl:
-          type: string
     PullRequestWithAnalysisResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/PullRequestWithAnalysis'
-    PullRequestIssuesListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommitIssue'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
     PaginationInfo:
       type: object
       properties:
@@ -122,27 +102,6 @@ components:
           type: integer
         total:
           type: integer
-    PullRequest:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        number:
-          type: integer
-        updated:
-          type: string
-          format: date-time
-        status:
-          type: string
-        title:
-          type: string
-        owner:
-          $ref: '#/components/schemas/GitUser'
-        originBranch:
-          type: string
-        targetBranch:
-          type: string
     CommitIssue:
       type: object
       properties:
@@ -190,6 +149,38 @@ components:
             $ref: '#/components/schemas/PullRequestWithAnalysis'
         pagination:
           $ref: '#/components/schemas/PaginationInfo'
+    PullRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        number:
+          type: integer
+        updated:
+          type: string
+          format: date-time
+        status:
+          type: string
+        title:
+          type: string
+        owner:
+          $ref: '#/components/schemas/GitUser'
+        originBranch:
+          type: string
+        targetBranch:
+          type: string
+    GitUser:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        avatarUrl:
+          type: string
     PullRequestWithAnalysis:
       type: object
       properties:
@@ -212,6 +203,15 @@ components:
               type: number
             diffCoverage:
               type: number
+    PullRequestIssuesListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
   parameters:
     provider:
       name: provider
@@ -227,6 +227,13 @@ components:
         - gle
         - bb
         - bbe
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
     remoteOrganizationName:
       name: remoteOrganizationName
       in: path
@@ -234,6 +241,14 @@ components:
       description: Organization name on the Git provider.
       schema:
         type: string
+    pullRequestNumber:
+      name: pullRequestNumber
+      in: path
+      required: true
+      description: Pull request number on the Git provider.
+      schema:
+        type: integer
+        format: int64
     limit:
       name: limit
       in: query
@@ -243,21 +258,6 @@ components:
         type: integer
         default: 100
         maximum: 1000
-    pullRequestNumber:
-      name: pullRequestNumber
-      in: path
-      required: true
-      description: Pull request number on the Git provider.
-      schema:
-        type: integer
-        format: int64
-    cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Cursor for the next page of results.
-      schema:
-        type: string
     repositoryName:
       name: repositoryName
       in: path

@@ -66,6 +66,20 @@ components:
         - gle
         - bb
         - bbe
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
     limit:
       name: limit
       in: query
@@ -75,35 +89,7 @@ components:
         type: integer
         default: 100
         maximum: 1000
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
-      schema:
-        type: string
-    cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Cursor for the next page of results.
-      schema:
-        type: string
   schemas:
-    OrganizationListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Organization'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
-    OrganizationResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Organization'
     PaginationInfo:
       type: object
       properties:
@@ -113,6 +99,11 @@ components:
           type: integer
         total:
           type: integer
+    OrganizationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Organization'
     Organization:
       type: object
       properties:
@@ -126,6 +117,15 @@ components:
           type: string
         joinMode:
           type: string
+    OrganizationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
   securitySchemes:
     api-token:
       type: apiKey

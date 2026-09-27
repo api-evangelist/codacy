@@ -93,11 +93,11 @@ components:
         - gle
         - bb
         - bbe
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
       schema:
         type: string
     limit:
@@ -109,11 +109,11 @@ components:
         type: integer
         default: 100
         maximum: 1000
-    cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Cursor for the next page of results.
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
       schema:
         type: string
     repositoryName:
@@ -124,6 +124,44 @@ components:
       schema:
         type: string
   schemas:
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    Repository:
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          format: int64
+        provider:
+          type: string
+        owner:
+          type: string
+        name:
+          type: string
+        fullPath:
+          type: string
+        visibility:
+          type: string
+        defaultBranch:
+          type: object
+          properties:
+            name:
+              type: string
+            branchId:
+              type: integer
+              format: int64
+    RepositoryWithAnalysisResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RepositoryWithAnalysis'
     RepositoryWithAnalysis:
       type: object
       properties:
@@ -155,44 +193,6 @@ components:
             $ref: '#/components/schemas/RepositoryWithAnalysis'
         pagination:
           $ref: '#/components/schemas/PaginationInfo'
-    PaginationInfo:
-      type: object
-      properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
-    RepositoryWithAnalysisResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/RepositoryWithAnalysis'
-    Repository:
-      type: object
-      properties:
-        repositoryId:
-          type: integer
-          format: int64
-        provider:
-          type: string
-        owner:
-          type: string
-        name:
-          type: string
-        fullPath:
-          type: string
-        visibility:
-          type: string
-        defaultBranch:
-          type: object
-          properties:
-            name:
-              type: string
-            branchId:
-              type: integer
-              format: int64
   securitySchemes:
     api-token:
       type: apiKey

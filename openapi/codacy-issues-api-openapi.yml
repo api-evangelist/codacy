@@ -65,21 +65,61 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommitIssueResponse'
 components:
+  parameters:
+    provider:
+      name: provider
+      in: path
+      required: true
+      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
+      schema:
+        type: string
+        enum:
+        - gh
+        - ghe
+        - gl
+        - gle
+        - bb
+        - bbe
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Cursor for the next page of results.
+      schema:
+        type: string
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return (max 1000).
+      schema:
+        type: integer
+        default: 100
+        maximum: 1000
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
   schemas:
-    SearchRepositoryIssuesListResponse:
+    PaginationInfo:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommitIssue'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
-    CommitIssueResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/CommitIssue'
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
     SearchRepositoryIssuesBody:
       type: object
       properties:
@@ -109,15 +149,6 @@ components:
           type: array
           items:
             type: string
-    PaginationInfo:
-      type: object
-      properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
     CommitIssue:
       type: object
       properties:
@@ -156,51 +187,20 @@ components:
                   type: string
                 uuid:
                   type: string
-  parameters:
-    provider:
-      name: provider
-      in: path
-      required: true
-      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
-      schema:
-        type: string
-        enum:
-        - gh
-        - ghe
-        - gl
-        - gle
-        - bb
-        - bbe
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
-      schema:
-        type: string
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of items to return (max 1000).
-      schema:
-        type: integer
-        default: 100
-        maximum: 1000
-    cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Cursor for the next page of results.
-      schema:
-        type: string
-    repositoryName:
-      name: repositoryName
-      in: path
-      required: true
-      description: Repository name on the Git provider.
-      schema:
-        type: string
+    CommitIssueResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CommitIssue'
+    SearchRepositoryIssuesListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
   securitySchemes:
     api-token:
       type: apiKey
