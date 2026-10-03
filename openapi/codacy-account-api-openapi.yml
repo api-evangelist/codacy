@@ -32,11 +32,6 @@ paths:
                 $ref: '#/components/schemas/UserResponse'
 components:
   schemas:
-    UserResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/User'
     User:
       type: object
       properties:
@@ -52,6 +47,11 @@ components:
         created:
           type: string
           format: date-time
+    UserResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/User'
   securitySchemes:
     api-token:
       type: apiKey

@@ -54,6 +54,51 @@ paths:
               schema:
                 $ref: '#/components/schemas/PullRequestFilesCoverageResponse'
 components:
+  schemas:
+    PullRequestFilesCoverageResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileCoverage'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PullRequestWithCoverageResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            coverage:
+              type: object
+              properties:
+                deltaCoverage:
+                  type: number
+                diffCoverage:
+                  type: number
+                coverageStatus:
+                  type: string
+    FileCoverage:
+      type: object
+      properties:
+        filePath:
+          type: string
+        totalCoverage:
+          type: number
+        diffCoverage:
+          type: number
+        coverageStatus:
+          type: string
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
   parameters:
     provider:
       name: provider
@@ -91,51 +136,6 @@ components:
       description: Repository name on the Git provider.
       schema:
         type: string
-  schemas:
-    PaginationInfo:
-      type: object
-      properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
-    PullRequestWithCoverageResponse:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            coverage:
-              type: object
-              properties:
-                deltaCoverage:
-                  type: number
-                diffCoverage:
-                  type: number
-                coverageStatus:
-                  type: string
-    FileCoverage:
-      type: object
-      properties:
-        filePath:
-          type: string
-        totalCoverage:
-          type: number
-        diffCoverage:
-          type: number
-        coverageStatus:
-          type: string
-    PullRequestFilesCoverageResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileCoverage'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
   securitySchemes:
     api-token:
       type: apiKey

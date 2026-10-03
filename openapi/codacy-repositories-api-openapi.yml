@@ -93,11 +93,25 @@ components:
         - gle
         - bb
         - bbe
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
     cursor:
       name: cursor
       in: query
       required: false
       description: Cursor for the next page of results.
+      schema:
+        type: string
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
       schema:
         type: string
     limit:
@@ -109,21 +123,43 @@ components:
         type: integer
         default: 100
         maximum: 1000
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
-      schema:
-        type: string
-    repositoryName:
-      name: repositoryName
-      in: path
-      required: true
-      description: Repository name on the Git provider.
-      schema:
-        type: string
   schemas:
+    RepositoryWithAnalysisResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RepositoryWithAnalysis'
+    RepositoryWithAnalysisListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepositoryWithAnalysis'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    RepositoryWithAnalysis:
+      type: object
+      properties:
+        repository:
+          $ref: '#/components/schemas/Repository'
+        grade:
+          type: integer
+        gradeLetter:
+          type: string
+        issuesPercentage:
+          type: number
+        coverage:
+          type: object
+          properties:
+            filesUncovered:
+              type: integer
+            filesWithLowCoverage:
+              type: integer
+            coveragePercentage:
+              type: number
+        lastAnalysedCommit:
+          type: string
     PaginationInfo:
       type: object
       properties:
@@ -157,42 +193,6 @@ components:
             branchId:
               type: integer
               format: int64
-    RepositoryWithAnalysisResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/RepositoryWithAnalysis'
-    RepositoryWithAnalysis:
-      type: object
-      properties:
-        repository:
-          $ref: '#/components/schemas/Repository'
-        grade:
-          type: integer
-        gradeLetter:
-          type: string
-        issuesPercentage:
-          type: number
-        coverage:
-          type: object
-          properties:
-            filesUncovered:
-              type: integer
-            filesWithLowCoverage:
-              type: integer
-            coveragePercentage:
-              type: number
-        lastAnalysedCommit:
-          type: string
-    RepositoryWithAnalysisListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/RepositoryWithAnalysis'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
   securitySchemes:
     api-token:
       type: apiKey

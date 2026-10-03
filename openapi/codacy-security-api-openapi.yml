@@ -43,13 +43,6 @@ components:
       description: Repository name on the Git provider.
       schema:
         type: string
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
-      schema:
-        type: string
     provider:
       name: provider
       in: path
@@ -64,6 +57,13 @@ components:
         - gle
         - bb
         - bbe
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
   schemas:
     SshKeyResponse:
       type: object

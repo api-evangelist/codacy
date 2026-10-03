@@ -57,36 +57,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/QualitySettingsResponse'
 components:
-  schemas:
-    QualitySettingsResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/QualitySettings'
-    QualitySettings:
-      type: object
-      properties:
-        issueThreshold:
-          type: object
-          properties:
-            threshold:
-              type: integer
-            minimumSeverity:
-              type: string
-              enum:
-              - Info
-              - Warning
-              - Error
-        securityIssueThreshold:
-          type: integer
-        coverageThresholdWithDecimals:
-          type: number
-        diffCoverageThreshold:
-          type: integer
-        duplicationThreshold:
-          type: integer
-        complexityThreshold:
-          type: integer
   parameters:
     provider:
       name: provider
@@ -116,6 +86,36 @@ components:
       description: Repository name on the Git provider.
       schema:
         type: string
+  schemas:
+    QualitySettings:
+      type: object
+      properties:
+        issueThreshold:
+          type: object
+          properties:
+            threshold:
+              type: integer
+            minimumSeverity:
+              type: string
+              enum:
+              - Info
+              - Warning
+              - Error
+        securityIssueThreshold:
+          type: integer
+        coverageThresholdWithDecimals:
+          type: number
+        diffCoverageThreshold:
+          type: integer
+        duplicationThreshold:
+          type: integer
+        complexityThreshold:
+          type: integer
+    QualitySettingsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/QualitySettings'
   securitySchemes:
     api-token:
       type: apiKey
