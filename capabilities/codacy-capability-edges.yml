@@ -1,0 +1,57 @@
+slug: codacy
+provider: Codacy
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Coverage
+  spec_file: codacy-coverage-api-openapi.yml
+  capability_id: BC-4200.50
+  capability_id_l1: BC-4200
+  capability_name: Software Quality Engineering
+  confidence: 0.8
+  evidence: GET .../pull-requests/{pullRequestNumber}/files getRepositoryPullRequestFilesCoverage 'Get
+    per-file coverage for a pull request'; schema FileCoverage
+  reason: Test-coverage measurement of code changes is part of software quality engineering (test suite
+    stewardship and quality measurement). Clearly within BC-4200; the narrower sub-capability fit is quality
+    engineering rather than CI.
+- tag: Pull Requests
+  spec_file: codacy-pull-requests-api-openapi.yml
+  capability_id: BC-4200.40
+  capability_id_l1: BC-4200
+  capability_name: Software Construction Management
+  confidence: 0.78
+  evidence: POST .../pull-requests/{pullRequestNumber}/ai-reviewer/trigger triggerPullRequestAiReview
+    'Trigger the AI Reviewer on a pull request'
+  reason: Pull-request analysis and AI code review sit in Software Construction Management, which explicitly
+    covers source control and code review. Some overlap with quality engineering (issues introduced/fixed),
+    hence not maximal confidence.
+- tag: Issues
+  spec_file: codacy-issues-api-openapi.yml
+  capability_id: BC-4200.50
+  capability_id_l1: BC-4200
+  capability_name: Software Quality Engineering
+  confidence: 0.75
+  evidence: POST .../issues/search searchRepositoryIssues 'Search a repository's issues'; schema CommitIssue
+  reason: These 'issues' are static-analysis code-quality findings on commits (schema CommitIssue), i.e.
+    defect detection and management for software — Software Quality Engineering. Not a customer-service
+    or ITSM issue tracker.
+- tag: Quality Settings
+  spec_file: codacy-quality-settings-api-openapi.yml
+  capability_id: BC-4200.50
+  capability_id_l1: BC-4200
+  capability_name: Software Quality Engineering
+  confidence: 0.7
+  evidence: GET .../settings/quality/pull-requests getPullRequestQualitySettings 'Get the pull request
+    quality gate settings'
+  reason: Configures quality gates applied to code changes — test/quality policy for the software product.
+    Could arguably be CI pipeline policy enforcement (BC-4210.10), so confidence is tempered.

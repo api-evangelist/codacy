@@ -235,6 +235,9 @@ apis:
   - type: Documentation
     url: https://docs.codacy.com/organizations/security-monitor/
 common:
+- type: CapabilityMap
+  url: capabilities/codacy-capability-edges.yml
+  name: Codacy Business Capability Map
 - type: AgenticAccess
   url: agentic-access/codacy-agentic-access.yml
 - type: DomainSecurity
