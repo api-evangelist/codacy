@@ -87,6 +87,11 @@ components:
       schema:
         type: string
   schemas:
+    QualitySettingsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/QualitySettings'
     QualitySettings:
       type: object
       properties:
@@ -111,11 +116,6 @@ components:
           type: integer
         complexityThreshold:
           type: integer
-    QualitySettingsResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/QualitySettings'
   securitySchemes:
     api-token:
       type: apiKey

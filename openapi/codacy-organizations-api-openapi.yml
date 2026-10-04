@@ -90,29 +90,6 @@ components:
         default: 100
         maximum: 1000
   schemas:
-    OrganizationResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Organization'
-    OrganizationListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Organization'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
-    PaginationInfo:
-      type: object
-      properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
     Organization:
       type: object
       properties:
@@ -126,6 +103,29 @@ components:
           type: string
         joinMode:
           type: string
+    OrganizationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Organization'
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    OrganizationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
   securitySchemes:
     api-token:
       type: apiKey

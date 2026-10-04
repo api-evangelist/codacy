@@ -78,6 +78,76 @@ paths:
         '204':
           description: The repository is no longer followed.
 components:
+  schemas:
+    RepositoryWithAnalysis:
+      type: object
+      properties:
+        repository:
+          $ref: '#/components/schemas/Repository'
+        grade:
+          type: integer
+        gradeLetter:
+          type: string
+        issuesPercentage:
+          type: number
+        coverage:
+          type: object
+          properties:
+            filesUncovered:
+              type: integer
+            filesWithLowCoverage:
+              type: integer
+            coveragePercentage:
+              type: number
+        lastAnalysedCommit:
+          type: string
+    Repository:
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          format: int64
+        provider:
+          type: string
+        owner:
+          type: string
+        name:
+          type: string
+        fullPath:
+          type: string
+        visibility:
+          type: string
+        defaultBranch:
+          type: object
+          properties:
+            name:
+              type: string
+            branchId:
+              type: integer
+              format: int64
+    RepositoryWithAnalysisListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepositoryWithAnalysis'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    RepositoryWithAnalysisResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RepositoryWithAnalysis'
   parameters:
     provider:
       name: provider
@@ -123,76 +193,6 @@ components:
         type: integer
         default: 100
         maximum: 1000
-  schemas:
-    RepositoryWithAnalysisResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/RepositoryWithAnalysis'
-    RepositoryWithAnalysisListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/RepositoryWithAnalysis'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
-    RepositoryWithAnalysis:
-      type: object
-      properties:
-        repository:
-          $ref: '#/components/schemas/Repository'
-        grade:
-          type: integer
-        gradeLetter:
-          type: string
-        issuesPercentage:
-          type: number
-        coverage:
-          type: object
-          properties:
-            filesUncovered:
-              type: integer
-            filesWithLowCoverage:
-              type: integer
-            coveragePercentage:
-              type: number
-        lastAnalysedCommit:
-          type: string
-    PaginationInfo:
-      type: object
-      properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
-    Repository:
-      type: object
-      properties:
-        repositoryId:
-          type: integer
-          format: int64
-        provider:
-          type: string
-        owner:
-          type: string
-        name:
-          type: string
-        fullPath:
-          type: string
-        visibility:
-          type: string
-        defaultBranch:
-          type: object
-          properties:
-            name:
-              type: string
-            branchId:
-              type: integer
-              format: int64
   securitySchemes:
     api-token:
       type: apiKey

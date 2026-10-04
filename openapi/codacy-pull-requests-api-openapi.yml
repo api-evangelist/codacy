@@ -126,6 +126,61 @@ components:
                   type: string
                 uuid:
                   type: string
+    PullRequestWithAnalysisResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PullRequestWithAnalysis'
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
+    PullRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        number:
+          type: integer
+        updated:
+          type: string
+          format: date-time
+        status:
+          type: string
+        title:
+          type: string
+        owner:
+          $ref: '#/components/schemas/GitUser'
+        originBranch:
+          type: string
+        targetBranch:
+          type: string
+    PullRequestIssuesListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    GitUser:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        avatarUrl:
+          type: string
     PullRequestWithAnalysis:
       type: object
       properties:
@@ -148,26 +203,6 @@ components:
               type: number
             diffCoverage:
               type: number
-    PullRequestIssuesListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommitIssue'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
-    GitUser:
-      type: object
-      properties:
-        username:
-          type: string
-        name:
-          type: string
-        email:
-          type: string
-        avatarUrl:
-          type: string
     PullRequestWithAnalysisListResponse:
       type: object
       properties:
@@ -177,41 +212,6 @@ components:
             $ref: '#/components/schemas/PullRequestWithAnalysis'
         pagination:
           $ref: '#/components/schemas/PaginationInfo'
-    PullRequestWithAnalysisResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/PullRequestWithAnalysis'
-    PullRequest:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        number:
-          type: integer
-        updated:
-          type: string
-          format: date-time
-        status:
-          type: string
-        title:
-          type: string
-        owner:
-          $ref: '#/components/schemas/GitUser'
-        originBranch:
-          type: string
-        targetBranch:
-          type: string
-    PaginationInfo:
-      type: object
-      properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
   parameters:
     provider:
       name: provider
@@ -227,13 +227,6 @@ components:
         - gle
         - bb
         - bbe
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
-      schema:
-        type: string
     pullRequestNumber:
       name: pullRequestNumber
       in: path
@@ -242,6 +235,13 @@ components:
       schema:
         type: integer
         format: int64
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
+      schema:
+        type: string
     repositoryName:
       name: repositoryName
       in: path

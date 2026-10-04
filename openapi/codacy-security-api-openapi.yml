@@ -36,13 +36,6 @@ paths:
                 $ref: '#/components/schemas/SshKeyResponse'
 components:
   parameters:
-    repositoryName:
-      name: repositoryName
-      in: path
-      required: true
-      description: Repository name on the Git provider.
-      schema:
-        type: string
     provider:
       name: provider
       in: path
@@ -57,6 +50,13 @@ components:
         - gle
         - bb
         - bbe
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
     remoteOrganizationName:
       name: remoteOrganizationName
       in: path
