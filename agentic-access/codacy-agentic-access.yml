@@ -1,22 +1,65 @@
-generated: '2026-07-15'
+generated: '2026-09-23'
 method: generated
-source: openapi/codacy-openapi.yml
+source: openapi/codacy-account-api-openapi.yml, openapi/codacy-coverage-api-openapi.yml, openapi/codacy-issues-api-openapi.yml,
+  openapi/codacy-organizations-api-openapi.yml, openapi/codacy-pull-requests-api-openapi.yml,
+  openapi/codacy-quality-settings-api-openapi.yml, openapi/codacy-repositories-api-openapi.yml,
+  openapi/codacy-security-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
   operations: 18
   by_action_class:
-    connected: 13
-    acting: 5
+    connected: 14
+    acting: 4
   by_consequence:
-    read: 13
-    write: 5
+    read: 14
+    write: 4
   human_in_the_loop_required: 0
 operations:
 - path: /user
   method: get
   operationId: getUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}
+  method: get
+  operationId: getRepositoryPullRequestCoverage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/files
+  method: get
+  operationId: getRepositoryPullRequestFilesCoverage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/search
+  method: post
+  operationId: searchRepositoryIssues
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/{issueId}
+  method: get
+  operationId: getIssue
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -37,84 +80,6 @@ operations:
 - path: /user/organizations/{provider}/{remoteOrganizationName}
   method: get
   operationId: getUserOrganization
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /analysis/organizations/{provider}/{remoteOrganizationName}/repositories
-  method: get
-  operationId: listOrganizationRepositoriesWithAnalysis
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}
-  method: get
-  operationId: getRepositoryWithAnalysis
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/follow
-  method: post
-  operationId: followAddedRepository
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/follow
-  method: delete
-  operationId: unfollowRepository
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/search
-  method: post
-  operationId: searchRepositoryIssues
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/{issueId}
-  method: get
-  operationId: getIssue
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -168,26 +133,6 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}
-  method: get
-  operationId: getRepositoryPullRequestCoverage
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/files
-  method: get
-  operationId: getRepositoryPullRequestFilesCoverage
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
 - path: /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/pull-requests
   method: get
   operationId: getPullRequestQualitySettings
@@ -201,6 +146,58 @@ operations:
 - path: /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/pull-requests
   method: put
   operationId: updatePullRequestQualitySettings
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /analysis/organizations/{provider}/{remoteOrganizationName}/repositories
+  method: get
+  operationId: listOrganizationRepositoriesWithAnalysis
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}
+  method: get
+  operationId: getRepositoryWithAnalysis
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/follow
+  method: post
+  operationId: followAddedRepository
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/follow
+  method: delete
+  operationId: unfollowRepository
   x-agentic-access:
     action-class: acting
     consequence: write
