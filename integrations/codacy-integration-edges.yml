@@ -2,6 +2,8 @@ generated: '2026-10-13'
 method: searched
 checked:
 - https://aws.amazon.com/marketplace/
+- https://github.com/marketplace?type=actions
+- https://github.com/marketplace?type=apps
 marketplace_apps: []
 edges:
 - partner_name: AWS Marketplace
@@ -19,3 +21,44 @@ edges:
   seller_name: Codacy
   detected_by: sweep-cloud-marketplaces.py
   detected: '2026-10-13'
+- partner_name: GitHub Marketplace (apps)
+  partner: github
+  partner_match: aggregator
+  type: marketplace
+  marketplace: github-apps
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://github.com/marketplace/codacy
+  listing_count: 1
+  apps:
+  - Codacy
+  publisher_name: Codacy
+  badges:
+  - Verified creator
+  - Verified domain
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
+- partner_name: GitHub Marketplace (actions)
+  partner: github-actions
+  partner_match: aggregator
+  type: marketplace
+  marketplace: github-actions
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://github.com/marketplace/actions/git-version
+  listing_count: 4
+  apps:
+  - Git Version
+  - Codacy Coverage Reporter
+  - Codacy Analysis CLI
+  - Codacy CLI V2
+  publisher_name: Codacy
+  badges:
+  - Verified creator
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
+source:
+- https://github.com/marketplace?type=actions
+- https://github.com/marketplace?type=apps
