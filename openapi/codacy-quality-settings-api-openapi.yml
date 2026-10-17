@@ -72,18 +72,18 @@ components:
         - gle
         - bb
         - bbe
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
-      schema:
-        type: string
     repositoryName:
       name: repositoryName
       in: path
       required: true
       description: Repository name on the Git provider.
+      schema:
+        type: string
+    remoteOrganizationName:
+      name: remoteOrganizationName
+      in: path
+      required: true
+      description: Organization name on the Git provider.
       schema:
         type: string
   schemas:

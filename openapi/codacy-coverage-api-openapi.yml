@@ -69,6 +69,13 @@ components:
         - gle
         - bb
         - bbe
+    repositoryName:
+      name: repositoryName
+      in: path
+      required: true
+      description: Repository name on the Git provider.
+      schema:
+        type: string
     pullRequestNumber:
       name: pullRequestNumber
       in: path
@@ -84,14 +91,16 @@ components:
       description: Organization name on the Git provider.
       schema:
         type: string
-    repositoryName:
-      name: repositoryName
-      in: path
-      required: true
-      description: Repository name on the Git provider.
-      schema:
-        type: string
   schemas:
+    PullRequestFilesCoverageResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileCoverage'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
     FileCoverage:
       type: object
       properties:
@@ -103,6 +112,15 @@ components:
           type: number
         coverageStatus:
           type: string
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+        limit:
+          type: integer
+        total:
+          type: integer
     PullRequestWithCoverageResponse:
       type: object
       properties:
@@ -118,24 +136,6 @@ components:
                   type: number
                 coverageStatus:
                   type: string
-    PaginationInfo:
-      type: object
-      properties:
-        cursor:
-          type: string
-        limit:
-          type: integer
-        total:
-          type: integer
-    PullRequestFilesCoverageResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileCoverage'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfo'
   securitySchemes:
     api-token:
       type: apiKey
