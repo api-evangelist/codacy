@@ -1,0 +1,3565 @@
+openapi: 3.2.0
+info:
+  title: Codacy Repository API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Repository
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/follow:
+    post:
+      tags:
+      - Repository
+      summary: Follow a repository that was already added to Codacy
+      operationId: followAddedRepository
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddedStateResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    delete:
+      tags:
+      - Repository
+      summary: Unfollow a repository
+      operationId: unfollowRepository
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/repository:
+    get:
+      tags:
+      - Repository
+      summary: Get quality settings for the specific repository
+      operationId: getQualitySettingsForRepository
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryQualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    put:
+      tags:
+      - Repository
+      summary: Update quality goals settings for the specific repository
+      operationId: updateRepositoryQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: The new value for the quality goals of the repository
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RepositoryQualitySettings'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryQualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: updatedQualitySettings
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/ssh-user-key:
+    post:
+      tags:
+      - Repository
+      summary: Regenerate the user SSH key that Codacy uses to clone the repository
+      description: Codacy automatically adds the new public user SSH key to the user account on the Git provider. Using a user SSH key is recommended if your repository includes submodules.
+      operationId: regenerateUserSshKey
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshKeySettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/ssh-repository-key:
+    post:
+      tags:
+      - Repository
+      summary: Regenerate the SSH key that Codacy uses to clone the repository
+      description: Codacy automatically adds the new public SSH key to the repository on the Git provider.
+      operationId: regenerateRepositorySshKey
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshKeySettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/stored-ssh-key:
+    get:
+      tags:
+      - Repository
+      summary: Get the public SSH key for the repository
+      description: The returned key is the most recently generated and can be either a user or repository SSH key.
+      operationId: getRepositoryPublicSshKey
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshKeySettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/sync:
+    post:
+      tags:
+      - Repository
+      summary: Synchronize repository name and visibility with Git provider
+      operationId: syncRepositoryWithProvider
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncProviderSettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/analysis:
+    get:
+      tags:
+      - Repository
+      summary: Get the status of the repository setting **Run analysis on your build server**
+      operationId: getBuildServerAnalysisSetting
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildServerAnalysisSettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    patch:
+      tags:
+      - Repository
+      summary: Update the status of the repository setting **Run analysis on your build…
+      operationId: updateBuildServerAnalysisSetting
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: New value for the repository setting **Run analysis on your build server**
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuildServerAnalysisSettingRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildServerAnalysisSettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: targetBuildServerAnalysisSetting
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/commits:
+    get:
+      tags:
+      - Repository
+      summary: Get quality settings for the commits of a repository
+      description: '`diffCoverageThreshold` is never returned because this threshold isn''t currently supported for commits.'
+      operationId: getCommitQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    put:
+      tags:
+      - Repository
+      summary: Update quality settings for the commits of a repository
+      operationId: updateCommitQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: The new value for the quality settings of commits in a repository
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QualityGate'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: updatedQualitySettings
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/commits/reset:
+    post:
+      tags:
+      - Repository
+      summary: Reset quality settings for the commits of a repository to Codacy’s default…
+      operationId: resetCommitsQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/pull-requests/reset:
+    post:
+      tags:
+      - Repository
+      summary: Reset quality settings for the pull requests of a repository to Codacy’s…
+      operationId: resetPullRequestsQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/repository/reset:
+    post:
+      tags:
+      - Repository
+      summary: Reset quality settings for the repository to Codacy’s default values
+      operationId: resetRepositoryQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryQualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/pull-requests:
+    get:
+      tags:
+      - Repository
+      summary: Get quality settings for the pull requests of a repository
+      operationId: getPullRequestQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    put:
+      tags:
+      - Repository
+      summary: Update quality settings for the pull requests of a repository
+      operationId: updatePullRequestQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: The new value for the quality settings of pull requests in the repository
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QualityGate'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: updatedQualitySettings
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/integrations/providerSettings:
+    get:
+      tags:
+      - Repository
+      summary: Get Git provider integration settings for a repository
+      operationId: getRepositoryIntegrationsSettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryIntegrationSettings'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: repository
+    patch:
+      tags:
+      - Repository
+      summary: Update Git provider integration settings for a repository
+      operationId: updateRepositoryIntegrationsSettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderIntegrationSettingsPatchBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: repository
+      x-codegen-request-body-name: repositoryIntegrationSettingsBody
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/integrations/postCommitHook:
+    get:
+      tags:
+      - Repository
+      summary: Create a post-commit hook for a repository
+      operationId: createPostCommitHook
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          description: An unexpected error occurred while creating the post-commit hook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          x-ms-error-response: true
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/integrations/refreshProvider:
+    post:
+      tags:
+      - Repository
+      summary: Refresh the Git provider integration for a repository (GitLab and Bitbucket…
+      description: Codacy will use the authenticated user to create comments on new pull requests
+      operationId: refreshProviderRepositoryIntegration
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          description: An unexpected error occurred while refreshing the repository Git provider integration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          x-ms-error-response: true
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/reanalyzeCommit:
+    post:
+      tags:
+      - Repository
+      summary: Reanalyze a specific commit in a repository
+      operationId: reanalyzeCommitById
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: UUID or SHA string that identifies the commit
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommitUuidRequest'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: repository
+      x-codegen-request-body-name: commitUuid
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}:
+    get:
+      tags:
+      - Repository
+      summary: Fetch the specified repository
+      description: '**Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: getRepository
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: repository
+    delete:
+      tags:
+      - Repository
+      summary: Delete the specified repository
+      operationId: deleteRepository
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/branches:
+    get:
+      tags:
+      - Repository
+      summary: List repository branches
+      description: '**Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: listRepositoryBranches
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchStatusParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/branchesSortParam'
+      - $ref: '#/components/parameters/directionParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BranchListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/branches/{branchName}:
+    patch:
+      tags:
+      - Repository
+      summary: Update the settings for a repository branch
+      description: Toggle analysis for a branch.
+      operationId: updateRepositoryBranchConfiguration
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNamePathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRepositoryBranchConfigurationBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: updateRepositoryBranchConfigurationBody
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/branches/{branchName}/setDefault:
+    post:
+      tags:
+      - Repository
+      summary: Set branch as default
+      description: Sets the default branch for a repository. The new default branch must already be enabled on Codacy.
+      operationId: setRepositoryBranchAsDefault
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNamePathParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/branches/{branchName}/required-checks:
+    get:
+      tags:
+      - Repository
+      summary: Get branch required status checks
+      operationId: getBranchRequiredChecks
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNamePathParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BranchRequiredChecksResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/gh/{remoteOrganizationName}/repositories/{repositoryName}/badge:
+    post:
+      tags:
+      - Repository
+      summary: Create a pull request adding the Codacy analysis badge to the repository
+      description: 'Creates a pull request adding the Codacy static code analysis badge
+
+        to the README of the GitHub repository if the repository is public
+
+        and doesn''t already have a badge.
+
+
+        **Note:** The pull request is created asynchronously and may fail
+
+        even if this endpoint responds successfully.'
+      operationId: createBadgePullRequest
+      parameters:
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /repositories:
+    post:
+      tags:
+      - Repository
+      summary: Add a repository to Codacy
+      description: Add a new repository to an existing organization on Codacy
+      operationId: addRepository
+      parameters:
+      - name: caller
+        in: header
+        description: Optional identifier for the calling application or service.
+        schema:
+          type: string
+      requestBody:
+        description: Information of repository to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddRepositoryBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Repository'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: addRepositoryParameter
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/files:
+    get:
+      tags:
+      - Repository
+      summary: List files in a repository
+      description: 'Returns the most recent analysis information for the files in a repository as available on the Files page.
+
+        Files that are ignored on Codacy aren''t returned.
+
+
+        **Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: listFiles
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      - $ref: '#/components/parameters/filesPathParam'
+      - $ref: '#/components/parameters/filesSearchFilter'
+      - $ref: '#/components/parameters/filesSortParam'
+      - $ref: '#/components/parameters/directionParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of files in the repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/directories:
+    get:
+      tags:
+      - Repository
+      summary: List folders in a repository
+      description: 'Returns the most recent analysis information for the folders directly inside a path of a repository, with metrics aggregated over every file in each folder''s subtree.
+
+        Use the `path` parameter to list the folders inside a folder; when absent or empty, the folders at the repository root are returned.'
+      operationId: listDirectories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      - $ref: '#/components/parameters/directoriesPathParam'
+      - $ref: '#/components/parameters/filesSortParam'
+      - $ref: '#/components/parameters/directionParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of folders in the repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectoryListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/ignored-files:
+    get:
+      tags:
+      - Repository
+      summary: List ignored files in a repository
+      description: 'Returns the most recent ignored files information.
+
+
+        **Note:** When the repository has a Codacy configuration file ''hasCodacyConfigurationFile'', this list of files
+
+        are read-only, as they were ignored during the most recent analysis based on the configuration file'
+      operationId: listIgnoredFiles
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      - $ref: '#/components/parameters/filesSearchFilter'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of ignored files in the repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IgnoredFileListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/files/{fileId}:
+    get:
+      tags:
+      - Repository
+      summary: Get analysis information and coverage metrics for a file in a repository
+      operationId: getFileWithAnalysis
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/fileIdParam'
+      responses:
+        '200':
+          description: File with analysis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileInformationWithAnalysis'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/files/{fileId}/duplication:
+    get:
+      tags:
+      - Repository
+      summary: Get the list of duplicated code blocks for a file in a repository
+      description: The `id` of each duplicate code block is deprecated and will be removed, as it can change over time.
+      operationId: getFileClones
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/fileIdParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: File clones
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileClonesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/files/{fileId}/issues:
+    get:
+      tags:
+      - Repository
+      summary: Get the issue list for a file in a repository
+      operationId: getFileIssues
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/fileIdParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: File issues
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchRepositoryIssuesListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tokens:
+    get:
+      tags:
+      - Repository
+      summary: List the repository API tokens
+      description: 'Each token reports its name, expiration and creation date. Tokens created before creation dates were
+
+        recorded have no `createdAt`'
+      operationId: listRepositoryApiTokens
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTokenListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    post:
+      tags:
+      - Repository
+      summary: Create a new repository API token
+      operationId: createRepositoryApiToken
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RepositoryApiTokenCreateRequest'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tokens/delete:
+    post:
+      tags:
+      - Repository
+      summary: Delete multiple repository API tokens by id
+      description: Deletes the repository API tokens with the given ids
+      operationId: deleteRepositoryApiTokens
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RepositoryApiTokensDeleteRequest'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tokens/{tokenId}:
+    delete:
+      tags:
+      - Repository
+      summary: Delete a repository API token by ID
+      operationId: deleteRepositoryApiToken
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/tokenIdParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/coverage/status:
+    get:
+      tags:
+      - Repository
+      summary: List the most recent coverage reports and their status
+      operationId: listCoverageReports
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoverageReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}/coverage/reports:
+    get:
+      tags:
+      - Repository
+      summary: List coverage reports for a commit
+      operationId: listCommitCoverageReports
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/commitUuid'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoverageReportEntryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  ? /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}/coverage/reports/{reportUuid}
+  : get:
+      tags:
+      - Repository
+      summary: Get a coverage report with its contents
+      operationId: getCoverageReport
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/commitUuid'
+      - $ref: '#/components/parameters/reportUuid'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoverageReportContentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/files/{fileId}/coverage:
+    get:
+      tags:
+      - Repository
+      summary: Get coverage information for a file in the head commit of a repository branch
+      operationId: getFileCoverage
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/fileIdParam'
+      responses:
+        '200':
+          description: File Coverage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileCoverageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/file:
+    patch:
+      tags:
+      - Repository
+      summary: Ignore or unignore a file
+      operationId: updateFileState
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileStateBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: fileState
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/diff:
+    get:
+      tags:
+      - Repository
+      summary: Get the human-readable Git diff of a pull request
+      operationId: getPullRequestDiff
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiffResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}/diff:
+    get:
+      tags:
+      - Repository
+      summary: Get the human-readable Git diff of a commit
+      operationId: getCommitDiff
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/commitUuid'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiffResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  ? /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/base/{baseCommitUuid}/head/{headCommitUuid}/diff
+  : get:
+      tags:
+      - Repository
+      summary: Get the human-readable Git diff between a head commit and a base commit
+      operationId: getDiffBetweenCommits
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/baseCommitUuid'
+      - $ref: '#/components/parameters/headCommitUuid'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiffResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+components:
+  parameters:
+    fileIdParam:
+      name: fileId
+      in: path
+      description: Identifier of a file in a specific commit
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 1
+      x-ms-parameter-location: method
+    filesPathParam:
+      name: path
+      in: query
+      description: 'Relative path of the folder whose direct child files are listed.
+
+        When absent, all files in the repository are returned (recursive).
+
+        When empty, only files at the repository root are returned.
+
+        '
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: src/main
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    branchNameParam:
+      name: branch
+      in: query
+      description: 'Name of a [repository branch enabled on Codacy](https://docs.codacy.com/repositories-configure/managing-branches/),
+
+        as returned by the endpoint [listRepositoryBranches](#listrepositorybranches).
+
+        By default, uses the main branch defined on the Codacy repository settings.
+
+        '
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: master
+      x-ms-parameter-location: method
+    headCommitUuid:
+      name: headCommitUuid
+      in: path
+      description: UUID or SHA string that identifies the head commit for a comparison
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 2957025d42e8daadf937d4044516f991d21deea4
+      x-ms-parameter-location: method
+    filesSortParam:
+      name: sort
+      in: query
+      description: 'Field used to sort the results.
+
+        For files the valid values are `filename`, `issues`, `grade`, `duplication`, `complexity`, and `coverage`.
+
+        For folders the valid values are `name`, `issues`, `grade`, `duplication`, `complexity`, and `coverage`.
+
+        '
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: issues
+      x-ms-parameter-location: method
+    directionParam:
+      name: direction
+      in: query
+      description: Sort direction. Possible values are 'asc' (ascending) or 'desc' (descending).
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: desc
+      x-ms-parameter-location: method
+    tokenIdParam:
+      name: tokenId
+      in: path
+      description: Unique identifier for the API token
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 30
+      x-ms-parameter-location: method
+    filesSearchFilter:
+      name: search
+      in: query
+      description: Filter files that include this string anywhere in their relative path
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: file.js
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    branchStatusParam:
+      name: enabled
+      in: query
+      description: Filter by branch status. Set to `true` to return only enabled branches, or `false` to return only disabled branches
+      schema:
+        type: boolean
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+    searchParam:
+      name: search
+      in: query
+      description: Filter results by searching for this string
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: my-repository-name
+      x-ms-parameter-location: method
+    directoriesPathParam:
+      name: path
+      in: query
+      description: 'Path of the folder whose child folders are listed.
+
+        When absent or empty, the folders at the repository root are returned.
+
+        '
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: src/main
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    repositoryNameParam:
+      name: repositoryName
+      in: path
+      description: Repository name on the Git provider organization
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: awesome-repo
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    branchesSortParam:
+      name: sort
+      in: query
+      description: Field used to sort the list of branches. The allowed values are 'name' and 'last-updated'.
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: category
+      x-ms-parameter-location: method
+    pullRequestNumberParam:
+      name: pullRequestNumber
+      in: path
+      description: Pull request number
+      required: true
+      schema:
+        type: integer
+        format: int32
+        x-ms-parameter-location: method
+      example: 738490
+      x-ms-parameter-location: method
+    commitUuid:
+      name: commitUuid
+      in: path
+      description: UUID or SHA string that identifies the commit
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 2957025d42e8daadf937d4044516f991d21deea4
+      x-ms-parameter-location: method
+    reportUuid:
+      name: reportUuid
+      in: path
+      description: UUID string that identifies the coverage report
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 80f64371-e6bc-4d9b-b022-7c873cc5e39f
+    branchNamePathParam:
+      name: branchName
+      in: path
+      description: Repository branch name
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: master
+      x-ms-parameter-location: method
+    baseCommitUuid:
+      name: baseCommitUuid
+      in: path
+      description: UUID or SHA string that identifies the base commit for a comparison
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 2957025d42e8daadf937d4044516f991d21deea4
+      x-ms-parameter-location: method
+  schemas:
+    RepositorySummary:
+      required:
+      - name
+      - owner
+      - provider
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          description: Codacy identifier for this repository.
+          format: int64
+          example: 45738
+        provider:
+          $ref: '#/components/schemas/Provider'
+        owner:
+          type: string
+          description: Name of the organization that owns the repository.
+          example: codacy
+        name:
+          type: string
+          description: Name of the repository.
+          example: codacy-eslint
+      description: Essential information to describe a repository.
+    AdvisoryInformation:
+      description: Enrichment extracted for the associated advisory, such as vulnerable entry-point functions
+      type: object
+      required:
+      - advisoryId
+      - vulnerableFunctions
+      properties:
+        advisoryId:
+          type: string
+          description: The advisory identifier
+          example: CVE-2024-24786
+        vulnerableFunctions:
+          type: array
+          description: The vulnerable functions of the advisory.
+          items:
+            type: string
+          example:
+          - Unmarshal
+          - UnmarshalOptions.Unmarshal
+        publishedAt:
+          type: string
+          format: date-time
+          x-scala-type: java.time.Instant
+          description: When the advisory was published, as reported by OSV.
+    CoverageReportEntry:
+      required:
+      - repositoryId
+      - commitSha
+      - reportId
+      - isFinal
+      - processed
+      - createdAt
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          format: int64
+        commitSha:
+          type: string
+        reportId:
+          type: string
+        language:
+          type: string
+        isFinal:
+          type: boolean
+        processed:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+    ToolReference:
+      required:
+      - name
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: Tool unique identifier
+          example: 847feb32-9ff2-11ea-bb37-0242ac130002
+        name:
+          type: string
+          description: Name of the tool
+          example: ESLint
+      description: Details of the tool that found the issue
+    CoverageReportContentResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CoverageReportContent'
+    CommitReference:
+      description: Details of the commit that introduced the issue or null if the issue was introduced in a commit that Codacy didn't analyze
+      allOf:
+      - $ref: '#/components/schemas/CommitIdentification'
+      - type: object
+        properties:
+          commiter:
+            type: string
+            description: Email address of the author of the commit
+          commiterName:
+            type: string
+            description: Name of the author of the commit
+          timestamp:
+            type: string
+            description: Time and date of the commit
+            format: date-time
+            example: '2019-05-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+    IgnoredFileListResponse:
+      required:
+      - hasCodacyConfigurationFile
+      - data
+      type: object
+      properties:
+        hasCodacyConfigurationFile:
+          type: boolean
+          description: If the repository has a configuration file that controls what repository files are ignored
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IgnoredFile'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PatternDetails:
+      required:
+      - category
+      - id
+      - level
+      - severityLevel
+      type: object
+      properties:
+        id:
+          type: string
+          description: Pattern identifier (unique per tool)
+          example: accessor-pairs
+        title:
+          type: string
+          description: Pattern title
+        category:
+          type: string
+          description: Pattern category
+          example: Security
+        subCategory:
+          type: string
+          description: Pattern subcategory (optional since some patterns might not have a subcategory)
+          example: XSS
+        level:
+          type: string
+          description: Deprecated, use `severityLevel` instead
+          example: Error
+          enum:
+          - Info
+          - Warning
+          - High
+          - Error
+          x-ms-enum:
+            name: SeverityLevel
+        severityLevel:
+          $ref: '#/components/schemas/SeverityLevel'
+      description: Details of the pattern that was identified in the issue
+    DependencyChains:
+      type: array
+      description: 'Dependency chains showing how the vulnerable package is reached. Each chain is an ordered list of package identifiers from the root package down to the vulnerable package. Only present for SCA findings.
+
+        '
+      items:
+        type: array
+        items:
+          type: string
+      example:
+      - - root-app
+        - lodash
+        - vulnerable-pkg
+    CommitIdentification:
+      required:
+      - sha
+      type: object
+      properties:
+        sha:
+          type: string
+          description: Commit SHA
+    CoverageReportResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            hasCoverageOverview:
+              type: boolean
+              description: True if the Quality evolution chart of the repository includes coverage information
+            lastReports:
+              type: array
+              items:
+                $ref: '#/components/schemas/CoverageReport'
+    ProviderIntegrationSettingsBody:
+      required:
+      - aiEnhancedComments
+      - commitStatus
+      - pullRequestComment
+      - pullRequestSummary
+      - availableSettings
+      type: object
+      properties:
+        commitStatus:
+          type: boolean
+          description: Toggle the feature "Status checks"
+        pullRequestComment:
+          type: boolean
+          description: Toggle the feature "Issue annotations"
+        pullRequestSummary:
+          type: boolean
+          description: Toggle the feature "Issue summaries"
+        coverageSummary:
+          type: boolean
+          description: Toggle the feature "Coverage summary" (GitHub only)
+        suggestions:
+          type: boolean
+          description: Toggle the feature "Suggested fixes" (GitHub only)
+        aiEnhancedComments:
+          type: boolean
+          description: 'Toggle the feature "AI-enhanced comments". If "Suggested fixes" (GitHub only) is also enabled, then the AI-enhanced comments also provide suggested fixes. This is an experimental feature.
+
+            '
+        aiPullRequestReviewer:
+          type: boolean
+          description: 'Toggle the feature "AI Pull Request Reviewer" (GitHub only). When enabled, Codacy will use AI to review pull requests and provide comments on code quality and potential issues. This is an experimental feature.
+
+            '
+        aiPullRequestReviewerAutomatic:
+          type: boolean
+          description: 'Toggle the feature "AI Pull Request Reviewer Automatic" (GitHub only). When enabled, Codacy will use AI to review pull requests and provide comments on code quality and potential issues automatically once, subsequent reviews will have to be explicitly requested.
+
+            '
+        pullRequestUnifiedSummary:
+          type: boolean
+          description: 'Toggle the feature "Pull Request Unified Summary" (GitHub only). When enabled, Codacy provides a unified summary (coverage and analysis).
+
+            '
+        availableSettings:
+          type: array
+          description: List of available settings for the Git provider integration
+          items:
+            type: string
+            example: GitHubCoverageSummary
+      description: Default settings for Git provider integrations with a list of available settings
+    PaymentRequired:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: PaymentRequired
+    DirectoryWithAnalysisInfo:
+      required:
+      - path
+      - name
+      - nrFiles
+      - totalIssues
+      - grade
+      - gradeLetter
+      type: object
+      properties:
+        path:
+          type: string
+          description: Full path of the folder in the repository
+          example: src/main/scala
+        name:
+          type: string
+          description: Name of the folder, that is the last segment of its path
+          example: scala
+        nrFiles:
+          type: integer
+          description: Number of files in the folder, including all subfolders
+          format: int32
+          example: 42
+        totalIssues:
+          type: integer
+          description: Number of issues in the folder, including all subfolders
+          format: int32
+          example: 17
+        grade:
+          type: integer
+          description: Quality grade of the folder as a number between 100 (highest grade) and 0 (lowest grade)
+          format: int32
+          example: 74
+        gradeLetter:
+          type: string
+          description: Quality grade of the folder as a letter between A (highest grade) and F (lowest grade)
+          example: A
+        complexity:
+          type: integer
+          description: Highest complexity of a file in the folder, including all subfolders
+          format: int32
+          example: 12
+        complexitySum:
+          type: integer
+          description: Total complexity of all files in the folder, including all subfolders
+          format: int32
+          example: 120
+        duplication:
+          type: integer
+          description: Number of duplicated lines in the folder, including all subfolders
+          format: int32
+          example: 7
+        numberOfClones:
+          type: integer
+          description: Number of cloned blocks of code in the folder, including all subfolders
+          format: int32
+          example: 5
+        coverageWithDecimals:
+          multipleOf: 0.01
+          type: number
+          description: Test coverage percentage of the folder with decimals
+          format: double
+          example: 71
+        sourceLinesOfCode:
+          type: integer
+          description: Coverable lines of code in the folder, including all subfolders
+          format: int32
+          example: 90
+        linesOfCode:
+          type: integer
+          description: Lines of code in the folder, including all subfolders
+          format: int32
+          example: 123
+      description: Folder with analysis information
+    BadGateway:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadGateway
+    CloneDuplicationBlock:
+      required:
+      - fileDataId
+      - fileId
+      - fromLine
+      - path
+      - toLine
+      type: object
+      properties:
+        path:
+          type: string
+        fileId:
+          type: integer
+          format: int64
+        fileDataId:
+          type: integer
+          format: int64
+        fromLine:
+          type: integer
+          format: int64
+        toLine:
+          type: integer
+          format: int64
+    ApiToken:
+      required:
+      - id
+      - token
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        token:
+          type: string
+        name:
+          type: string
+          example: pt-4f1a9b2c8e3d
+        expiresAt:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        createdAt:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+          description: 'The timestamp when the token was created. Absent for tokens created before creation dates were recorded
+
+            '
+      description: API token string value and ID
+    Repository:
+      allOf:
+      - $ref: '#/components/schemas/RepositorySummary'
+      - required:
+        - addedState
+        - languages
+        - problems
+        - standards
+        - visibility
+        type: object
+        properties:
+          fullPath:
+            type: string
+            description: Full path of the repository on the Git provider
+            example: codacy/codacy-eslint
+          visibility:
+            $ref: '#/components/schemas/Visibility'
+          remoteIdentifier:
+            type: string
+            description: Unique identifier of the repository on the Git provider
+            example: '3'
+          lastUpdated:
+            type: string
+            description: Timestamp when the repository was last updated. See [Git provider documentation](https://docs.codacy.com/organizations/organization-overview/#last-updated-repositories) for details.
+            format: date-time
+            example: '2019-05-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+          permission:
+            $ref: '#/components/schemas/Permission'
+          problems:
+            type: array
+            items:
+              $ref: '#/components/schemas/RepositoryProblem'
+          languages:
+            type: array
+            description: List of the languages in the repository
+            example:
+            - Java
+            - Scala
+            - CSS
+            items:
+              type: string
+          stack:
+            $ref: '#/components/schemas/RepositoryStack'
+          defaultBranch:
+            $ref: '#/components/schemas/Branch'
+          badges:
+            $ref: '#/components/schemas/Badges'
+          codingStandardId:
+            type: integer
+            description: '**Deprecated:** Use `standards` field instead. Coding standard identifier.'
+            deprecated: true
+            format: int64
+          codingStandardName:
+            type: string
+            description: '**Deprecated:** Use `standards` field instead. Coding standard name.'
+            deprecated: true
+          standards:
+            type: array
+            description: List of the coding standard identifiers and names
+            items:
+              $ref: '#/components/schemas/CodingStandardInfo'
+          addedState:
+            $ref: '#/components/schemas/AddedState'
+          gatePolicyId:
+            type: integer
+            description: Identifier of the gate policy the repository is following. If not defined, the repository does not follow a gate policy.
+            format: int64
+          gatePolicyName:
+            type: string
+            description: Name of the gate policy the repository is following. Present only if the gatePolicyId is defined.
+    RepositoryQualitySettingsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RepositoryQualitySettings'
+    RepositoryGatePolicy:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier of the gate policy
+          format: int64
+        name:
+          type: string
+          description: Name of the gate policy
+      description: Gate policy the repository is following.
+    BranchRequiredChecksResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BranchRequiredChecks'
+    CoverageReportContent:
+      required:
+      - repositoryId
+      - commitSha
+      - reportId
+      - isFinal
+      - processed
+      - createdAt
+      - content
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          format: int64
+        commitSha:
+          type: string
+        reportId:
+          type: string
+        language:
+          type: string
+        isFinal:
+          type: boolean
+        processed:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CoverageReportFile'
+    RepositoryQualitySettings:
+      type: object
+      properties:
+        maxIssuePercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of issues is over this threshold
+          format: int32
+          example: 1
+        maxDuplicatedFilesPercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of duplication of files is over this threshold
+          format: int32
+          example: 1
+        minCoveragePercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the coverage percentage is under this threshold
+          format: int32
+          example: 1
+        maxComplexFilesPercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of complexity of files is over this threshold
+          format: int32
+          example: 1
+        fileDuplicationBlockThreshold:
+          minimum: 0
+          type: integer
+          description: A file in this repository will be considered duplicated when the number of cloned blocks is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+        fileComplexityValueThreshold:
+          minimum: 0
+          type: integer
+          description: A file in this repository will be considered complex when its complexity value is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+    DiffResponse:
+      required:
+      - diff
+      type: object
+      properties:
+        diff:
+          type: string
+          example: diff --git a/example.md b/example.md&bsol;nindex 9eeb703..777b981 100644&bsol;n--- a/example.md&bsol;n+++ b/example.md&bsol;n@@ -1 +1 @@&bsol;n-Edited line&bsol;n+Edited line (edit)&bsol;n
+      description: Human-readable Git diff of a commit or pull request, matching the output format of the [`git diff` command](https://git-scm.com/docs/git-diff)
+    FileClonesResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          description: Array of duplicated code blocks
+          items:
+            $ref: '#/components/schemas/FileClone'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+      description: Paginated list of duplicate code blocks within a file
+    SeverityLevel:
+      type: string
+      description: Issue severity level. These values map to our UI as follows - Info to Minor, Warning to Medium, High to High, Error to Critical.
+      example: Error
+      enum:
+      - Info
+      - Warning
+      - High
+      - Error
+      x-ms-enum:
+        name: SeverityLevel
+    CodingStandardInfo:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier of the coding standard
+          format: int64
+        name:
+          type: string
+          description: Name of the coding standard
+      description: Coding standard identifier and name
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    BranchRequiredChecks:
+      required:
+      - coverageVariation
+      - diffCoverage
+      - quality
+      type: object
+      properties:
+        quality:
+          type: boolean
+          description: True if Branch has Codacy Static Code Analysis step as required before merge
+          example: true
+        diffCoverage:
+          type: boolean
+          description: True if Branch has Codacy Diff Coverage step as required before merge
+          example: true
+        coverageVariation:
+          type: boolean
+          description: True if Branch has Codacy Coverage Variation step as required before merge
+          example: true
+    QualityGate:
+      type: object
+      properties:
+        issueThreshold:
+          required:
+          - threshold
+          type: object
+          properties:
+            threshold:
+              minimum: 0
+              type: integer
+              format: int32
+              example: 1
+            minimumSeverity:
+              $ref: '#/components/schemas/SeverityLevel'
+          description: The quality gate will fail if there are new issues of the specified severity over this threshold (if no severity is specified all severity levels are considered). This value cannot be negative
+        securityIssueThreshold:
+          minimum: 0
+          type: integer
+          description: The quality gate will fail if the number of new security issues is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+        securityIssueMinimumSeverity:
+          $ref: '#/components/schemas/SeverityLevel'
+        duplicationThreshold:
+          type: integer
+          description: The quality gate will fail if there are new duplicated blocks over this threshold
+          format: int32
+          example: 1
+        coverageThreshold:
+          maximum: 1
+          type: integer
+          description: Deprecated, use `coverageThresholdWithDecimals` instead
+          format: int32
+          example: 1
+        coverageThresholdWithDecimals:
+          type: number
+          description: The quality gate will fail if coverage percentage varies less than this threshold. This value should be at most 1.00
+          format: double
+          example: -0.02
+        diffCoverageThreshold:
+          maximum: 100
+          minimum: 0
+          type: integer
+          description: The quality gate will fail if diff coverage is under this threshold. This value should be at least 0 and at most 100
+          format: int32
+          example: 70
+        complexityThreshold:
+          minimum: 0
+          type: integer
+          description: The quality gate will fail if the complexity value is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+    FileMetadata:
+      required:
+      - commitId
+      - commitSha
+      - fileDataId
+      - fileId
+      - gitProviderUrl
+      - ignored
+      - language
+      - path
+      type: object
+      properties:
+        branchId:
+          type: integer
+          description: Identifier for the branch the file belongs to
+          format: int64
+          example: 1
+        commitId:
+          type: integer
+          format: int64
+          example: 1
+        commitSha:
+          type: string
+          description: Commit SHA
+        fileId:
+          type: integer
+          description: Identifier for file in any branch of a specific commit
+          format: int64
+          example: 1
+        fileDataId:
+          type: integer
+          description: Identifier for file
+          format: int64
+          example: 1
+        path:
+          type: string
+          description: Relative path of the file in the repository
+          example: /src/test.go
+        language:
+          type: string
+          description: Language of the file
+          example: Go
+        gitProviderUrl:
+          type: string
+          description: URL to the commit on the Git provider
+          example: https://github.com/codacy/tools-for-code-review-engineers/commit/370b160aaf0ed781d707d335aa1fde20cefeabf2
+        ignored:
+          type: boolean
+          description: True if the file is excluded from the analysis
+          example: false
+      description: Metadata for a file in a repository
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    FileCoverageAnalysis:
+      required:
+      - coverableLines
+      - coverage
+      - coveredLines
+      type: object
+      properties:
+        coverage:
+          multipleOf: 0.01
+          type: number
+          description: Coverage percentage of the file with decimals
+          format: double
+          example: 71
+        coverableLines:
+          type: integer
+          description: Coverable lines of the file (lines that can be covered by tests)
+          format: int64
+          example: 2
+        coveredLines:
+          type: integer
+          description: Covered lines of the file (lines that are covered by tests)
+          format: int64
+          example: 1
+      description: Coverage analysis metrics for a file
+    BuildServerAnalysisSettingResponse:
+      required:
+      - buildServerAnalysisSetting
+      type: object
+      properties:
+        buildServerAnalysisSetting:
+          type: boolean
+          description: 'If true, Codacy waits for your build server to upload the results of the local analysis before resuming the analysis of your commits.
+
+            If false, Codacy analyzes your commits directly on its cloud infrastructure.
+
+            '
+    Provider:
+      type: string
+      description: Git provider hosting the repository
+      example: gh
+    RepositoryProblem:
+      required:
+      - actions
+      - code
+      - message
+      - severity
+      type: object
+      properties:
+        message:
+          type: string
+          example: We can't analyze this repository because none of the committers are part of the organization.
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+        code:
+          type: string
+          description: A stable identifier for a problem.
+          example: failed_to_clone
+        severity:
+          type: string
+          description: The extent to which this problem affects the repository in terms of analysis execution.
+          example: all_analysis
+    RepositoryApiTokenCreateRequest:
+      required:
+      - name
+      - expiresAt
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: ^[A-Za-z0-9-]{1,100}$
+          maxLength: 100
+          example: pt-4f1a9b2c8e3d
+          description: 'A name to identify the token. Must contain only alphanumeric characters and dashes, with a
+
+            maximum length of 100 characters.
+
+            '
+        expiresAt:
+          type: string
+          format: date-time
+          example: '2027-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+          description: 'The timestamp when the token expires. Must be in the future and no more than one year from now.
+
+            '
+      description: 'Request body for creating a repository API token. When omitted entirely, a name is generated and
+
+        the token expires in one year.
+
+        '
+    Badges:
+      required:
+      - coverage
+      - grade
+      type: object
+      properties:
+        grade:
+          type: string
+          description: Repository grade badge URL
+          example: https://app.codacy.com/project/badge/Grade/d992a862b1994805907ec277e16b0fda
+        coverage:
+          type: string
+          description: Repository coverage badge URL
+          example: https://app.codacy.com/project/badge/Coverage/d992a862b1994805907ec277e16b0fda
+    DirectoryListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DirectoryWithAnalysisInfo'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    CommitUuidRequest:
+      required:
+      - commitUuid
+      type: object
+      properties:
+        commitUuid:
+          $ref: '#/components/schemas/commitUuidSchema'
+        cleanCache:
+          type: boolean
+          description: If true, the cache will be cleaned before the analysis
+          example: false
+    CommitIssue:
+      required:
+      - fileId
+      - filePath
+      - issueId
+      - language
+      - lineNumber
+      - lineText
+      - message
+      - patternInfo
+      - resultDataId
+      - toolInfo
+      - falsePositiveThreshold
+      type: object
+      properties:
+        issueId:
+          type: string
+          description: ID of the Issue
+        resultDataId:
+          type: integer
+          description: Stable ID for the issue.
+          format: int64
+        filePath:
+          type: string
+          description: Path of the file where the issue was found
+        fileId:
+          type: integer
+          format: int64
+        patternInfo:
+          $ref: '#/components/schemas/PatternDetails'
+        toolInfo:
+          $ref: '#/components/schemas/ToolReference'
+        lineNumber:
+          type: integer
+          description: Line where the issue was found
+          format: int64
+        message:
+          type: string
+          description: Detailed cause of the issue
+        suggestion:
+          type: string
+          description: The suggested fix for the issue
+        language:
+          type: string
+          description: Language of the file where the issue was found
+        lineText:
+          type: string
+          description: Contents of the line where the issue was found
+        commitInfo:
+          $ref: '#/components/schemas/CommitReference'
+        falsePositiveProbability:
+          type: integer
+          description: Probability that the issue is a false positive
+          format: int32
+        falsePositiveReason:
+          type: string
+          description: Reasoning for the false positive
+        falsePositiveThreshold:
+          type: integer
+          description: Threshold for false positive detection
+          format: int32
+        advisoryInformation:
+          $ref: '#/components/schemas/AdvisoryInformation'
+        dependencyChains:
+          $ref: '#/components/schemas/DependencyChains'
+        fixedVersion:
+          type: array
+          description: Versions that fix the vulnerable dependency. Empty when no fix is available. Only present for SCA issues.
+          items:
+            type: string
+          example:
+          - 1.0.1
+      description: Issue details including the commit that originated the issue
+    SyncProviderSettingResponse:
+      required:
+      - name
+      - visibility
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the repository
+          example: codacy-eslint
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+    commitUuidSchema:
+      type: string
+      description: UUID or SHA string that identifies the commit
+      x-example: 2957025d42e8daadf937d4044516f991d21deea4
+    BuildServerAnalysisSettingRequest:
+      required:
+      - buildServerAnalysisSetting
+      type: object
+      properties:
+        buildServerAnalysisSetting:
+          type: boolean
+          description: 'If true, Codacy waits for your build server to upload the results of the local analysis before resuming the analysis of your commits.
+
+            If false, Codacy analyzes your commits directly on its cloud infrastructure.
+
+            '
+    FileInformationWithAnalysis:
+      required:
+      - file
+      type: object
+      properties:
+        file:
+          $ref: '#/components/schemas/FileMetadata'
+        coverage:
+          $ref: '#/components/schemas/FileCoverageAnalysis'
+        quality:
+          $ref: '#/components/schemas/FileQualityInfo'
+    Branch:
+      required:
+      - branchType
+      - id
+      - isDefault
+      - isEnabled
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: master
+        isDefault:
+          type: boolean
+          example: true
+        isEnabled:
+          type: boolean
+          example: true
+        lastUpdated:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        branchType:
+          type: string
+          enum:
+          - Branch
+          - PullRequest
+        lastCommit:
+          type: string
+    FileCoverage:
+      required:
+      - hits
+      - line
+      type: object
+      properties:
+        line:
+          type: integer
+          description: Line number
+          format: int32
+          example: 2
+        hits:
+          type: integer
+          description: Number of test hits for the line
+          format: int32
+          example: 3
+      description: Coverage information for a file
+    CoverageReportFile:
+      type: object
+      description: Coverage report for the file
+      required:
+      - fileName
+      - coverage
+      properties:
+        fileName:
+          type: string
+          description: Name of the file
+        coverage:
+          type: object
+          description: Coverage map
+          additionalProperties:
+            type: integer
+            format: int32
+          example:
+            '1': 2
+            '12': 1
+            '23': 0
+    RepositoryApiTokensDeleteRequest:
+      required:
+      - ids
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Ids of the repository API tokens to delete.
+      description: Request body for deleting repository API tokens by ids
+    CoverageReportEntryResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CoverageReportEntry'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PayloadTooLarge:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: PayloadTooLarge
+    AddRepositoryBody:
+      required:
+      - provider
+      - repositoryFullPath
+      type: object
+      properties:
+        repositoryFullPath:
+          type: string
+          description: Full path of the repository on the Git provider, starting at the organization. Separate each segment of the path with a slash (/).
+          example: codacy/codacy-analysis-cli
+        provider:
+          $ref: '#/components/schemas/Provider'
+    AddedStateResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AddedState'
+    GetFileCoverageResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileCoverage'
+    CoverageReport:
+      required:
+      - createdAt
+      - status
+      - targetCommitSha
+      type: object
+      properties:
+        targetCommitSha:
+          type: string
+          description: Commit SHA that was referenced as the target for this report
+        commit:
+          $ref: '#/components/schemas/CommitWithBranches'
+        language:
+          type: string
+          description: Programming language associated with the coverage report
+        createdAt:
+          type: string
+          description: Report creation date
+          format: date-time
+          x-scala-type: java.time.Instant
+        status:
+          type: string
+          description: Coverage status
+          enum:
+          - Pending
+          - Processed
+          - CommitNotAnalysed
+          - CommitNotFound
+          - BranchNotEnabled
+          - MissingFinal
+      description: Status and details of a coverage report
+    RepositoryStack:
+      required:
+      - commitUuid
+      - stackTags
+      - discoveredAt
+      type: object
+      properties:
+        commitUuid:
+          type: string
+          description: Commit UUID where the repository stack was discovered.
+          example: 2f4d2d3f9a7d4e9f8d0fbb4f2f7d2e1b4a5c6d7e
+        stackTags:
+          type: array
+          description: Prefixed stack tags detected for the repository.
+          example:
+          - fwk:react
+          - tool:eslint
+          items:
+            type: string
+        discoveredAt:
+          type: string
+          description: Timestamp when the repository stack was discovered.
+          format: date-time
+          example: '2026-08-25T15:10:00Z'
+          x-scala-type: java.time.Instant
+    AddedState:
+      type: string
+      description: 'Added state of the repository on Codacy. Valid values are `NotAdded` (the repository was not added to Codacy), `Added` (the repository was added to Codacy), or `Following` (the current user is following a repository added to Codacy).
+
+        '
+      example: Added
+      enum:
+      - NotAdded
+      - Added
+      - Following
+      x-ms-enum:
+        name: AddedState
+    FileClone:
+      required:
+      - occurrences
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: '**Deprecated:** Do not rely on this value, it will be removed. Identifier of the duplicated code block, which can change over time.'
+          deprecated: true
+        occurrences:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloneDuplicationBlock'
+      description: A duplicated code block within a file, including its occurrences
+    RepositoryResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Repository'
+    FileListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileWithAnalysisInfo'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    FileWithAnalysisInfo:
+      required:
+      - branchId
+      - fileId
+      - grade
+      - gradeLetter
+      - numberOfMethods
+      - path
+      - totalIssues
+      type: object
+      properties:
+        fileId:
+          type: integer
+          description: Identifier of the file in a specific branch and commit
+          format: int64
+          example: 2
+        branchId:
+          type: integer
+          description: Identifier for the branch the file belongs to
+          format: int64
+          example: 3
+        path:
+          type: string
+          description: Relative path of the file in the repository
+          example: /src/test.go
+        totalIssues:
+          type: integer
+          description: Number of issues in the file
+          format: int32
+          example: 42
+        complexity:
+          type: integer
+          description: Complexity level of the file
+          format: int32
+          example: 3
+        grade:
+          type: integer
+          description: Quality grade of the file as a number between 100 (highest grade) and 0 (lowest grade)
+          format: int32
+          example: 74
+        gradeLetter:
+          type: string
+          description: Quality grade of the file as a letter between A (highest grade) and F (lowest grade)
+          example: A
+        coverage:
+          type: integer
+          description: Deprecated, use `coverageWithDecimals` instead
+          format: int32
+          example: 71
+        coverageWithDecimals:
+          multipleOf: 0.01
+          type: number
+          description: Test coverage percentage of the file with decimals
+          format: double
+          example: 71
+        duplication:
+          type: integer
+          description: Number of duplicated lines in the file
+          format: int32
+          example: 7
+        linesOfCode:
+          type: integer
+          description: Lines of code in the file
+          format: int32
+          example: 123
+        sourceLinesOfCode:
+          type: integer
+          description: Coverable lines of code in the file
+          format: int32
+          example: 90
+        numberOfMethods:
+          type: integer
+          description: Number of methods in the file
+          format: int32
+          example: 12
+        numberOfClones:
+          type: integer
+          description: Number of cloned blocks of code in the file
+          format: int32
+          example: 5
+      description: File with analysis information
+    Visibility:
+      type: string
+      description: Visibility of the repository
+      example: Private
+      enum:
+      - Public
+      - Private
+      - LoginPublic
+      x-ms-enum:
+        name: Visibility
+    FileStateBody:
+      required:
+      - filepath
+      - ignored
+      type: object
+      properties:
+        ignored:
+          type: boolean
+          description: True if the file is ignored
+          example: true
+        filepath:
+          type: string
+          description: Relative path of the file in the repository
+          example: src/main/scala/main/Main.scala
+      description: Ignored status of a file
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    QualitySettingsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/QualitySettingsWithGatePolicy'
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    QualitySettingsWithGatePolicy:
+      required:
+      - qualityGate
+      type: object
+      properties:
+        qualityGate:
+          $ref: '#/components/schemas/QualityGate'
+        repositoryGatePolicyInfo:
+          $ref: '#/components/schemas/RepositoryGatePolicy'
+    ApiTokenListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiToken'
+      description: List of API tokens
+    SearchRepositoryIssuesListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    SshKeySettingResponse:
+      required:
+      - publicSshKey
+      type: object
+      properties:
+        publicSshKey:
+          type: string
+          description: Public SSH key
+    IgnoredFile:
+      type: object
+      required:
+      - filepath
+      properties:
+        filepath:
+          type: string
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    FileQualityInfo:
+      required:
+      - grade
+      - gradeLetter
+      - totalIssues
+      type: object
+      properties:
+        totalIssues:
+          type: integer
+          description: Number of issues in the file
+          format: int32
+          example: 42
+        complexity:
+          type: integer
+          description: Complexity level of the file
+          format: int32
+          example: 3
+        grade:
+          type: integer
+          description: Quality grade of the file as a number between 100 (highest grade) and 0 (lowest grade)
+          format: int32
+          example: 74
+        gradeLetter:
+          type: string
+          description: Quality grade of the file as a letter between A (highest grade) and F (lowest grade)
+          example: A
+        duplication:
+          type: integer
+          description: Number of cloned blocks of code in the file
+          format: int32
+          example: 7
+        duplicatedLinesOfCode:
+          type: integer
+          description: Number of duplicated lines in the file
+          format: int32
+          example: 45
+      description: Analysis result information for a file
+    Commit:
+      allOf:
+      - $ref: '#/components/schemas/CommitIdentification'
+      - required:
+        - commitTimestamp
+        - id
+        - authorName
+        - authorEmail
+        - message
+        type: object
+        properties:
+          id:
+            type: integer
+            description: Internal commit identifier
+            format: int64
+            example: 1
+          commitTimestamp:
+            type: string
+            description: Timestamp when the commit was created
+            format: date-time
+            example: '2019-05-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+          authorName:
+            type: string
+            description: Name of the commit author
+          authorEmail:
+            type: string
+            description: Email address of the commit author
+          message:
+            type: string
+            description: Commit message
+          startedAnalysis:
+            type: string
+            description: Timestamp when Codacy started the last analysis of the commit
+            format: date-time
+            example: '2022-01-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+          endedAnalysis:
+            type: string
+            description: Timestamp when Codacy finished the last analysis of the commit
+            format: date-time
+            example: '2022-01-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+          isMergeCommit:
+            type: boolean
+            description: True if the commit is a merge commit
+            example: false
+          gitHref:
+            type: string
+            description: URL to the commit on the Git provider
+            example: https://github.com/codacy/tools-for-code-review-engineers/commit/370b160aaf0ed781d707d335aa1fde20cefeabf2
+          parents:
+            type: array
+            items:
+              type: string
+              description: SHA-1 hashes of the parents of the commit
+    RepositoryIntegrationSettings:
+      required:
+      - settings
+      type: object
+      properties:
+        settings:
+          $ref: '#/components/schemas/ProviderIntegrationSettingsBody'
+        integratedBy:
+          type: string
+          example: example@codacy.com
+      description: Settings for Git provider integrations
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    ApiTokenResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ApiToken'
+    UpdateRepositoryBranchConfigurationBody:
+      type: object
+      properties:
+        isEnabled:
+          type: boolean
+          description: True if Codacy should analyze the branch
+          example: true
+      description: Configuration of a repository branch
+    ProviderIntegrationSettingsPatchBody:
+      type: object
+      properties:
+        commitStatus:
+          type: boolean
+          description: Toggle the feature "Status checks"
+        pullRequestComment:
+          type: boolean
+          description: Toggle the feature "Issue annotations"
+        pullRequestSummary:
+          type: boolean
+          description: Toggle the feature "Issue summaries"
+        coverageSummary:
+          type: boolean
+          description: Toggle the feature "Coverage summary" (GitHub only)
+        suggestions:
+          type: boolean
+          description: Toggle the feature "Suggested fixes" (GitHub only)
+        aiEnhancedComments:
+          type: boolean
+          description: 'Toggle the feature "AI-enhanced comments". If "Suggested fixes" (GitHub only) is also enabled, then the AI-enhanced comments also provide suggested fixes.
+
+            '
+        aiPullRequestReviewer:
+          type: boolean
+          description: 'Toggle the feature "AI Pull Request Reviewer" (GitHub only). When enabled, Codacy will use AI to review pull requests and provide comments on code quality and potential issues.
+
+            '
+        aiPullRequestReviewerAutomatic:
+          type: boolean
+          description: 'Toggle the feature "AI Pull Request Reviewer Automatic" (GitHub only). When enabled, Codacy will use AI to review pull requests and provide comments on code quality and potential issues automatically once, subsequent reviews will have to be explicitly requested.
+
+            '
+        pullRequestUnifiedSummary:
+          type: boolean
+          description: 'Toggle the feature "Pull Request Unified Summary" (GitHub only). When enabled, Codacy provides a unified summary (coverage and analysis).
+
+            '
+      description: Default settings for Git provider integrations
+    BranchListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Branch'
+    MethodNotAllowed:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: MethodNotAllowed
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    CommitWithBranches:
+      allOf:
+      - $ref: '#/components/schemas/Commit'
+      - type: object
+        properties:
+          branches:
+            type: array
+            description: List of branches containing the commit
+            items:
+              $ref: '#/components/schemas/Branch'
+    Permission:
+      type: string
+      enum:
+      - admin
+      - write
+      - read
+      x-ms-enum:
+        name: Permission
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+  responses:
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    PaymentRequired:
+      description: PaymentRequired
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentRequired'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+    BadGateway:
+      description: Bad Gateway
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadGateway'
+      x-ms-error-response: true
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    PayloadTooLarge:
+      description: Content too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PayloadTooLarge'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    MethodNotAllowed:
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MethodNotAllowed'
+      x-ms-error-response: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

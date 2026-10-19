@@ -1,0 +1,597 @@
+openapi: 3.2.0
+info:
+  title: Codacy Dast API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: dast
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/dast/targets:
+    get:
+      tags:
+      - dast
+      summary: List configured DAST targets
+      operationId: getDastTargets
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DastTargetsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: dast
+    post:
+      tags:
+      - dast
+      summary: Create a DAST target
+      operationId: createDastTarget
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDastTargetBody'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DastTargetResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+      x-jvm-package: dast
+  /organizations/{provider}/{remoteOrganizationName}/dast/targets/{dastTargetId}:
+    delete:
+      tags:
+      - dast
+      summary: Delete a DAST target
+      operationId: deleteDastTarget
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/dastTargetIdParam'
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: dast
+  /organizations/{provider}/{remoteOrganizationName}/dast/targets/{dastTargetId}/analyze:
+    post:
+      tags:
+      - dast
+      summary: Enqueue a DAST analysis for the given target
+      operationId: analyzeDastTarget
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/dastTargetIdParam'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeDastTargetResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: dast
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+    DastTargetStatus:
+      description: The current analysis status of a DAST target.
+      type: object
+      properties:
+        status:
+          description: The current analysis status of a DAST target.
+          type: string
+          enum:
+          - queued
+          - running
+          - successful
+          - failed
+        transitionedAt:
+          description: When the target transitioned to this status.
+          type: string
+          format: date-time
+          example: '2024-06-28T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        transitionReason:
+          description: An optional description of why the target transition to the current status.
+          type: string
+          example: Timed out.
+        analysisId:
+          description: The DAST analysis id associated with this status.
+          type: string
+          format: uuid
+          example: 72aa9244-4281-460a-a4ee-25be58d2a1ab
+      required:
+      - status
+      - transitionedAt
+      - analysisId
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    NotImplemented:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotImplemented
+    DastTargetFormLoginSummary:
+      description: Form login settings of a DAST target. The password is never returned.
+      type: object
+      properties:
+        username:
+          type: string
+        loginPageUrl:
+          type: string
+          format: uri
+      required:
+      - username
+    DastTarget:
+      description: A target for DAST analysis.
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 125904
+        url:
+          type: string
+          format: uri
+          example: https://api.domain.com/v1
+        status:
+          description: 'The analysis status the target is in. A target can have multiple status at once.
+
+            Currently, it can be both running and queued.
+
+            This array can be empty if the target was never analysed.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/DastTargetStatus'
+        targetType:
+          $ref: '#/components/schemas/DastTargetType'
+        apiDefinitionUrl:
+          type: string
+        apiAuthHeaderNames:
+          type: array
+          items:
+            type: string
+        repositoryName:
+          description: Name of the repository linked to the target. Findings from its scans are attributed to it.
+          type: string
+        formLogin:
+          $ref: '#/components/schemas/DastTargetFormLoginSummary'
+        lastAuthenticationSucceeded:
+          description: 'Whether the last finished analysis logged in with the target''s credentials.
+
+            Absent when the target has no credentials, was never analysed, or the outcome is unknown.
+
+            '
+          type: boolean
+        lastAuthenticationFailureReason:
+          description: Why the last finished analysis failed to log in. Only set when lastAuthenticationSucceeded is false.
+          type: string
+      required:
+      - id
+      - url
+      - status
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    DastTargetResponse:
+      description: A response with a target for DAST analysis.
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DastTarget'
+      required:
+      - data
+    AnalyzeDastTargetResponse:
+      description: A response with the analysis ID that was queued.
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            analysisId:
+              type: string
+              format: uuid
+              example: 75d1b4cf-ef70-4be8-93ca-e9d21c7dca31
+          required:
+          - analysisId
+      required:
+      - data
+    CreateDastTargetBody:
+      description: body to create a DAST target
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://api.domain.com/v1
+        targetType:
+          $ref: '#/components/schemas/DastTargetType'
+        apiDefinitionUrl:
+          type: string
+          example: https://api.domain.com/v1
+        apiAuthHeaders:
+          type: object
+          additionalProperties:
+            type: string
+        repositoryName:
+          description: Name of a repository in the organization to attribute the target's findings to
+          type: string
+        formLogin:
+          $ref: '#/components/schemas/DastTargetFormLogin'
+      required:
+      - url
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    TooManyRequests:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: TooManyRequests
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    DastTargetFormLogin:
+      description: Form login credentials. Only allowed for webapp targets.
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+        loginPageUrl:
+          description: The URL of the login page. The scan uses the target URL when absent.
+          type: string
+          format: uri
+      required:
+      - username
+      - password
+    DastTargetType:
+      type: string
+      description: Dast target request type
+      enum:
+      - webapp
+      - openapi
+      - graphql
+      default: webapp
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    DastTargetsResponse:
+      description: List of DAST targets.
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DastTarget'
+      required:
+      - pagination
+      - data
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TooManyRequests'
+      x-ms-error-response: true
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    NotImplemented:
+      description: Not Implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotImplemented'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    dastTargetIdParam:
+      name: dastTargetId
+      in: path
+      description: Identifier of a DAST analysis target
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 123351656
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

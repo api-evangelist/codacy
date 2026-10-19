@@ -1,0 +1,777 @@
+openapi: 3.2.0
+info:
+  title: Codacy Admin API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Admin
+paths:
+  /admin:
+    get:
+      tags:
+      - Admin
+      x-jvm-package: admin
+      summary: (Codacy admins only) Search for an entity like Organization or Repository…
+      operationId: adminSearch
+      parameters:
+      - $ref: '#/components/parameters/searchParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEntityGroupResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /admin/{adminEntityGroupSlug}/{adminEntityIdentifier}:
+    get:
+      tags:
+      - Admin
+      x-jvm-package: admin
+      summary: (Codacy admins only) Returns the requested admin entity
+      operationId: getAdminEntity
+      parameters:
+      - $ref: '#/components/parameters/adminEntityGroupSlugParam'
+      - $ref: '#/components/parameters/adminEntityIdentifierParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEntityResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+  /admin/{adminEntityGroupSlug}/{adminEntityIdentifier}/{adminResourceSlug}:
+    get:
+      tags:
+      - Admin
+      x-jvm-package: admin
+      summary: (Codacy admins only) Returns the requested resources of a given admin entity
+      operationId: listAdminEntityResources
+      parameters:
+      - $ref: '#/components/parameters/adminEntityGroupSlugParam'
+      - $ref: '#/components/parameters/adminEntityIdentifierParam'
+      - $ref: '#/components/parameters/adminResourceSlugParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEntityResourcesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+  /admin/{adminEntityGroupSlug}/{adminEntityIdentifier}/actions/{adminActionSlug}:
+    post:
+      tags:
+      - Admin
+      x-jvm-package: admin
+      summary: (Codacy admins only) Executes an action on a given admin entity
+      operationId: executeAdminAction
+      parameters:
+      - $ref: '#/components/parameters/adminEntityGroupSlugParam'
+      - $ref: '#/components/parameters/adminEntityIdentifierParam'
+      - $ref: '#/components/parameters/adminActionSlugParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminEntityActionPayload'
+      responses:
+        '200':
+          description: Action executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEntityActionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+  /admin/license:
+    post:
+      tags:
+      - Admin
+      summary: (Codacy admins only) Generates a license for self-hosted instances of Codacy
+      operationId: generateLicense
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/License'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: admin.license
+      x-codegen-request-body-name: LicenseBody
+  /admin/dormantAccounts:
+    delete:
+      tags:
+      - Admin
+      summary: (Codacy admins only) Delete Codacy users based on a CSV file exported by GitHub…
+      operationId: deleteDormantAccounts
+      requestBody:
+        description: CSV file containing email addresses of the users to delete in a column called "email"
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteDormantAccountsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: admin
+      x-codegen-request-body-name: CSVFileContents
+  /admin/security/penTest/reports:
+    post:
+      tags:
+      - Admin
+      summary: Upload pen test reports for an organization (internal, Codacy admins only)
+      operationId: uploadPenTestReport
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - csvdata
+              - organizationName
+              - provider
+              type: object
+              properties:
+                csvdata:
+                  type: string
+                  description: The pen test report in CSV format
+                  format: binary
+                provider:
+                  type: string
+                  description: Git provider hosting the organization's repositories
+                  x-ms-parameter-location: method
+                organizationName:
+                  type: string
+                  description: The name of the organization to which the results belong
+        required: true
+      responses:
+        '202':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: admin
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    AdminEntityIdentification:
+      type: object
+      required:
+      - id
+      - groupSlug
+      properties:
+        id:
+          type: integer
+          description: Internal Codacy identifier for this entity
+          format: int64
+          example: 42
+        groupSlug:
+          type: string
+          description: Name to be used on URLs that identify the group for this type of entity
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    AdminEntityResourcesResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminEntityResource'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    NotImplemented:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotImplemented
+    AdminEntityResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/AdminEntity'
+    DormantAccountInfo:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address of the deleted account
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    LicenseResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: string
+    AdminEntityActionMetadata:
+      type: object
+      required:
+      - slug
+      - displayName
+      - fields
+      - requiresConfirmation
+      properties:
+        slug:
+          type: string
+          description: Unique identifier for the action, used in URLs
+          example: update-settings
+        displayName:
+          type: string
+          description: Human-friendly name for the action
+          example: Update Settings
+        description:
+          type: string
+          description: Description of what the action does
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminEntityActionField'
+        requiresConfirmation:
+          type: boolean
+          description: Whether the action requires user confirmation before execution
+    AdminEntityResource:
+      type: object
+      required:
+      - details
+      properties:
+        details:
+          type: object
+          additionalProperties:
+            type: string
+        entityIdentification:
+          $ref: '#/components/schemas/AdminEntityIdentification'
+    License:
+      required:
+      - email
+      - expirationDate
+      - numberOfSeats
+      type: object
+      properties:
+        numberOfSeats:
+          type: integer
+          format: int32
+          example: 100
+        email:
+          type: string
+          example: name@domain.com
+        expirationDate:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        inactivityThreshold:
+          type: integer
+          format: int32
+          example: 4
+        autoAddAuthors:
+          type: boolean
+        allowSeatsOverflow:
+          type: boolean
+    AdminEntityActionResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/AdminEntityActionResult'
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    DeleteDormantAccountsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DormantAccountInfo'
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    AdminEntityActionResult:
+      type: object
+      required:
+      - resultType
+      properties:
+        resultType:
+          type: string
+          description: Result type (success, updated, failed)
+          example: success
+        changes:
+          type: object
+          additionalProperties:
+            type: string
+          description: Map of field names to their new values (for updated results)
+        errorReason:
+          type: string
+          description: Error message (for failed results)
+        entityIdentification:
+          $ref: '#/components/schemas/AdminEntityIdentification'
+    AdminEntity:
+      type: object
+      required:
+      - id
+      - groupSlug
+      - displayName
+      - details
+      - relatedEntities
+      - availableResources
+      - availableActions
+      properties:
+        id:
+          type: integer
+          description: Internal Codacy identifier for this entity
+          format: int64
+          example: 42
+        groupSlug:
+          type: string
+          description: Name to be used on URLs that identify the group for this type of entity
+        displayName:
+          type: string
+          description: Human friendly name
+        details:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            provider: GitHub
+            visibility: private
+        relatedEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminEntityIdentification'
+        availableResources:
+          type: array
+          items:
+            type: string
+        availableActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminEntityActionMetadata'
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    AdminEntityActionField:
+      type: object
+      required:
+      - name
+      - displayName
+      - required
+      - fieldType
+      properties:
+        name:
+          type: string
+          description: Field identifier used in the payload
+          example: cloneSubmodules
+        displayName:
+          type: string
+          description: Human-friendly name for the field
+          example: Clone Submodules
+        description:
+          type: string
+          description: Description of what the field controls
+        required:
+          type: boolean
+          description: Whether the field is required
+        fieldType:
+          type: string
+          description: The type of the field (boolean, number, string)
+          example: boolean
+        currentValueBoolean:
+          type: boolean
+          description: Current value if fieldType is boolean
+        currentValueNumber:
+          type: integer
+          format: int64
+          description: Current value if fieldType is number
+        currentValueString:
+          type: string
+          description: Current value if fieldType is string
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Additional metadata for the field
+    AdminEntityActionPayload:
+      type: object
+      additionalProperties: true
+      description: Action-specific payload with fields matching the action metadata
+    AdminEntityGroupResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminEntityGroup'
+    AdminEntityGroup:
+      type: object
+      required:
+      - slug
+      - items
+      properties:
+        slug:
+          type: string
+          description: Name to be used on URLs that identify the group for this type of entity
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminEntity'
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    NotImplemented:
+      description: Not Implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotImplemented'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    searchParam:
+      name: search
+      in: query
+      description: Filter results by searching for this string
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: my-repository-name
+      x-ms-parameter-location: method
+    adminResourceSlugParam:
+      name: adminResourceSlug
+      in: path
+      description: Admin resource slug
+      required: true
+      schema:
+        type: string
+      x-ms-parameter-location: method
+      example: members
+    adminActionSlugParam:
+      name: adminActionSlug
+      in: path
+      description: Admin action slug
+      required: true
+      schema:
+        type: string
+      x-ms-parameter-location: method
+      example: update-settings
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    adminEntityIdentifierParam:
+      name: adminEntityIdentifier
+      in: path
+      description: Admin entity identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+      x-ms-parameter-location: method
+      example: 1337
+    adminEntityGroupSlugParam:
+      name: adminEntityGroupSlug
+      in: path
+      description: Admin entity group slug
+      required: true
+      schema:
+        type: string
+      example: repositories
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

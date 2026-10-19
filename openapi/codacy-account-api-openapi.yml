@@ -1,43 +1,745 @@
 openapi: 3.2.0
 info:
   title: Codacy Account API
-  description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
-  termsOfService: https://www.codacy.com/terms
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
   contact:
-    name: Codacy Support
+    name: Codacy Team
     url: https://www.codacy.com
-    email: support@codacy.com
-  version: '3.0'
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
 servers:
 - url: https://api.codacy.com/api/v3
-  description: Codacy Cloud API v3
 security:
-- api-token: []
+- ApiKeyAuth: []
 tags:
 - name: Account
-  description: Authenticated user account and API token operations.
 paths:
   /user:
     get:
-      operationId: getUser
       tags:
       - Account
       summary: Get the authenticated user
+      operationId: getUser
       responses:
         '200':
-          description: The authenticated user.
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+    delete:
+      summary: Delete the authenticated user
+      tags:
+      - Account
+      operationId: deleteUser
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+    patch:
+      summary: Update the authenticated user
+      tags:
+      - Account
+      operationId: patchUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+      x-codegen-request-body-name: UserBody
+  /user/organizations:
+    get:
+      tags:
+      - Account
+      summary: List organizations for the authenticated user
+      operationId: listUserOrganizations
+      parameters:
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/organizations/{provider}:
+    get:
+      tags:
+      - Account
+      summary: List organizations for the authenticated user
+      operationId: listOrganizations
+      parameters:
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/providerParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/organizations/{provider}/{remoteOrganizationName}:
+    get:
+      tags:
+      - Account
+      summary: Get organization for the authenticated user
+      operationId: getUserOrganization
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/emails:
+    get:
+      tags:
+      - Account
+      summary: List emails for the authenticated user
+      operationId: listUserEmails
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEmailsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/emails/remove:
+    post:
+      tags:
+      - Account
+      summary: Remove an email from user account
+      description: 'Removes the specified email address from the authenticated user''s account. The primary/default email
+
+        cannot be removed. A user must always have at least one email address associated with their account.'
+      operationId: removeUserEmail
+      requestBody:
+        $ref: '#/components/requestBodies/emailParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/emails/settings:
+    get:
+      tags:
+      - Account
+      summary: Retrieve email notification settings
+      description: 'Returns the current email notification preferences, including per-commit notifications,
+
+        pull request notifications, and activity.'
+      operationId: getEmailSettings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailNotificationSettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+    patch:
+      tags:
+      - Account
+      summary: Update email notification preferences
+      description: 'Modifies the user''s email notification settings. Settings can be updated individually without affecting
+
+        other settings. This endpoint allows users to control which events trigger email notifications.'
+      operationId: updateEmailSettings
+      requestBody:
+        $ref: '#/components/requestBodies/updateEmailSettingsRequest'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/emails/set-default:
+    post:
+      tags:
+      - Account
+      summary: Set an email as default
+      description: 'Designates the specified email as the default email for the authenticated user. This operation will
+
+        automatically remove the default status from any previously default email.
+
+        Only one email can be default at any time.'
+      operationId: setDefaultEmail
+      requestBody:
+        $ref: '#/components/requestBodies/emailParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/integrations:
+    get:
+      tags:
+      - Account
+      summary: List integrations for the authenticated user
+      operationId: listUserIntegrations
+      parameters:
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/integrations/{provider}:
+    delete:
+      summary: Delete an integration for the authenticated user
+      tags:
+      - Account
+      operationId: deleteIntegration
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /organizations/{provider}/installation/{installationId}:
+    get:
+      tags:
+      - Account
+      summary: Get organization by provider installation id
+      description: __Note__ Currently supports only `gh` as the `provider` parameter.
+      operationId: getOrganizationByInstallationId
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/installationIdParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/tokens:
+    get:
+      tags:
+      - Account
+      summary: List the account API tokens of the authenticated user
+      operationId: getUserApiTokens
+      parameters:
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTokenListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+    post:
+      tags:
+      - Account
+      summary: Create a new account API token for the authenticated user
+      operationId: createUserApiToken
+      requestBody:
+        description: Optional token expiration timestamp
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTokenCreateRequest'
+        required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiToken'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
+  /user/tokens/{tokenId}:
+    delete:
+      tags:
+      - Account
+      summary: Delete an account API token for the authenticated user by ID
+      operationId: deleteUserApiToken
+      parameters:
+      - $ref: '#/components/parameters/tokenIdParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: account
 components:
   schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    ApiTokenListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiToken'
+      description: List of API tokens
+    Integration:
+      required:
+      - lastAuthenticated
+      - provider
+      - host
+      type: object
+      properties:
+        provider:
+          $ref: '#/components/schemas/Provider'
+        host:
+          type: string
+          example: gsh.dev.codacy.org
+        lastAuthenticated:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
     UserResponse:
+      required:
+      - data
       type: object
       properties:
         data:
           $ref: '#/components/schemas/User'
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    EmailNotificationSettings:
+      type: object
+      required:
+      - perCommit
+      - perPullRequest
+      - onlyMyActivity
+      properties:
+        perCommit:
+          type: boolean
+          description: Whether to receive notifications for each commit
+          example: false
+        perPullRequest:
+          type: boolean
+          description: Whether to receive notifications for pull requests
+          example: true
+        onlyMyActivity:
+          type: boolean
+          description: Whether to only receive notifications for your own activity
+          example: true
+      example:
+        perCommit: false
+        perPullRequest: true
+        onlyMyActivity: true
+    IntegrationListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Integration'
+    UserEmailsResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/UserEmails'
+    UserEmails:
+      type: object
+      required:
+      - mainEmail
+      - otherEmails
+      properties:
+        mainEmail:
+          $ref: '#/components/schemas/UserEmail'
+        otherEmails:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserEmail'
+    UserEmail:
+      type: object
+      required:
+      - email
+      - isPrivate
+      properties:
+        email:
+          type: string
+        isPrivate:
+          type: boolean
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    Provider:
+      type: string
+      description: Git provider hosting the repository
+      example: gh
+    JoinStatus:
+      type: string
+      enum:
+      - member
+      - pendingMember
+      - remoteMember
+      x-ms-enum:
+        name: JoinStatus
+    EmailNotificationSettingsResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/EmailNotificationSettings'
+    OrganizationResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Organization'
+    UserBody:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Foo
+        shouldDoClientQualification:
+          type: boolean
+          example: false
+    JoinMode:
+      type: string
+      enum:
+      - auto
+      - adminAuto
+      - request
+      x-ms-enum:
+        name: JoinMode
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    ApiToken:
+      required:
+      - id
+      - token
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        token:
+          type: string
+        name:
+          type: string
+          example: pt-4f1a9b2c8e3d
+        expiresAt:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        createdAt:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+          description: 'The timestamp when the token was created. Absent for tokens created before creation dates were recorded
+
+            '
+      description: API token string value and ID
+    OrganizationListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    OrganizationType:
+      type: string
+      description: The type of Organization
+      example: Organization
+      enum:
+      - Account
+      - Organization
+      x-ms-enum:
+        name: OrganizationType
+    EmailNotificationSettingsOptional:
+      type: object
+      properties:
+        perCommit:
+          type: boolean
+          description: Whether to receive notifications for each commit
+          example: false
+        perPullRequest:
+          type: boolean
+          description: Whether to receive notifications for pull requests
+          example: true
+        onlyMyActivity:
+          type: boolean
+          description: Whether to only receive notifications for your own activity
+          example: true
+      example:
+        perCommit: false
+        perPullRequest: true
+        onlyMyActivity: true
     User:
+      required:
+      - created
+      - id
+      - isActive
+      - isAdmin
+      - mainEmail
+      - otherEmails
       type: object
       properties:
         id:
@@ -45,16 +747,263 @@ components:
           format: int64
         name:
           type: string
-        email:
-          type: string
+          example: Foo
         mainEmail:
           type: string
+          example: main@codacy.com
+        otherEmails:
+          type: array
+          example:
+          - foo@bar.com
+          items:
+            type: string
+        isAdmin:
+          type: boolean
+          example: false
+        isActive:
+          type: boolean
+          example: true
         created:
           type: string
           format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        intercomHash:
+          type: string
+          example: userhash
+        zendeskHash:
+          type: string
+          example: userzendeskhash
+        pylonHash:
+          type: string
+          example: userpylonhash
+        shouldDoClientQualification:
+          type: boolean
+          example: false
+    ApiTokenCreateRequest:
+      type: object
+      properties:
+        expiresAt:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+      description: Request body for creating an API token containing optional expiration timestamp
+    Organization:
+      required:
+      - name
+      - provider
+      - remoteIdentifier
+      - singleProviderLogin
+      - type
+      - hasDastAccess
+      - dastTargetsLimit
+      - hasScaEnabled
+      - imageSbomEnabled
+      type: object
+      properties:
+        identifier:
+          type: integer
+          format: int64
+        remoteIdentifier:
+          type: string
+        name:
+          type: string
+          example: FooOrganization
+        avatar:
+          type: string
+          example: someRandomLink.com
+        created:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        provider:
+          $ref: '#/components/schemas/Provider'
+        joinMode:
+          $ref: '#/components/schemas/JoinMode'
+        type:
+          $ref: '#/components/schemas/OrganizationType'
+        joinStatus:
+          $ref: '#/components/schemas/JoinStatus'
+        singleProviderLogin:
+          type: boolean
+        hasDastAccess:
+          type: boolean
+        dastTargetsLimit:
+          type: integer
+          format: int32
+        hasScaEnabled:
+          type: boolean
+        imageSbomEnabled:
+          type: boolean
+        hasAiInventoryEnabled:
+          type: boolean
+        hasWebhooksEnabled:
+          type: boolean
+        hasFalsePositiveAccess:
+          type: boolean
+        hasSilentFalsePositiveDetection:
+          type: boolean
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    installationIdParam:
+      name: installationId
+      in: path
+      description: Identifier of the Codacy installation
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: '123412645234'
+      x-ms-parameter-location: method
+    tokenIdParam:
+      name: tokenId
+      in: path
+      description: Unique identifier for the API token
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 30
+      x-ms-parameter-location: method
+  requestBodies:
+    emailParam:
+      description: Email
+      content:
+        application/json:
+          schema:
+            type: string
+      required: true
+    updateEmailSettingsRequest:
+      description: Email notification preferences to update
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmailNotificationSettingsOptional'
+      required: true
   securitySchemes:
-    api-token:
+    ApiKeyAuth:
       type: apiKey
-      in: header
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
       name: api-token
-      description: Account API token created in your Codacy account settings.
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

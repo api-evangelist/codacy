@@ -1,0 +1,353 @@
+openapi: 3.2.0
+info:
+  title: Codacy Billing API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Billing
+paths:
+  /billing/{provider}/{remoteOrganizationName}/subscription:
+    delete:
+      tags:
+      - Billing
+      summary: Delete billing subscription for organization
+      operationId: deleteSubscription
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        $ref: '#/components/requestBodies/churnFeedbackParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: billing
+  /plans:
+    get:
+      tags:
+      - Billing
+      x-jvm-package: billing
+      summary: List available plans in Codacy
+      operationId: listPaymentPlans
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPlansResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    PaymentPlan:
+      required:
+      - isPremium
+      - model
+      - code
+      - monthly
+      - price
+      - pricedPerUser
+      type: object
+      properties:
+        isPremium:
+          type: boolean
+          example: true
+        model:
+          type: string
+          example: Auto
+          enum:
+          - Auto
+          - Manual
+        code:
+          type: string
+          example: trial
+        monthly:
+          type: boolean
+          example: true
+        price:
+          type: integer
+          format: int64
+          example: 1000
+        pricedPerUser:
+          type: boolean
+          example: true
+        alternatePeriodCode:
+          type: string
+          description: 'Plan code for the same tier with opposite billing period (monthly <-> yearly).
+
+            When not available, fall back to default plan selection logic.
+
+            '
+          example: team-yearly
+    Reason:
+      required:
+      - notes
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+        notes:
+          type: array
+          items:
+            type: string
+    ChurnFeedback:
+      required:
+      - cancelReason
+      - joinReason
+      type: object
+      properties:
+        joinReason:
+          $ref: '#/components/schemas/Reason'
+        cancelReason:
+          $ref: '#/components/schemas/Reason'
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    CodacyPaymentPlans:
+      type: object
+      required:
+      - defaultYearlyPaidCode
+      - defaultMonthlyPaidCode
+      - trialCode
+      - openSourceCode
+      - defaultYearlyPaidPlan
+      - defaultMonthlyPaidPlan
+      - trialPlan
+      - openSourcePlan
+      - plans
+      properties:
+        defaultYearlyPaidCode:
+          type: string
+        defaultMonthlyPaidCode:
+          type: string
+        trialCode:
+          type: string
+        openSourceCode:
+          type: string
+        defaultYearlyPaidPlan:
+          $ref: '#/components/schemas/PaymentPlan'
+        defaultMonthlyPaidPlan:
+          $ref: '#/components/schemas/PaymentPlan'
+        trialPlan:
+          $ref: '#/components/schemas/PaymentPlan'
+        openSourcePlan:
+          $ref: '#/components/schemas/PaymentPlan'
+        plans:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentPlan'
+    PaymentPlansResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CodacyPaymentPlans'
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  requestBodies:
+    churnFeedbackParam:
+      description: Reasons
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChurnFeedback'
+      required: false
+  parameters:
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

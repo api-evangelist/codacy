@@ -1,0 +1,251 @@
+openapi: 3.2.0
+info:
+  title: Codacy Integrations API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Integrations
+paths:
+  /login/integrations:
+    get:
+      tags:
+      - Integrations
+      summary: List configured login providers on Codacy's platform
+      operationId: listConfiguredLoginIntegrations
+      parameters:
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfiguredLoginIntegrationListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      x-jvm-package: integrations
+  /provider/integrations:
+    get:
+      tags:
+      - Integrations
+      summary: List provider integrations existing on Codacy's platform
+      operationId: listProviderIntegrations
+      parameters:
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderIntegrationListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      x-jvm-package: integrations
+components:
+  schemas:
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    ConfiguredLoginIntegrationListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfiguredLoginIntegration'
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    ProviderIntegrationListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderIntegration'
+    Provider:
+      type: string
+      description: Git provider hosting the repository
+      example: gh
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    ConfiguredLoginIntegration:
+      required:
+      - loginUrl
+      - provider
+      type: object
+      properties:
+        provider:
+          $ref: '#/components/schemas/Provider'
+        loginUrl:
+          type: string
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ProviderIntegration:
+      required:
+      - provider
+      - redirectUrl
+      type: object
+      properties:
+        provider:
+          $ref: '#/components/schemas/Provider'
+        redirectUrl:
+          type: string
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+  parameters:
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

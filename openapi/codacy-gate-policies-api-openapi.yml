@@ -1,0 +1,821 @@
+openapi: 3.2.0
+info:
+  title: Codacy gate policies API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: gate policies
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/gate-policies/{gatePolicyId}/setDefault:
+    post:
+      tags:
+      - gate policies
+      summary: Set the gate policy as the default for an organization
+      operationId: setDefaultGatePolicy
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/gatePolicyId'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: policies
+  /organizations/{provider}/{remoteOrganizationName}/gate-policies/setCodacyDefault:
+    post:
+      tags:
+      - gate policies
+      summary: Set the built-in Codacy gate policy as the default for an organization
+      operationId: setCodacyDefault
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: policies
+  /organizations/{provider}/{remoteOrganizationName}/gate-policies/{gatePolicyId}:
+    get:
+      tags:
+      - gate policies
+      summary: Get a gate policy
+      operationId: getGatePolicy
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/gatePolicyId'
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGatePolicyResultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: policies
+    delete:
+      tags:
+      - gate policies
+      summary: Delete a gate policy
+      operationId: deleteGatePolicy
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/gatePolicyId'
+      responses:
+        '204':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: policies
+    patch:
+      tags:
+      - gate policies
+      summary: Update a gate policy
+      operationId: updateGatePolicy
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/gatePolicyId'
+      requestBody:
+        description: The new values for the name, default status, or quality gates of the gate policy
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGatePolicyBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGatePolicyResultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: policies
+      x-codegen-request-body-name: updateGatePolicyBody
+  /organizations/{provider}/{remoteOrganizationName}/gate-policies:
+    get:
+      tags:
+      - gate policies
+      summary: List the gate policies for an organization
+      operationId: listGatePolicies
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatePoliciesListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: policies
+    post:
+      tags:
+      - gate policies
+      summary: Create a gate policy
+      operationId: createGatePolicy
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Details of the gate policy to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGatePolicyBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGatePolicyResultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: policies
+      x-codegen-request-body-name: createGatePolicyBody
+  /organizations/{provider}/{remoteOrganizationName}/gate-policies/{gatePolicyId}/repositories:
+    get:
+      tags:
+      - gate policies
+      summary: List all repositories following a gate policy
+      operationId: listRepositoriesFollowingGatePolicy
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/gatePolicyId'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRepositoriesFollowingGatePolicyResultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: policies
+    put:
+      tags:
+      - gate policies
+      summary: Apply a gate policy to a list of repositories
+      description: Link or unlink a gate policy to a list of repositories.
+      operationId: applyGatePolicyToRepositories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/gatePolicyId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyGatePolicyToRepositoriesBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: policies
+      x-codegen-request-body-name: ApplyGatePolicyToRepositoriesBody
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    GatePolicy:
+      required:
+      - id
+      - isDefault
+      - meta
+      - name
+      - readOnly
+      - settings
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier of the gate policy
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: Name of the gate policy
+          example: policy-name
+        isDefault:
+          type: boolean
+          description: True if the gate policy is the default for the organization
+          example: true
+        readOnly:
+          type: boolean
+          description: True if the quality gates of the gate policy cannot be changed
+          example: true
+        settings:
+          $ref: '#/components/schemas/QualityGate'
+        meta:
+          $ref: '#/components/schemas/GatePolicyMeta'
+      description: Details of the gate policy
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    RepositoryIdentification:
+      required:
+      - name
+      - repositoryId
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          description: Identifier of the repository
+          format: int64
+        name:
+          type: string
+          description: Name of the repository
+          example: codacy-eslint
+      description: Identifier and name of a repository using a coding standard
+    CreateGatePolicyBody:
+      required:
+      - gatePolicyName
+      type: object
+      properties:
+        gatePolicyName:
+          type: string
+          description: Name of the gate policy
+          example: gate-policy-name
+        isDefault:
+          type: boolean
+          example: true
+        settings:
+          $ref: '#/components/schemas/QualityGate'
+      description: Details of a new gate policy
+    ListRepositoriesFollowingGatePolicyResultResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          description: List of repositories following a gate policy
+          items:
+            $ref: '#/components/schemas/RepositoryIdentification'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    QualityGate:
+      type: object
+      properties:
+        issueThreshold:
+          required:
+          - threshold
+          type: object
+          properties:
+            threshold:
+              minimum: 0
+              type: integer
+              format: int32
+              example: 1
+            minimumSeverity:
+              $ref: '#/components/schemas/SeverityLevel'
+          description: The quality gate will fail if there are new issues of the specified severity over this threshold (if no severity is specified all severity levels are considered). This value cannot be negative
+        securityIssueThreshold:
+          minimum: 0
+          type: integer
+          description: The quality gate will fail if the number of new security issues is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+        securityIssueMinimumSeverity:
+          $ref: '#/components/schemas/SeverityLevel'
+        duplicationThreshold:
+          type: integer
+          description: The quality gate will fail if there are new duplicated blocks over this threshold
+          format: int32
+          example: 1
+        coverageThreshold:
+          maximum: 1
+          type: integer
+          description: Deprecated, use `coverageThresholdWithDecimals` instead
+          format: int32
+          example: 1
+        coverageThresholdWithDecimals:
+          type: number
+          description: The quality gate will fail if coverage percentage varies less than this threshold. This value should be at most 1.00
+          format: double
+          example: -0.02
+        diffCoverageThreshold:
+          maximum: 100
+          minimum: 0
+          type: integer
+          description: The quality gate will fail if diff coverage is under this threshold. This value should be at least 0 and at most 100
+          format: int32
+          example: 70
+        complexityThreshold:
+          minimum: 0
+          type: integer
+          description: The quality gate will fail if the complexity value is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    ApplyGatePolicyToRepositoriesBody:
+      required:
+      - link
+      - unlink
+      type: object
+      properties:
+        link:
+          type: array
+          description: Names of the repositories to link to a gate policy
+          items:
+            type: string
+        unlink:
+          type: array
+          description: Names of the repositories to unlink from a gate policy
+          items:
+            type: string
+      description: Names of the repositories to link or unlink from a gate policy
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    GatePolicySummarized:
+      required:
+      - id
+      - isDefault
+      - meta
+      - name
+      - readOnly
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier of the gate policy
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: Name of the gate policy
+          example: policy-name
+        isDefault:
+          type: boolean
+          description: True if the gate policy is the default for the organization
+          example: true
+        readOnly:
+          type: boolean
+          description: True if the quality gates of the gate policy cannot be changed
+          example: true
+        meta:
+          $ref: '#/components/schemas/GatePolicyMeta'
+      description: Gate policy summary information, without the quality gate settings
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    UpdateGatePolicyBody:
+      type: object
+      properties:
+        gatePolicyName:
+          type: string
+          description: Name of the gate policy
+        isDefault:
+          type: boolean
+          description: True if the gate policy is the default for the organization
+        settings:
+          $ref: '#/components/schemas/QualityGate'
+    GatePoliciesListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GatePolicySummarized'
+      description: List of gate policies for an organization
+    GetGatePolicyResultResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GatePolicy'
+    GatePolicyMeta:
+      required:
+      - linkedRepositoriesCount
+      - nrOfQualityGates
+      type: object
+      properties:
+        nrOfQualityGates:
+          type: integer
+          description: Number of quality gates that are configured in the gate policy
+          format: int32
+          example: 10
+        linkedRepositoriesCount:
+          type: integer
+          description: Number of repositories following the gate policy
+          format: int32
+          example: 10
+      description: Meta information about a gate policy
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    SeverityLevel:
+      type: string
+      description: Issue severity level. These values map to our UI as follows - Info to Minor, Warning to Medium, High to High, Error to Critical.
+      example: Error
+      enum:
+      - Info
+      - Warning
+      - High
+      - Error
+      x-ms-enum:
+        name: SeverityLevel
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    gatePolicyId:
+      name: gatePolicyId
+      in: path
+      description: Identifier of the gate policy
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 1
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

@@ -1,0 +1,382 @@
+openapi: 3.2.0
+info:
+  title: Codacy Language Settings API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: language-settings
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/languages:
+    get:
+      tags:
+      - language-settings
+      summary: Get the list of all languages with their extensions and enabled status
+      operationId: getRepositoryLanguages
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryLanguageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: fileExtension
+    patch:
+      tags:
+      - language-settings
+      summary: Configure language settings for this repo
+      operationId: patchRepositoryLanguageResponseSettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RepositoryLanguagesBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: fileExtension
+      x-codegen-request-body-name: RepositoryLanguagesBody
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    Language:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of the language
+          example: Scala
+      description: Language information
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    RepositoryLanguageResponse:
+      required:
+      - languages
+      type: object
+      properties:
+        languages:
+          type: array
+          description: List of languages with supported extensions
+          items:
+            $ref: '#/components/schemas/RepositoryLanguage'
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    RepositoryLanguage:
+      allOf:
+      - $ref: '#/components/schemas/Language'
+      - required:
+        - codacyDefaults
+        - detected
+        - enabled
+        - extensions
+        - defaultFiles
+        type: object
+        properties:
+          codacyDefaults:
+            type: array
+            description: Default Codacy extensions for the language
+            items:
+              type: string
+          extensions:
+            type: array
+            description: List of custom extensions for the language
+            items:
+              type: string
+          defaultFiles:
+            type: array
+            description: Default Codacy files for the language
+            items:
+              type: string
+          enabled:
+            type: boolean
+            description: Whether or not this language is to be analyzed for this repository.
+          detected:
+            type: boolean
+            description: Whether or not Codacy detected this language in the given repository. Note that at least one analysis has to have happened after
+        description: List of supported file extensions for a specific language
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    RepositoryLanguageUpdate:
+      allOf:
+      - $ref: '#/components/schemas/Language'
+      - type: object
+        properties:
+          extensions:
+            type: array
+            description: List of custom file extensions for the language. If left undefined, then the extensions will not be updated.
+            items:
+              type: string
+          enabled:
+            type: boolean
+            description: Whether this language is to be analyzed for this repository. If left undefined, then the flag will not be updated.
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    RepositoryLanguagesBody:
+      required:
+      - languages
+      type: object
+      properties:
+        languages:
+          type: array
+          description: List of languages for this repository
+          items:
+            $ref: '#/components/schemas/RepositoryLanguageUpdate'
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    repositoryNameParam:
+      name: repositoryName
+      in: path
+      description: Repository name on the Git provider organization
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: awesome-repo
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

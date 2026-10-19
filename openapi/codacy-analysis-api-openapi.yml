@@ -1,0 +1,5033 @@
+openapi: 3.2.0
+info:
+  title: Codacy Analysis API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Analysis
+paths:
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories:
+    get:
+      tags:
+      - Analysis
+      summary: List organization repositories with analysis information for the authenticated…
+      description: For Bitbucket, you must URL encode the cursor before using it in subsequent API calls, as the pagination comes directly from the Git provider.
+      operationId: listOrganizationRepositoriesWithAnalysis
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/repositoriesParam'
+      - $ref: '#/components/parameters/segmentsParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryWithAnalysisListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: analysis
+  /search/analysis/organizations/{provider}/{remoteOrganizationName}/repositories:
+    post:
+      tags:
+      - Analysis
+      summary: Search organization repositories with analysis information for the…
+      description: For Bitbucket, you must URL encode the cursor before using it in subsequent API calls, as the pagination comes directly from the Git provider.
+      operationId: searchOrganizationRepositoriesWithAnalysis
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        description: Search query body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchOrganizationRepositoriesWithAnalysis'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryWithAnalysisListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: analysis
+      x-codegen-request-body-name: searchOrganizationRepositoriesWithAnalysisBody
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}:
+    get:
+      tags:
+      - Analysis
+      summary: Get a repository with analysis information for the authenticated user
+      operationId: getRepositoryWithAnalysis
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryWithAnalysisResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tools:
+    get:
+      tags:
+      - Analysis
+      summary: Get analysis tools settings of a repository
+      description: '**Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: listRepositoryTools
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisToolsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tools/conflicts:
+    get:
+      tags:
+      - Analysis
+      summary: Get tools with conflicts in a repository
+      operationId: listRepositoryToolConflicts
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryConflictsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tools/{toolUuid}:
+    patch:
+      tags:
+      - Analysis
+      summary: Configure an analysis tool by enabling and disabling its patterns for a…
+      operationId: configureTool
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigureToolBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: analysis
+      x-codegen-request-body-name: configureToolBody
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tools/{toolUuid}/patterns:
+    get:
+      tags:
+      - Analysis
+      summary: Patterns configuration for (repository, tool).
+      operationId: listRepositoryToolPatterns
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/languagesFilterParam'
+      - $ref: '#/components/parameters/categoriesParam'
+      - $ref: '#/components/parameters/severityLevelsParam'
+      - $ref: '#/components/parameters/tagsParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/enabledPatternParam'
+      - $ref: '#/components/parameters/recommendedPatternParam'
+      - $ref: '#/components/parameters/matchesStackParam'
+      - $ref: '#/components/parameters/patternsSortParam'
+      - $ref: '#/components/parameters/directionParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfiguredPatternsListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: analysis
+    patch:
+      tags:
+      - Analysis
+      summary: Bulk updates the code patterns of a tool in a repository.
+      operationId: updateRepositoryToolPatterns
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/languagesFilterParam'
+      - $ref: '#/components/parameters/categoriesParam'
+      - $ref: '#/components/parameters/severityLevelsParam'
+      - $ref: '#/components/parameters/tagsParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/recommendedPatternParam'
+      - $ref: '#/components/parameters/matchesStackParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePatternsBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: analysis
+      x-codegen-request-body-name: updatePatternsBody
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tools/{toolUuid}/patterns/{patternId}
+  : get:
+      tags:
+      - Analysis
+      summary: Patterns configuration for (repository, tool, pattern).
+      operationId: getRepositoryToolPattern
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/patternIdParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfiguredPatternResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tools/{toolUuid}/patterns/overview
+  : get:
+      tags:
+      - Analysis
+      summary: Patterns overview for tool.
+      operationId: toolPatternsOverview
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/languagesFilterParam'
+      - $ref: '#/components/parameters/categoriesParam'
+      - $ref: '#/components/parameters/severityLevelsParam'
+      - $ref: '#/components/parameters/tagsParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/enabledPatternParam'
+      - $ref: '#/components/parameters/recommendedPatternParam'
+      - $ref: '#/components/parameters/matchesStackParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolPatternsOverviewResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/tools/{toolUuid}/conflicts:
+    get:
+      tags:
+      - Analysis
+      summary: Patterns with Coding Standards conflicts for tool
+      operationId: listRepositoryToolPatternConflicts
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryToolConflictsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/analysis-progress:
+    get:
+      tags:
+      - Analysis
+      summary: Get the analysis progress of a repository
+      description: '**Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: getFirstAnalysisOverview
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirstAnalysisOverviewResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/recover:
+    post:
+      tags:
+      - Analysis
+      summary: Recover a stuck repository
+      description: 'Triggers a recovery action when the repository is stuck on its first analysis.
+
+        The exact action taken depends on the stuck state.
+
+        Returns `422 Unprocessable Entity` when the repository is not stuck.'
+      operationId: recoverRepository
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/autoconfig:
+    post:
+      tags:
+      - Analysis
+      summary: Add repository autoconfiguration run
+      description: '**[Experimental]** Autoconfig enqueuing endpoint'
+      operationId: addAutoconfig
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '202':
+          description: Autoconfig run accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddAutoconfigResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/autoconfig/runs:
+    get:
+      tags:
+      - Analysis
+      summary: Get latest autoconfig run summary
+      operationId: getLatestAutoconfigRunSummary
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutoconfigRunSummaryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/autoconfig/status:
+    get:
+      tags:
+      - Analysis
+      summary: Get autoconfig run status
+      description: '**[Experimental]** Fetch latest autoconfig run state managed (can be `Requested`, `Running`, `Done` or `Failed`)'
+      operationId: getAutoconfigStatus
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutoconfigStatusResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests:
+    get:
+      tags:
+      - Analysis
+      summary: List pull requests from a repository that the user has access to
+      description: 'You can search this endpoint for either `last-updated` (default), `merged`
+
+
+        **Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: listRepositoryPullRequests
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/textQueryParam'
+      - $ref: '#/components/parameters/targetBranchParam'
+      - name: includeNotAnalyzed
+        in: query
+        description: If true, also return pull requests that weren't analyzed
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestWithAnalysisListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}
+  : get:
+      tags:
+      - Analysis
+      summary: Get pull request from a repository
+      description: '**Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: getRepositoryPullRequest
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestWithAnalysis'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/commits
+  : get:
+      tags:
+      - Analysis
+      summary: Return analysis results for the commits in a pull request
+      operationId: getPullRequestCommits
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/cursorParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitWithAnalysisListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/bypass
+  : post:
+      tags:
+      - Analysis
+      summary: Bypass analysis status in a pull request
+      operationId: bypassPullRequestAnalysis
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/ai-reviewer/trigger
+  : post:
+      tags:
+      - Analysis
+      summary: Triggers an AI review for a pull request
+      operationId: triggerPullRequestAiReview
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/coverage/status
+  : get:
+      tags:
+      - Analysis
+      summary: List all coverage reports uploaded for the common ancestor commit and head…
+      operationId: getPullRequestCoverageReports
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoveragePullRequestResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/issues
+  : get:
+      tags:
+      - Analysis
+      summary: List issues found in a pull request
+      description: Use the status parameter to filter by new or fixed issues
+      operationId: listPullRequestIssues
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      - $ref: '#/components/parameters/issueStatusParam'
+      - $ref: '#/components/parameters/onlyPotentialParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestIssuesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/clones
+  : get:
+      tags:
+      - Analysis
+      summary: List duplicate code blocks found in a pull request
+      description: 'Use the status parameter to filter by new or removed duplicates.
+
+        The `id` of each duplicate code block is deprecated and will be removed, as it can change over time.'
+      operationId: listPullRequestClones
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      - $ref: '#/components/parameters/issueStatusParam'
+      - $ref: '#/components/parameters/onlyPotentialParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClonesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}/clones:
+    get:
+      tags:
+      - Analysis
+      summary: List duplicate code blocks found in a commit
+      description: 'Use the status parameter to filter by new or removed duplicates.
+
+        The `id` of each duplicate code block is deprecated and will be removed, as it can change over time.'
+      operationId: listCommitClones
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - name: commitUuid
+        in: path
+        description: UUID or SHA identifier of the source commit
+        required: true
+        schema:
+          type: string
+          x-ms-parameter-location: method
+        example: 2957025d42e8daadf937d4044516f991d21deea4
+        x-ms-parameter-location: method
+      - $ref: '#/components/parameters/issueStatusParam'
+      - $ref: '#/components/parameters/onlyPotentialParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClonesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/logs
+  : get:
+      tags:
+      - Analysis
+      summary: Get analysis logs for a pull request
+      operationId: listPullRequestLogs
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}/logs:
+    get:
+      tags:
+      - Analysis
+      summary: Get analysis logs for a commit
+      operationId: listCommitLogs
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/commitUuidParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/quality-settings:
+    get:
+      tags:
+      - Analysis
+      summary: Get quality settings for the specific repository
+      description: '**Deprecated:** Use getQualitySettingsForRepository instead.
+
+
+        **Note:** When applied to public repositories, this operation does not require authentication.'
+      deprecated: true
+      operationId: getRepositoryQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeprecatedRepositoryQualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}/files:
+    get:
+      tags:
+      - Analysis
+      summary: List files of a commit with analysis results
+      operationId: listCommitFiles
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/commitUuid'
+      - $ref: '#/components/parameters/branchNameParam'
+      - name: filter
+        in: query
+        description: 'Optional field to filter the results. The possible values are empty (default, return files changed in the commit or with coverage changes) or `withCoverageChanges` (return files with coverage changes)
+
+          '
+        schema:
+          type: string
+          enum:
+          - withCoverageChanges
+          x-ms-parameter-location: method
+        x-ms-parameter-location: method
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/filesSearchFilter'
+      - name: sortColumn
+        in: query
+        description: 'Field used to sort the results. The possible values are `deltaCoverage` (to sort by the coverage variation value of the files), `totalCoverage` (to sort by the total coverage value of the files) or `filename` (default - to sort by the name of the files)
+
+          '
+        schema:
+          type: string
+          default: filename
+          enum:
+          - totalCoverage
+          - deltaCoverage
+          - filename
+      - name: columnOrder
+        in: query
+        description: Sort direction. The possible values are `asc` (ascending - default) or `desc` (descending).
+        schema:
+          type: string
+          default: asc
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileAnalysisListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/files
+  : get:
+      tags:
+      - Analysis
+      summary: List files of a pull request with analysis results
+      operationId: listPullRequestFiles
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - name: sortColumn
+        in: query
+        description: 'Field used to sort the results. The possible values are `deltaCoverage` (to sort by the coverage variation value of the files), `totalCoverage` (to sort by the total coverage value of the files) or `filename` (default - to sort by the name of the files)
+
+          '
+        schema:
+          type: string
+          default: filename
+          enum:
+          - totalCoverage
+          - deltaCoverage
+          - filename
+      - name: columnOrder
+        in: query
+        description: Sort direction. The possible values are `asc` (ascending - default) or `desc` (descending).
+        schema:
+          type: string
+          default: asc
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileAnalysisListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/pull-requests:
+    get:
+      tags:
+      - Analysis
+      summary: List organization pull requests from repositories that the user has access to
+      description: You can sort by `last-updated` (default), `merged`
+      operationId: listOrganizationPullRequests
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/repositoriesParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullRequestWithAnalysisListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commit-statistics:
+    get:
+      tags:
+      - Analysis
+      summary: List commit analysis statistics for the last n days that have analysis data
+      description: 'Returns the last `n` days with available data. This means that the returned days may not match the last `n` calendar days.
+
+
+        **Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: listCommitAnalysisStats
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      - $ref: '#/components/parameters/daysParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitAnalysisStatsListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/category-overviews:
+    get:
+      tags:
+      - Analysis
+      summary: List analysis category overviews for a repository that the user has access to
+      description: '**Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: listCategoryOverviews
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryOverviewListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/search:
+    post:
+      tags:
+      - Analysis
+      summary: List issues in a repository
+      description: 'Returns information about the issues that Codacy found in a repository as available on the Issues page.
+
+        Use SearchRepositoryIssuesBody to filter the returned issues.'
+      operationId: searchRepositoryIssues
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        $ref: '#/components/requestBodies/searchIssuesFilter'
+      responses:
+        '200':
+          description: List of issues in the repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchRepositoryIssuesListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/bulk-ignore:
+    post:
+      tags:
+      - Analysis
+      summary: Bulk ignore issues in a repository
+      description: Receives a list of issue ids and ignores them in the specified repository. Limited to 100 issues at once
+      operationId: bulkIgnoreIssues
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: List of issue ids to ignore
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkIgnoreIssuesBody'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/overview:
+    post:
+      tags:
+      - Analysis
+      summary: Get an overview of the issues in a repository
+      description: 'Returns information about the number of issues that Codacy found in a repository as available on the Issues page.
+
+        Use SearchRepositoryIssuesBody to filter the returned issues.'
+      operationId: issuesOverview
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        $ref: '#/components/requestBodies/searchIssuesFilter'
+      responses:
+        '200':
+          description: Overview of the issues in the repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssuesOverviewResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/{issueId}:
+    get:
+      tags:
+      - Analysis
+      summary: Get information about an open issue in a repository
+      operationId: getIssue
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/resultDataIdParam'
+      responses:
+        '200':
+          description: An issue found in a repository.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIssueResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+    patch:
+      tags:
+      - Analysis
+      summary: Ignore or unignore an issue
+      operationId: updateIssueState
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/issueParam'
+      requestBody:
+        description: New ignored status of the issue
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueStateBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+      x-codegen-request-body-name: issueState
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/{issueId}/false-positive/ignore
+  : patch:
+      tags:
+      - Analysis
+      summary: Ignore the false positive result in an issue
+      operationId: ignoreFalsePositive
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/issueParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/ignoredIssues/search:
+    post:
+      tags:
+      - Analysis
+      summary: List ignored issues in a repository
+      description: Ignored issues are issues that Codacy found but were marked as ignored on the Codacy UI. Use SearchRepositoryIssuesBody to filter results.
+      operationId: searchRepositoryIgnoredIssues
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        $ref: '#/components/requestBodies/searchIgnoredIssuesFilter'
+      responses:
+        '200':
+          description: List of ignored issues in the repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IgnoredIssuesListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits:
+    get:
+      tags:
+      - Analysis
+      summary: Return analysis results for the commits in a branch
+      operationId: listRepositoryCommits
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of commits with analysis results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitWithAnalysisListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - ProjectTokenAuth: []
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}:
+    get:
+      tags:
+      - Analysis
+      summary: Get analysis results for a commit
+      operationId: getCommit
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/commitUuid'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitWithAnalysis'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}/deltaStatistics
+  : get:
+      tags:
+      - Analysis
+      summary: Get analysis statistics of a commit
+      description: 'Returns the quality metric deltas introduced by a commit. The values of the metrics are 0 or null if Codacy didn''t analyze the commit yet.
+
+        To obtain the full analysis statistics for the repository use the endpoint getRepositoryWithAnalysis.'
+      operationId: getCommitDeltaStatistics
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/commitUuid'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitDeltaStatistics'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{srcCommitUuid}/deltaIssues
+  : get:
+      tags:
+      - Analysis
+      summary: List the issues introduced or fixed by a commit
+      description: 'Returns a list of issues introduced or fixed given a source commit SHA. By default, Codacy will calculate the issues by creating a delta between the source commit and its parent commit. As an alternative, you can also provide a destination commit to calculate the deltas.
+
+        To list all issues in the repository, use searchRepositoryIssues.'
+      operationId: listCommitDeltaIssues
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - name: srcCommitUuid
+        in: path
+        description: UUID or SHA string that identifies the source commit
+        required: true
+        schema:
+          type: string
+          x-ms-parameter-location: method
+        example: 2957025d42e8daadf937d4044516f991d21deea4
+        x-ms-parameter-location: method
+      - name: targetCommitUuid
+        in: query
+        description: UUID or SHA string that identifies the target commit
+        schema:
+          type: string
+          x-ms-parameter-location: method
+        example: 2957025d42e8daadf937d4044516f991d21deea4
+        x-ms-parameter-location: method
+      - $ref: '#/components/parameters/issueStatusParam'
+      - $ref: '#/components/parameters/onlyPotentialParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitDeltaIssuesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /organizations/{provider}/{remoteOrganizationName}/commit/{commitId}:
+    get:
+      tags:
+      - Analysis
+      summary: Get information about a commit
+      operationId: getCommitDetails
+      description: Use `/commits/{commitId}` instead.
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/commitId'
+      responses:
+        '200':
+          description: Details about the commit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitDetails'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /commits/{commitId}:
+    get:
+      tags:
+      - Analysis
+      summary: Get information about a commit
+      operationId: getCommitDetailsByCommitId
+      parameters:
+      - $ref: '#/components/parameters/commitId'
+      responses:
+        '200':
+          description: Details about the commit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitDetailsV2'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/hasSuggestions:
+    get:
+      tags:
+      - Analysis
+      summary: Check if the repository has quick fix suggestions for a branch
+      description: If branch is not provided, the default branch is used.
+      operationId: hasQuickfixSuggestions
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Not backward compatible. Can be deleted in future. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HasQuickfixSuggestionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/issues/patch:
+    get:
+      tags:
+      - Analysis
+      summary: Get quickfixes for issues in patch format
+      description: If branch is not provided, the default branch is used.
+      operationId: getQuickfixesPatch
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/branchNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Not backward compatible. Can be deleted in future. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuickfixPatchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+  ? /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/issues/patch
+  : get:
+      tags:
+      - Analysis
+      summary: Get quickfixes for pull request issues in patch format
+      description: If branch is not provided, the default branch is used.
+      operationId: getPullRequestQuickfixesPatch
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/pullRequestNumberParam'
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Not backward compatible. Can be deleted in future. Use at your own risk.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuickfixPatchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: analysis
+components:
+  schemas:
+    BulkIgnoreIssuesBody:
+      type: object
+      properties:
+        issueIds:
+          type: array
+          items:
+            type: string
+          description: List of issue ids to ignore
+        reason:
+          type: string
+          description: Optional reason for ignoring
+        comment:
+          type: string
+          description: Optional comment
+      required:
+      - issueIds
+    RepositoryWithAnalysisResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RepositoryWithAnalysis'
+    QuickfixPatchResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          required:
+          - patch
+          type: object
+          properties:
+            patch:
+              type: string
+              description: Base64 encoded patch file
+    SearchRepositoryIssuesBody:
+      type: object
+      properties:
+        branchName:
+          type: string
+          description: 'Name of a [repository branch enabled on Codacy](https://docs.codacy.com/repositories-configure/managing-branches/),
+
+            as returned by the endpoint [listRepositoryBranches](#listrepositorybranches).
+
+            By default, uses the main branch defined on the Codacy repository settings.
+
+            '
+          example: a-feature-branch-name
+        patternIds:
+          type: array
+          description: Set of code pattern identifiers, as returned by the endpoint [listPatterns](#listpatterns)
+          example:
+          - ESLint_@typescript-eslint_consistent-indexed-object-style
+          - ESLint_@typescript-eslint_no-redeclare
+          items:
+            type: string
+        toolUuids:
+          type: array
+          description: Set of tool UUIDs to filter issues by the tools that detected them
+          example:
+          - 847feb32-9ff2-11ea-bb37-0242ac130002
+          - cf05f3aa-fd23-4586-8cce-5571b1904586
+          items:
+            type: string
+        languages:
+          type: array
+          description: Set of language names, without spaces
+          example:
+          - Java
+          - Scala
+          - CSS
+          - ObjectiveC
+          items:
+            type: string
+        categories:
+          type: array
+          description: Set of issue categories
+          example:
+          - Security
+          - CodeStyle
+          items:
+            type: string
+        levels:
+          type: array
+          description: Set of issue severity levels
+          example:
+          - Error
+          - Warning
+          items:
+            $ref: '#/components/schemas/SeverityLevel'
+        tags:
+          type: array
+          description: Set of issue pattern tags
+          example:
+          - react
+          - angular
+          items:
+            type: string
+        authorEmails:
+          type: array
+          description: Set of commit author email addresses
+          example:
+          - example@mail.com
+          - another@mail.com
+          items:
+            type: string
+        potentialFalsePositives:
+          type: boolean
+          description: 'If true, only issues that are potential false positives will be included in the search,
+
+            if false, only issues that are not potential false positives will be included in the search.
+
+            '
+          example: true
+      description: Search parameters to filter the list of issues in a repository
+    AutoconfigRunSummaryResponse:
+      description: The latest autoconfig run summary for a repository
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AutoconfigRunSummary'
+      required:
+      - data
+    RepositorySummary:
+      required:
+      - name
+      - owner
+      - provider
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          description: Codacy identifier for this repository.
+          format: int64
+          example: 45738
+        provider:
+          $ref: '#/components/schemas/Provider'
+        owner:
+          type: string
+          description: Name of the organization that owns the repository.
+          example: codacy
+        name:
+          type: string
+          description: Name of the repository.
+          example: codacy-eslint
+      description: Essential information to describe a repository.
+    AdvisoryInformation:
+      description: Enrichment extracted for the associated advisory, such as vulnerable entry-point functions
+      type: object
+      required:
+      - advisoryId
+      - vulnerableFunctions
+      properties:
+        advisoryId:
+          type: string
+          description: The advisory identifier
+          example: CVE-2024-24786
+        vulnerableFunctions:
+          type: array
+          description: The vulnerable functions of the advisory.
+          items:
+            type: string
+          example:
+          - Unmarshal
+          - UnmarshalOptions.Unmarshal
+        publishedAt:
+          type: string
+          format: date-time
+          x-scala-type: java.time.Instant
+          description: When the advisory was published, as reported by OSV.
+    RepositoryIdentificationV2:
+      required:
+      - name
+      - repositoryId
+      - provider
+      - organizationName
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          description: Identifier of the repository
+          format: int64
+        name:
+          type: string
+          description: Name of the repository
+          example: codacy-eslint
+        provider:
+          $ref: '#/components/schemas/Provider'
+        organizationName:
+          type: string
+          description: Name of the organization
+          example: codacy
+    ToolReference:
+      required:
+      - name
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: Tool unique identifier
+          example: 847feb32-9ff2-11ea-bb37-0242ac130002
+        name:
+          type: string
+          description: Name of the tool
+          example: ESLint
+      description: Details of the tool that found the issue
+    SearchOrganizationRepositoriesWithAnalysis:
+      type: object
+      properties:
+        names:
+          type: array
+          description: List of repository names
+          items:
+            type: string
+      description: Search organization repositories with analysis query body
+    CommitReference:
+      description: Details of the commit that introduced the issue or null if the issue was introduced in a commit that Codacy didn't analyze
+      allOf:
+      - $ref: '#/components/schemas/CommitIdentification'
+      - type: object
+        properties:
+          commiter:
+            type: string
+            description: Email address of the author of the commit
+          commiterName:
+            type: string
+            description: Name of the author of the commit
+          timestamp:
+            type: string
+            description: Time and date of the commit
+            format: date-time
+            example: '2019-05-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+    PullRequestWithAnalysisListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PullRequestWithAnalysis'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PatternDetails:
+      required:
+      - category
+      - id
+      - level
+      - severityLevel
+      type: object
+      properties:
+        id:
+          type: string
+          description: Pattern identifier (unique per tool)
+          example: accessor-pairs
+        title:
+          type: string
+          description: Pattern title
+        category:
+          type: string
+          description: Pattern category
+          example: Security
+        subCategory:
+          type: string
+          description: Pattern subcategory (optional since some patterns might not have a subcategory)
+          example: XSS
+        level:
+          type: string
+          description: Deprecated, use `severityLevel` instead
+          example: Error
+          enum:
+          - Info
+          - Warning
+          - High
+          - Error
+          x-ms-enum:
+            name: SeverityLevel
+        severityLevel:
+          $ref: '#/components/schemas/SeverityLevel'
+      description: Details of the pattern that was identified in the issue
+    DependencyChains:
+      type: array
+      description: 'Dependency chains showing how the vulnerable package is reached. Each chain is an ordered list of package identifiers from the root package down to the vulnerable package. Only present for SCA findings.
+
+        '
+      items:
+        type: array
+        items:
+          type: string
+      example:
+      - - root-app
+        - lodash
+        - vulnerable-pkg
+    ConfiguredPatternsListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfiguredPattern'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        meta:
+          $ref: '#/components/schemas/ConfiguredPatternListMeta'
+    CommitIdentification:
+      required:
+      - sha
+      type: object
+      properties:
+        sha:
+          type: string
+          description: Commit SHA
+    PullRequestOwner:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Foo
+        avatarUrl:
+          type: string
+          example: https://example.com/foo
+        username:
+          type: string
+          example: foo.bar
+        email:
+          type: string
+          example: foobar@example.com
+    IssueStateBody:
+      required:
+      - ignored
+      type: object
+      properties:
+        ignored:
+          type: boolean
+          description: True if the issue is ignored
+        reason:
+          type: string
+          enum:
+          - AcceptedUse
+          - FalsePositive
+          - NotExploitable
+          - TestCode
+          - ExternalCode
+          description: Predefined reason for ignoring the issue
+          example: FalsePositive
+        comment:
+          type: string
+          description: Optional comment justifying the ignore action
+      description: Ignored status of an issue
+    PullRequestCoverage:
+      type: object
+      properties:
+        deltaCoverage:
+          multipleOf: 0.01
+          type: number
+          description: Difference between the coverage of the head commit and common ancestor commit of the pull request
+          format: double
+          example: 71
+        diffCoverage:
+          $ref: '#/components/schemas/DiffCoverage'
+        isUpToStandards:
+          type: boolean
+          description: True if coverage metrics are at or above gate thresholds
+          example: true
+        resultReasons:
+          type: array
+          description: Reasons for the results of coverage analysis
+          items:
+            $ref: '#/components/schemas/AnalysisResultReason'
+    BadGateway:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadGateway
+    Category:
+      required:
+      - categoryType
+      - description
+      - name
+      type: object
+      properties:
+        categoryType:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    CloneDuplicationBlock:
+      required:
+      - fileDataId
+      - fileId
+      - fromLine
+      - path
+      - toLine
+      type: object
+      properties:
+        path:
+          type: string
+        fileId:
+          type: integer
+          format: int64
+        fileDataId:
+          type: integer
+          format: int64
+        fromLine:
+          type: integer
+          format: int64
+        toLine:
+          type: integer
+          format: int64
+    CommitDeltaStatistics:
+      required:
+      - analyzed
+      - commitUuid
+      - fixedIssues
+      - newIssues
+      type: object
+      properties:
+        commitUuid:
+          type: string
+          description: Unique identifier of the commit
+        newIssues:
+          type: integer
+          description: Number of issues introduced by the commit
+          format: int32
+        fixedIssues:
+          type: integer
+          description: Number of issues fixed by the commit
+          format: int32
+        deltaComplexity:
+          type: integer
+          description: Difference in cyclomatic complexity when compared to the previous commit
+          format: int32
+        deltaCoverage:
+          type: integer
+          description: Difference in code coverage percentage when compared to the previous commit
+          format: int32
+        deltaCoverageWithDecimals:
+          multipleOf: 0.01
+          type: number
+          description: Difference in code coverage with decimals percentage when compared to the previous commit
+          format: double
+          example: 71
+        deltaClonesCount:
+          type: integer
+          description: Difference in number of duplicated blocks of code when compared to the previous commit
+          format: int32
+        analyzed:
+          type: boolean
+          description: True if the commit was already analyzed by Codacy
+      description: Delta quality metrics for a commit
+    TooManyRequests:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: TooManyRequests
+    ParameterList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Parameter'
+    Repository:
+      allOf:
+      - $ref: '#/components/schemas/RepositorySummary'
+      - required:
+        - addedState
+        - languages
+        - problems
+        - standards
+        - visibility
+        type: object
+        properties:
+          fullPath:
+            type: string
+            description: Full path of the repository on the Git provider
+            example: codacy/codacy-eslint
+          visibility:
+            $ref: '#/components/schemas/Visibility'
+          remoteIdentifier:
+            type: string
+            description: Unique identifier of the repository on the Git provider
+            example: '3'
+          lastUpdated:
+            type: string
+            description: Timestamp when the repository was last updated. See [Git provider documentation](https://docs.codacy.com/organizations/organization-overview/#last-updated-repositories) for details.
+            format: date-time
+            example: '2019-05-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+          permission:
+            $ref: '#/components/schemas/Permission'
+          problems:
+            type: array
+            items:
+              $ref: '#/components/schemas/RepositoryProblem'
+          languages:
+            type: array
+            description: List of the languages in the repository
+            example:
+            - Java
+            - Scala
+            - CSS
+            items:
+              type: string
+          stack:
+            $ref: '#/components/schemas/RepositoryStack'
+          defaultBranch:
+            $ref: '#/components/schemas/Branch'
+          badges:
+            $ref: '#/components/schemas/Badges'
+          codingStandardId:
+            type: integer
+            description: '**Deprecated:** Use `standards` field instead. Coding standard identifier.'
+            deprecated: true
+            format: int64
+          codingStandardName:
+            type: string
+            description: '**Deprecated:** Use `standards` field instead. Coding standard name.'
+            deprecated: true
+          standards:
+            type: array
+            description: List of the coding standard identifiers and names
+            items:
+              $ref: '#/components/schemas/CodingStandardInfo'
+          addedState:
+            $ref: '#/components/schemas/AddedState'
+          gatePolicyId:
+            type: integer
+            description: Identifier of the gate policy the repository is following. If not defined, the repository does not follow a gate policy.
+            format: int64
+          gatePolicyName:
+            type: string
+            description: Name of the gate policy the repository is following. Present only if the gatePolicyId is defined.
+    AnalysisAction:
+      type: string
+      enum:
+      - clone
+      - createTasks
+      - runMetrics
+      - runPatterns
+      - createOverviews
+      x-ms-enum:
+        name: AnalysisAction
+    AnalysisTool:
+      required:
+      - isClientSide
+      - name
+      - settings
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+        name:
+          type: string
+        isClientSide:
+          type: boolean
+        settings:
+          $ref: '#/components/schemas/AnalysisToolSettings'
+    PullRequestWithAnalysis:
+      required:
+      - isAnalysing
+      - meta
+      - pullRequest
+      type: object
+      properties:
+        isUpToStandards:
+          type: boolean
+          description: True if metrics are at or above gate thresholds
+          example: true
+        isAnalysing:
+          type: boolean
+          example: false
+        pullRequest:
+          $ref: '#/components/schemas/PullRequest'
+        newIssues:
+          type: integer
+          description: Number of issues introduced by the pull request
+          format: int32
+          example: 1
+        fixedIssues:
+          type: integer
+          description: Number of issues fixed by the pull request
+          format: int32
+          example: 1
+        deltaComplexity:
+          type: integer
+          description: Difference in cyclomatic complexity introduced by the pull request
+          format: int32
+          example: 1
+        deltaClonesCount:
+          type: integer
+          description: Difference in number of duplicated blocks of code introduced by the pull request
+          format: int32
+          example: 1
+        deltaCoverageWithDecimals:
+          multipleOf: 0.01
+          type: number
+          description: Deprecated, use `coverage` instead
+          format: double
+          example: 71
+        deltaCoverage:
+          type: integer
+          description: Deprecated, use `coverage` instead
+          format: int32
+          example: 1
+        diffCoverage:
+          multipleOf: 0.01
+          type: number
+          description: Deprecated, use `coverage` instead
+          format: double
+          example: 71
+        coverage:
+          $ref: '#/components/schemas/PullRequestCoverage'
+        quality:
+          $ref: '#/components/schemas/QualityAnalysis'
+        meta:
+          $ref: '#/components/schemas/AnalysisMeta'
+    DiffCoverage:
+      required:
+      - cause
+      type: object
+      properties:
+        value:
+          multipleOf: 0.01
+          type: number
+          description: Coverage value of the lines added or modified by the pull request
+          format: double
+          example: 71
+        coveredLines:
+          type: integer
+          description: Number of covered lines from the lines added or modified by the pull request
+          format: int32
+          example: 11
+        coverableLines:
+          type: integer
+          description: Number of coverable lines from the lines added or modified by the pull request
+          format: int32
+          example: 21
+        cause:
+          type: string
+          description: Rationale for diffCoverage value interpretation
+          example: NoCoverableLines
+          enum:
+          - ValueIsPresent
+          - NoCoverableLines
+          - MissingRequirements
+          x-ms-enum:
+            name: DiffCoverageReason
+    CoveragePullRequestCommitDetail:
+      required:
+      - commitId
+      - commitSha
+      - reports
+      type: object
+      properties:
+        commitId:
+          type: integer
+          format: int64
+          example: 1
+        commitSha:
+          type: string
+        reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/PullRequestCoverageReport'
+      description: Status and details of the coverage reports received for a pull request commit
+    RepositoryQualitySettings:
+      type: object
+      properties:
+        maxIssuePercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of issues is over this threshold
+          format: int32
+          example: 1
+        maxDuplicatedFilesPercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of duplication of files is over this threshold
+          format: int32
+          example: 1
+        minCoveragePercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the coverage percentage is under this threshold
+          format: int32
+          example: 1
+        maxComplexFilesPercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of complexity of files is over this threshold
+          format: int32
+          example: 1
+        fileDuplicationBlockThreshold:
+          minimum: 0
+          type: integer
+          description: A file in this repository will be considered duplicated when the number of cloned blocks is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+        fileComplexityValueThreshold:
+          minimum: 0
+          type: integer
+          description: A file in this repository will be considered complex when its complexity value is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+    ConfiguredPattern:
+      required:
+      - enabled
+      - enabledBy
+      - isCustom
+      - parameters
+      - patternDefinition
+      type: object
+      properties:
+        patternDefinition:
+          $ref: '#/components/schemas/Pattern'
+        enabled:
+          type: boolean
+          description: True if the code pattern is enabled
+          example: true
+        isCustom:
+          type: boolean
+          description: Whether the pattern is enabled outside the scope of a coding standard
+        parameters:
+          $ref: '#/components/schemas/ConfiguredParametersList'
+        enabledBy:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodingStandardInfo'
+      description: Code pattern configuration for a tool
+    RepositoryConflictsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: string
+            example: 847feb32-9ff2-11ea-bb37-0242ac130002
+      description: Repository Tools that have conflicts
+    SeverityLevel:
+      type: string
+      description: Issue severity level. These values map to our UI as follows - Info to Minor, Warning to Medium, High to High, Error to Critical.
+      example: Error
+      enum:
+      - Info
+      - Warning
+      - High
+      - Error
+      x-ms-enum:
+        name: SeverityLevel
+    IgnoredIssue:
+      required:
+      - filePath
+      - issueId
+      - ignoredTimestamp
+      - language
+      - lineText
+      - message
+      - patternInfo
+      - toolInfo
+      - falsePositiveThreshold
+      type: object
+      properties:
+        issueId:
+          type: string
+          description: ID of the Issue
+        reason:
+          type: string
+          enum:
+          - AcceptedUse
+          - FalsePositive
+          - NotExploitable
+          - TestCode
+          - ExternalCode
+          description: Predefined reason for ignoring the issue
+          example: FalsePositive
+        comment:
+          type: string
+          description: Optional comment describing reason for ignoring the issue
+        ignoredByName:
+          type: string
+          description: Name of who ignored the issue
+        ignoredTimestamp:
+          type: string
+          description: Timestamp when the issue was ignored
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        filePath:
+          type: string
+          description: Path of the file where the issue was found and ignored
+        fileId:
+          type: integer
+          format: int64
+        patternInfo:
+          $ref: '#/components/schemas/PatternDetails'
+        toolInfo:
+          $ref: '#/components/schemas/ToolReference'
+        lineNumber:
+          type: integer
+          description: Line where the issue was found
+          format: int64
+        message:
+          type: string
+          description: Detailed cause of the ignored issue
+        language:
+          type: string
+          description: Language of the file where the ignored issue was found
+        lineText:
+          type: string
+          description: Contents of the line where the ignored issue was found
+        commitInfo:
+          $ref: '#/components/schemas/CommitReference'
+        falsePositiveProbability:
+          type: integer
+          description: Probability that the issue is a false positive
+          format: int32
+        falsePositiveReason:
+          type: string
+          description: Reasoning for the false positive
+        falsePositiveThreshold:
+          type: integer
+          description: Threshold for false positive detection
+          format: int32
+      description: Ignored issue details including the commit that originated the issue
+    CodingStandardInfo:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier of the coding standard
+          format: int64
+        name:
+          type: string
+          description: Name of the coding standard
+      description: Coding standard identifier and name
+    SearchRepositoryIgnoredIssuesBody:
+      description: The body to search ignored issues for a project using filter.
+      allOf:
+      - $ref: '#/components/schemas/SearchRepositoryIssuesBody'
+      - type: object
+        properties:
+          ignoreReasons:
+            type: array
+            items:
+              type: string
+              description: Filter ignored issues by ignore reason.
+              enum:
+              - AcceptedUse
+              - FalsePositive
+              - NotExploitable
+              - TestCode
+              - ExternalCode
+              example: FalsePositive
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+    PullRequest:
+      required:
+      - gitHref
+      - id
+      - number
+      - owner
+      - repository
+      - status
+      - title
+      - updated
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        number:
+          type: integer
+          format: int32
+          example: 1
+        updated:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        status:
+          type: string
+          description: Pull request status
+          example: open
+        repository:
+          type: string
+          example: awesome-repository
+        title:
+          type: string
+          example: Amazing pull request
+        owner:
+          $ref: '#/components/schemas/PullRequestOwner'
+        headCommitSha:
+          type: string
+          example: 2957025d42e8daadf937d4044516f991d21deea4
+        commonAncestorCommitSha:
+          type: string
+          example: 3357025d42e8daadf937d4044516f991d21deea4
+        originBranch:
+          type: string
+          example: feat-branch
+        targetBranch:
+          type: string
+          example: master
+        gitHref:
+          type: string
+          description: URL to the pull request on the Git provider
+          example: https://github.com/...
+    IgnoredIssuesListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IgnoredIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    DeprecatedRepositoryQualitySettingsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DeprecatedRepositoryQualitySettings'
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    FileAnalysisListResponse:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDeltaAnalysis'
+      description: List of files with analysis results changes between two commits
+    CoverageStatus:
+      type: string
+      description: 'Coverage status of the repository''s default branch, derived from the stored repository overview. Valid values are `None` (no coverage report has ever been received), `UpToDate` (the most recent commit has a coverage report), `Waiting` (a coverage report is expected but has not arrived yet), or `Stopped` (coverage reports stopped arriving).
+
+        '
+      example: UpToDate
+      enum:
+      - None
+      - UpToDate
+      - Waiting
+      - Stopped
+      x-ms-enum:
+        name: CoverageStatus
+    AutoconfigBeforeAfter:
+      description: A before/after count pair for a metric impacted by an autoconfig run.
+      type: object
+      properties:
+        before:
+          description: Value before the run.
+          type: integer
+          example: 48
+        after:
+          description: Value after the run.
+          type: integer
+          example: 12
+      required:
+      - before
+      - after
+    AutoconfigStatusResponse:
+      description: The latest autoconfig run status for the repository
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - queued
+              - running
+              - successful
+              - failed
+              description: The current autoconfig analysis status of a repository.
+            transitionedAt:
+              description: When the repository transitioned to this status.
+              type: string
+              format: date-time
+              example: '2024-06-28T14:29:13.43Z'
+              x-scala-type: java.time.Instant
+            transitionReason:
+              description: An optional description of why the repository transitioned to the current status.
+              type: string
+              example: Timed out.
+            analysisId:
+              description: The autoconfig analysis id associated with this status.
+              type: string
+              format: uuid
+              example: 72aa9244-4281-460a-a4ee-25be58d2a1ab
+          required:
+          - status
+          - transitionedAt
+          - analysisId
+      required:
+      - data
+    FileMetadata:
+      required:
+      - commitId
+      - commitSha
+      - fileDataId
+      - fileId
+      - gitProviderUrl
+      - ignored
+      - language
+      - path
+      type: object
+      properties:
+        branchId:
+          type: integer
+          description: Identifier for the branch the file belongs to
+          format: int64
+          example: 1
+        commitId:
+          type: integer
+          format: int64
+          example: 1
+        commitSha:
+          type: string
+          description: Commit SHA
+        fileId:
+          type: integer
+          description: Identifier for file in any branch of a specific commit
+          format: int64
+          example: 1
+        fileDataId:
+          type: integer
+          description: Identifier for file
+          format: int64
+          example: 1
+        path:
+          type: string
+          description: Relative path of the file in the repository
+          example: /src/test.go
+        language:
+          type: string
+          description: Language of the file
+          example: Go
+        gitProviderUrl:
+          type: string
+          description: URL to the commit on the Git provider
+          example: https://github.com/codacy/tools-for-code-review-engineers/commit/370b160aaf0ed781d707d335aa1fde20cefeabf2
+        ignored:
+          type: boolean
+          description: True if the file is excluded from the analysis
+          example: false
+      description: Metadata for a file in a repository
+    DeprecatedRepositoryQualitySettings:
+      type: object
+      properties:
+        issueThreshold:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of issues is over this threshold
+          format: int32
+          example: 1
+        duplicationThreshold:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of duplication of files is over this threshold
+          format: int32
+          example: 1
+        coverageThreshold:
+          type: integer
+          description: The repository will be considered unhealthy if the coverage percentage is under this threshold
+          format: int32
+          example: 1
+        complexityThreshold:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of complexity of files is over this threshold
+          format: int32
+          example: 1
+        fileDuplicationThreshold:
+          type: integer
+          description: A file in this repository will be considered duplicated when the number of cloned blocks is over this threshold
+          format: int32
+          example: 1
+        fileComplexityThreshold:
+          type: integer
+          description: A file in this repository will be considered complex when its complexity value is over this threshold
+          format: int32
+          example: 1
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    AnalysisStepExecutionMetrics:
+      required:
+      - activeExecutionTime
+      - end
+      - start
+      - status
+      - title
+      - totalExecutionTime
+      type: object
+      properties:
+        title:
+          type: string
+        start:
+          type: string
+          format: date-time
+          x-scala-type: java.time.Instant
+        end:
+          type: string
+          format: date-time
+          x-scala-type: java.time.Instant
+        activeExecutionTime:
+          type: integer
+          format: int64
+        totalExecutionTime:
+          type: integer
+          format: int64
+        stackTrace:
+          type: string
+        status:
+          type: string
+          enum:
+          - success
+          - error
+      description: Execution metrics for a step of the analysis process
+    AnalysisToolsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalysisTool'
+    IssuesOverview:
+      required:
+      - counts
+      type: object
+      properties:
+        counts:
+          $ref: '#/components/schemas/IssuesOverviewCounts'
+      description: Overview of the issues in a repository
+    Provider:
+      type: string
+      description: Git provider hosting the repository
+      example: gh
+    RepositoryProblem:
+      required:
+      - actions
+      - code
+      - message
+      - severity
+      type: object
+      properties:
+        message:
+          type: string
+          example: We can't analyze this repository because none of the committers are part of the organization.
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+        code:
+          type: string
+          description: A stable identifier for a problem.
+          example: failed_to_clone
+        severity:
+          type: string
+          description: The extent to which this problem affects the repository in terms of analysis execution.
+          example: all_analysis
+    QualityAnalysis:
+      type: object
+      properties:
+        newIssues:
+          type: integer
+          description: Number of issues introduced by the pull request or commit
+          format: int32
+          example: 1
+        fixedIssues:
+          type: integer
+          description: Number of issues fixed by the pull request or commit
+          format: int32
+          example: 1
+        deltaComplexity:
+          type: integer
+          description: Difference in cyclomatic complexity introduced by the pull request or commit
+          format: int32
+          example: 1
+        deltaClonesCount:
+          type: integer
+          description: Difference in number of duplicated blocks of code introduced by the pull request or commit
+          format: int32
+          example: 1
+        isUpToStandards:
+          type: boolean
+          description: '**Deprecated:** Use PullRequest `isUpToStandards` instead (if applicable).'
+          deprecated: true
+          example: true
+        resultReasons:
+          type: array
+          description: Reasons for the results of quality analysis
+          items:
+            $ref: '#/components/schemas/AnalysisResultReason'
+    AutoconfigToolChange:
+      description: A tool that was enabled or disabled by an autoconfig run.
+      type: object
+      properties:
+        toolName:
+          description: Name of the tool.
+          type: string
+          example: Spectral
+        action:
+          description: Whether the tool was enabled or disabled.
+          type: string
+          example: enabled
+        reason:
+          description: Reason for the change.
+          type: string
+          example: Added for OpenAPI and AsyncAPI linting support
+        patternsAffected:
+          description: Number of patterns affected by this tool change.
+          type: integer
+          example: 25
+      required:
+      - toolName
+      - action
+      - reason
+      - patternsAffected
+    Badges:
+      required:
+      - coverage
+      - grade
+      type: object
+      properties:
+        grade:
+          type: string
+          description: Repository grade badge URL
+          example: https://app.codacy.com/project/badge/Grade/d992a862b1994805907ec277e16b0fda
+        coverage:
+          type: string
+          description: Repository coverage badge URL
+          example: https://app.codacy.com/project/badge/Coverage/d992a862b1994805907ec277e16b0fda
+    FirstAnalysisOverviewResponse:
+      required:
+      - data
+      - isStuck
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FirstAnalysisOverview'
+        isStuck:
+          type: boolean
+          description: 'Indicates that the first analysis has been making no observable progress for a long time and likely requires manual intervention.
+
+            Clients may surface a retry action when `true`
+
+            '
+          example: false
+    CommitAnalysisStatsListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitAnalysisStats'
+    CommitIssue:
+      required:
+      - fileId
+      - filePath
+      - issueId
+      - language
+      - lineNumber
+      - lineText
+      - message
+      - patternInfo
+      - resultDataId
+      - toolInfo
+      - falsePositiveThreshold
+      type: object
+      properties:
+        issueId:
+          type: string
+          description: ID of the Issue
+        resultDataId:
+          type: integer
+          description: Stable ID for the issue.
+          format: int64
+        filePath:
+          type: string
+          description: Path of the file where the issue was found
+        fileId:
+          type: integer
+          format: int64
+        patternInfo:
+          $ref: '#/components/schemas/PatternDetails'
+        toolInfo:
+          $ref: '#/components/schemas/ToolReference'
+        lineNumber:
+          type: integer
+          description: Line where the issue was found
+          format: int64
+        message:
+          type: string
+          description: Detailed cause of the issue
+        suggestion:
+          type: string
+          description: The suggested fix for the issue
+        language:
+          type: string
+          description: Language of the file where the issue was found
+        lineText:
+          type: string
+          description: Contents of the line where the issue was found
+        commitInfo:
+          $ref: '#/components/schemas/CommitReference'
+        falsePositiveProbability:
+          type: integer
+          description: Probability that the issue is a false positive
+          format: int32
+        falsePositiveReason:
+          type: string
+          description: Reasoning for the false positive
+        falsePositiveThreshold:
+          type: integer
+          description: Threshold for false positive detection
+          format: int32
+        advisoryInformation:
+          $ref: '#/components/schemas/AdvisoryInformation'
+        dependencyChains:
+          $ref: '#/components/schemas/DependencyChains'
+        fixedVersion:
+          type: array
+          description: Versions that fix the vulnerable dependency. Empty when no fix is available. Only present for SCA issues.
+          items:
+            type: string
+          example:
+          - 1.0.1
+      description: Issue details including the commit that originated the issue
+    AutoconfigParameterChange:
+      description: A parameter value that changed as part of an autoconfig pattern update.
+      type: object
+      properties:
+        id:
+          description: Parameter identifier.
+          type: string
+          example: threshold
+        before:
+          description: Value before the change.
+          type: string
+          example: '5'
+        after:
+          description: Value after the change.
+          type: string
+          example: '10'
+      required:
+      - id
+      - before
+      - after
+    ConfiguredPatternListMeta:
+      required:
+      - totalEnabled
+      type: object
+      properties:
+        totalEnabled:
+          type: integer
+          description: Total number of enabled patterns
+          format: int32
+          example: 35
+          default: 0
+      description: Metadata for a retrieved pattern list
+    GetIssueResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CommitIssue'
+    CoverageAnalysis:
+      type: object
+      properties:
+        totalCoveragePercentage:
+          type: number
+          description: Total coverage percentage at the requested commit
+          format: double
+          example: 93.23
+        deltaCoveragePercentage:
+          type: number
+          description: Difference in coverage between two commits, expressed in percentage points
+          format: double
+          example: 15.25
+        isUpToStandards:
+          type: boolean
+          description: True if coverage metrics are at or above gate thresholds
+          example: true
+        resultReasons:
+          type: array
+          description: Reasons for the results of coverage analysis
+          items:
+            $ref: '#/components/schemas/AnalysisResultReason'
+    ConfigureToolBody:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Whether to enable or disable the tool.
+        useConfigurationFile:
+          type: boolean
+          description: Marks the tool as using a configuration file or not.
+        patterns:
+          type: array
+          description: The patterns to enable or disable.
+          items:
+            $ref: '#/components/schemas/ConfigurePattern'
+      description: How to configure a tool.
+    CommitDeltaIssue:
+      required:
+      - commitIssue
+      - deltaType
+      type: object
+      properties:
+        commitIssue:
+          $ref: '#/components/schemas/CommitIssue'
+        deltaType:
+          $ref: '#/components/schemas/DeltaType'
+      description: Details of an issue that was added or fixed by a commit
+    PullRequestCoverageReport:
+      required:
+      - createdAt
+      - status
+      - targetCommitSha
+      type: object
+      properties:
+        targetCommitSha:
+          type: string
+          description: Commit SHA that was referenced as the target for this report
+        commit:
+          $ref: '#/components/schemas/CommitWithBranches'
+        language:
+          type: string
+          description: Programming language associated with the coverage report
+        createdAt:
+          type: string
+          description: Report creation date
+          format: date-time
+          x-scala-type: java.time.Instant
+        status:
+          type: string
+          description: Coverage status
+          enum:
+          - Pending
+          - Processed
+          - CommitNotAnalysed
+          - CommitNotFound
+          - BranchNotEnabled
+          - MissingFinal
+      description: Status and details of a pull request coverage report
+    CommitFileClone:
+      required:
+      - clones
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: '**Deprecated:** Do not rely on this value, it will be removed. Identifier of the duplicated code block, which can change over time.'
+          deprecated: true
+        status:
+          $ref: '#/components/schemas/DeltaType'
+        clones:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloneDuplicationBlock'
+      description: A duplicated code block with references to duplicate instances
+    Branch:
+      required:
+      - branchType
+      - id
+      - isDefault
+      - isEnabled
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: master
+        isDefault:
+          type: boolean
+          example: true
+        isEnabled:
+          type: boolean
+          example: true
+        lastUpdated:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        branchType:
+          type: string
+          enum:
+          - Branch
+          - PullRequest
+        lastCommit:
+          type: string
+    CommitDeltaIssuesResponse:
+      required:
+      - analyzed
+      - data
+      type: object
+      properties:
+        analyzed:
+          type: boolean
+          description: True if Codacy already analyzed the commit
+        data:
+          type: array
+          description: List of issues added or fixed on a commit or an empty list if Codacy didn't analyze the commit yet.
+          items:
+            $ref: '#/components/schemas/CommitDeltaIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+      description: List of issues added or fixed on a commit
+    CategoryOverviewListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryOverview'
+    CommitAnalysisStats:
+      required:
+      - commitAuthorName
+      - commitId
+      - commitShortUUID
+      - commitTimestamp
+      - issuePercentage
+      - issuesPerCategory
+      - numberIssues
+      - numberLoc
+      - repositoryId
+      - techDebt
+      - totalFilesAdded
+      - totalFilesChanged
+      - totalFilesRemoved
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          format: int64
+          example: 1
+        commitId:
+          type: integer
+          format: int64
+          example: 1
+        numberIssues:
+          type: integer
+          format: int64
+          example: 1
+        numberLoc:
+          type: integer
+          format: int64
+          example: 1
+        issuesPerCategory:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryIssues'
+        issuePercentage:
+          type: integer
+          format: int64
+          example: 1
+        totalComplexity:
+          type: integer
+          format: int64
+          example: 1
+        numberComplexFiles:
+          type: integer
+          format: int64
+          example: 1
+        complexFilesPercentage:
+          type: integer
+          format: int64
+          example: 1
+        filesChangedToIncreaseComplexity:
+          type: integer
+          format: int64
+          example: 1
+        numberDuplicatedLines:
+          type: integer
+          format: int64
+          example: 1
+        duplicationPercentage:
+          type: integer
+          format: int64
+          example: 1
+        coveragePercentage:
+          type: integer
+          description: Test coverage percentage, truncated. Present only if a coverage report was processed for this commit.
+          format: int64
+          example: 1
+        coveragePercentageWithDecimals:
+          type: number
+          description: Test coverage percentage. Present only if a coverage report was processed for this commit.
+          format: double
+          example: 15.25
+        numberFilesUncovered:
+          type: integer
+          format: int64
+          example: 1
+        techDebt:
+          type: integer
+          format: int64
+          example: 1
+        totalFilesAdded:
+          type: integer
+          format: int64
+          example: 1
+        totalFilesRemoved:
+          type: integer
+          format: int64
+          example: 1
+        totalFilesChanged:
+          type: integer
+          format: int64
+          example: 1
+        commitTimestamp:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        commitAuthorName:
+          type: string
+          example: Mike The Developer
+        commitShortUUID:
+          type: string
+          example: 00d3079ed
+    AddAutoconfigResponse:
+      description: A response confirming the autoconfig run was accepted
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            analysisId:
+              description: The autoconfig analysis id that was queued.
+              type: string
+              format: uuid
+              example: 75d1b4cf-ef70-4be8-93ca-e9d21c7dca31
+          required:
+          - analysisId
+      required:
+      - data
+    ConfiguredPatternResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ConfiguredPattern'
+    ConfiguredParametersList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfiguredParameter'
+    HasQuickfixSuggestionsResponse:
+      required:
+      - hasSuggestions
+      type: object
+      properties:
+        hasSuggestions:
+          type: boolean
+    FirstAnalysisOverview:
+      required:
+      - action
+      - complete
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/AnalysisAction'
+        complete:
+          type: boolean
+          example: false
+    UpdatePatternsBody:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: True enables the code patterns, and False disables them.
+      description: Specifies the update to apply to the code patterns of a tool in a coding standard
+    RepositoryIdentification:
+      required:
+      - name
+      - repositoryId
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          description: Identifier of the repository
+          format: int64
+        name:
+          type: string
+          description: Name of the repository
+          example: codacy-eslint
+      description: Identifier and name of a repository using a coding standard
+    ConfiguredParameter:
+      required:
+      - name
+      - value
+      type: object
+      properties:
+        name:
+          type: string
+          description: Code pattern parameter name
+          example: getWithoutSet
+        value:
+          type: string
+          description: Code pattern parameter value
+          example: 'true'
+      description: Parameter to configure a code pattern for a tool
+    AutoconfigPatternChange:
+      description: A pattern that was enabled, disabled, or updated by an autoconfig run.
+      type: object
+      properties:
+        patternId:
+          description: Pattern identifier.
+          type: string
+          example: Lizard_parameter-count-medium
+        toolName:
+          description: Name of the tool the pattern belongs to.
+          type: string
+          example: Lizard
+        action:
+          description: Whether the pattern was enabled, disabled, or updated.
+          type: string
+          example: updated
+        reason:
+          description: Reason for the change.
+          type: string
+          example: Raised threshold from 5 to 10 to reduce noise in complex Go functions
+        deltaIssues:
+          description: Net change in issue count caused by this pattern change.
+          type: integer
+          example: -25
+        parameters:
+          description: Parameter values that changed.
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoconfigParameterChange'
+      required:
+      - patternId
+      - toolName
+      - action
+      - reason
+      - deltaIssues
+      - parameters
+    AnalysisResultReason:
+      required:
+      - expectedThreshold
+      - gate
+      - isUpToStandards
+      type: object
+      properties:
+        gate:
+          type: string
+          description: Name of the quality gate
+        expected:
+          type: number
+          description: '**Deprecated:** Use `expectedThreshold` instead. The threshold value configured for the quality gate.'
+          deprecated: true
+          example: -1
+        expectedThreshold:
+          $ref: '#/components/schemas/AnalysisExpectedThreshold'
+        isUpToStandards:
+          type: boolean
+          description: True if the value passes the quality gate
+          example: true
+      description: Reason for an analysis result for a quality gate
+    AnalysisMeta:
+      required:
+      - analyzable
+      type: object
+      properties:
+        analyzable:
+          type: boolean
+        reason:
+          type: string
+    CommitDetails:
+      required:
+      - commit
+      - repository
+      type: object
+      properties:
+        commit:
+          $ref: '#/components/schemas/Commit'
+        repository:
+          $ref: '#/components/schemas/RepositoryIdentification'
+      description: Details of a commit.
+    PatternsCount:
+      required:
+      - id
+      - title
+      - total
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of the code pattern
+        title:
+          type: string
+          description: Title of the code pattern
+        total:
+          type: integer
+          description: Number of issues detected by the code pattern
+          format: int32
+      description: Number of issues detected by a code pattern
+    RepositoryStack:
+      required:
+      - commitUuid
+      - stackTags
+      - discoveredAt
+      type: object
+      properties:
+        commitUuid:
+          type: string
+          description: Commit UUID where the repository stack was discovered.
+          example: 2f4d2d3f9a7d4e9f8d0fbb4f2f7d2e1b4a5c6d7e
+        stackTags:
+          type: array
+          description: Prefixed stack tags detected for the repository.
+          example:
+          - fwk:react
+          - tool:eslint
+          items:
+            type: string
+        discoveredAt:
+          type: string
+          description: Timestamp when the repository stack was discovered.
+          format: date-time
+          example: '2026-08-25T15:10:00Z'
+          x-scala-type: java.time.Instant
+    CommitDetailsV2:
+      required:
+      - commit
+      - repository
+      type: object
+      properties:
+        commit:
+          $ref: '#/components/schemas/Commit'
+        repository:
+          $ref: '#/components/schemas/RepositoryIdentificationV2'
+      description: Details of a commit.
+    AddedState:
+      type: string
+      description: 'Added state of the repository on Codacy. Valid values are `NotAdded` (the repository was not added to Codacy), `Added` (the repository was added to Codacy), or `Following` (the current user is following a repository added to Codacy).
+
+        '
+      example: Added
+      enum:
+      - NotAdded
+      - Added
+      - Following
+      x-ms-enum:
+        name: AddedState
+    RepositoryToolConflictsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StandardPatternConflict'
+      description: Repository Tool Patterns that have conflicts
+    Coverage:
+      type: object
+      properties:
+        filesUncovered:
+          type: integer
+          format: int64
+          example: 1
+        filesWithLowCoverage:
+          type: integer
+          format: int64
+          example: 1
+        coveragePercentage:
+          type: integer
+          description: Test coverage percentage, truncated. Present only if a coverage report was processed for the most recent commit on the relevant branch.
+          format: int64
+          example: 1
+        coveragePercentageWithDecimals:
+          type: number
+          description: Test coverage percentage. Present only if a coverage report was processed for the most recent commit on the relevant branch.
+          format: double
+          example: 15.25
+        numberTotalFiles:
+          type: integer
+          format: int32
+          example: 1
+        numberCoveredLines:
+          type: integer
+          format: int32
+          example: 1
+        numberCoverableLines:
+          type: integer
+          format: int32
+          example: 1
+        status:
+          $ref: '#/components/schemas/CoverageStatus'
+        lastCommitWithCoverage:
+          type: string
+          description: Commit UUID of the most recent commit that received a coverage report.
+          example: 2f4d2d3f9a7d4e9f8d0fbb4f2f7d2e1b4a5c6d7e
+        statusUpdatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when `status` last changed.
+          example: '2026-08-25T15:10:00Z'
+          x-scala-type: java.time.Instant
+        valueUpdatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the coverage value was last updated.
+          example: '2026-08-25T15:10:00Z'
+          x-scala-type: java.time.Instant
+    CategoryOverview:
+      required:
+      - category
+      - commitId
+      - percentage
+      - totalResults
+      type: object
+      properties:
+        commitId:
+          type: integer
+          format: int64
+          example: 1
+        category:
+          $ref: '#/components/schemas/Category'
+        percentage:
+          type: number
+          format: double
+          example: 1.6
+        totalResults:
+          type: integer
+          format: int64
+          example: 1
+    StandardPatternConflict:
+      required:
+      - conflicts
+      - patternId
+      type: object
+      properties:
+        patternId:
+          type: string
+          description: The pattern's id.
+          example: ESLint_@typescript-eslint_no-shadow
+        conflicts:
+          type: array
+          items:
+            $ref: '#/components/schemas/StandardParameterConflict'
+      description: Identifies conflicts in a Pattern
+    Parameter:
+      required:
+      - default
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the parameter
+          example: getWithoutSet
+        description:
+          type: string
+          description: Description of the parameter
+          example: getWithoutSet
+        default:
+          type: string
+          description: Default value of the parameter
+          example: 'true'
+      description: Parameter to configure a code pattern
+    FileDeltaQualityAnalysis:
+      required:
+      - deltaFixedIssues
+      - deltaNewIssues
+      type: object
+      properties:
+        deltaNewIssues:
+          type: integer
+          description: Number of issues introduced by the commit
+          format: int32
+          example: 1
+        deltaFixedIssues:
+          type: integer
+          description: Number of issues fixed by the commit
+          format: int32
+          example: 1
+        deltaComplexity:
+          type: integer
+          description: Difference in cyclomatic complexity introduced by the commit
+          format: int32
+          example: 1
+        deltaClonesCount:
+          type: integer
+          description: Difference in number of duplicated blocks of code introduced by the commit
+          format: int32
+          example: 1
+      description: Quality changes for a file between two commits
+    Visibility:
+      type: string
+      description: Visibility of the repository
+      example: Private
+      enum:
+      - Public
+      - Private
+      - LoginPublic
+      x-ms-enum:
+        name: Visibility
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ToolPatternsOverviewCounts:
+      required:
+      - categories
+      - languages
+      - severities
+      - tags
+      - totalEnabled
+      - totalRecommended
+      type: object
+      properties:
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Count'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Count'
+        severities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Count'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Count'
+        totalRecommended:
+          type: integer
+          format: int32
+        totalEnabled:
+          type: integer
+          format: int32
+      description: Overview of the patterns in a tool
+    AutoconfigConflict:
+      description: A change skipped due to a conflict with an existing coding standard.
+      type: object
+      properties:
+        patternId:
+          description: Pattern identifier.
+          type: string
+          example: Revive_unused-parameter
+        toolName:
+          description: Name of the tool the pattern belongs to.
+          type: string
+          example: Revive
+        conflict:
+          description: Conflict type.
+          type: string
+          example: EnforcedByCodingStandard
+        codingStandardName:
+          description: Name of the coding standard that caused the conflict.
+          type: string
+          example: Our Default + SOC2
+        reason:
+          description: Explanation of why the change was skipped.
+          type: string
+          example: Reports 91 issues but is enforced by a coding standard.
+      required:
+      - toolName
+      - conflict
+      - reason
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    AnalysisToolSettings:
+      required:
+      - enabledBy
+      - followsStandard
+      - hasConfigurationFile
+      - isCustom
+      - isEnabled
+      - usesConfigurationFile
+      type: object
+      properties:
+        name:
+          type: string
+        isEnabled:
+          type: boolean
+        followsStandard:
+          type: boolean
+        isCustom:
+          type: boolean
+        hasConfigurationFile:
+          type: boolean
+        usesConfigurationFile:
+          type: boolean
+        enabledBy:
+          type: array
+          description: List of the coding standard that enable the tool
+          items:
+            $ref: '#/components/schemas/CodingStandardInfo'
+    PullRequestIssuesResponse:
+      required:
+      - analyzed
+      - data
+      type: object
+      properties:
+        analyzed:
+          type: boolean
+          description: True if Codacy already analyzed the latest commit
+        data:
+          type: array
+          description: List of issues added or fixed on a pull request or an empty list if Codacy didn't analyze the latest commit yet.
+          items:
+            $ref: '#/components/schemas/CommitDeltaIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+      description: List of issues added or fixed on a pull request
+    CommitWithAnalysisListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitWithAnalysis'
+    ClonesResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          description: List of duplicate code blocks added or removed in a commit or pull request, or an empty list if Codacy has not analyzed the latest commit yet.
+          items:
+            $ref: '#/components/schemas/CommitFileClone'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+      description: List of duplicate code blocks added or removed in a commit or pull request
+    LogsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          required:
+          - end
+          - start
+          - steps
+          - totalAnalysisTime
+          type: object
+          properties:
+            headCommitSha:
+              type: string
+            commonAncestorCommitSha:
+              type: string
+            start:
+              type: string
+              format: date-time
+              x-scala-type: java.time.Instant
+            end:
+              type: string
+              format: date-time
+              x-scala-type: java.time.Instant
+            totalAnalysisTime:
+              type: integer
+              format: int64
+            steps:
+              type: array
+              items:
+                $ref: '#/components/schemas/AnalysisStepExecutionMetrics'
+          description: Analysis logs data for a commit or pull request
+      description: Analysis logs response for a commit or pull request
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    SearchRepositoryIssuesListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitIssue'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    CommitWithAnalysis:
+      required:
+      - commit
+      - meta
+      type: object
+      properties:
+        commit:
+          $ref: '#/components/schemas/Commit'
+        coverage:
+          $ref: '#/components/schemas/CoverageAnalysis'
+        quality:
+          $ref: '#/components/schemas/QualityAnalysis'
+        meta:
+          $ref: '#/components/schemas/AnalysisMeta'
+    CoveragePullRequestResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          required:
+          - commonAncestorCommit
+          - headCommit
+          - origin
+          - target
+          type: object
+          properties:
+            headCommit:
+              $ref: '#/components/schemas/CoveragePullRequestCommitDetail'
+            commonAncestorCommit:
+              $ref: '#/components/schemas/CoveragePullRequestCommitDetail'
+            origin:
+              $ref: '#/components/schemas/CoveragePullRequestCommitDetail'
+            target:
+              $ref: '#/components/schemas/CoveragePullRequestCommitDetail'
+      description: 'Status and details about the coverage reports uploaded for the head commit
+
+        and common ancestor commit of the pull request.
+
+        '
+    FileDeltaAnalysis:
+      required:
+      - file
+      type: object
+      properties:
+        file:
+          $ref: '#/components/schemas/FileMetadata'
+        coverage:
+          $ref: '#/components/schemas/FileDeltaCoverageAnalysis'
+        quality:
+          $ref: '#/components/schemas/FileDeltaQualityAnalysis'
+        comparedWithCommit:
+          required:
+          - commitId
+          type: object
+          properties:
+            commitId:
+              type: integer
+              format: int64
+              example: 1
+            coverage:
+              type: object
+              properties:
+                totalCoverage:
+                  multipleOf: 0.01
+                  type: number
+                  description: Total coverage of the commit
+                  format: double
+                  example: 82.35
+          description: Original analysis results for the file
+      description: File with analysis results changes between two commits
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    Pattern:
+      description: Code pattern that a Codacy tool can use to find issues
+      allOf:
+      - $ref: '#/components/schemas/PatternDetails'
+      - required:
+        - enabled
+        - parameters
+        type: object
+        properties:
+          description:
+            type: string
+            description: Short description of the code pattern
+            example: Enforce getter and setter pairs in objects and classes
+          explanation:
+            type: string
+            description: Full description of the code pattern, in CommonMark
+            example: Accessor pairs description
+          enabled:
+            type: boolean
+            description: True if the code pattern is on by default for new repositories
+            example: true
+          languages:
+            type: array
+            description: List of languages that the code pattern supports
+            example:
+            - JavaScript
+            items:
+              type: string
+          timeToFix:
+            type: integer
+            description: Average time to fix an issue detected by the code pattern, in minutes
+            format: int32
+            example: 5
+          parameters:
+            $ref: '#/components/schemas/ParameterList'
+          rationale:
+            type: string
+            description: Rationale for the pattern
+          solution:
+            type: string
+            description: Pattern suggested solution
+          goodExamples:
+            type: array
+            description: List of good examples for the pattern
+            items:
+              type: string
+          badExamples:
+            type: array
+            description: List of bad examples for the pattern
+            items:
+              type: string
+          tags:
+            type: array
+            description: Tags associated with the pattern
+            items:
+              type: string
+    RepositoryWithAnalysis:
+      required:
+      - repository
+      type: object
+      properties:
+        lastAnalysedCommit:
+          $ref: '#/components/schemas/Commit'
+        grade:
+          type: integer
+          description: Quality grade of the file as a number between 100 (highest grade) and 0 (lowest grade)
+          format: int32
+          example: 74
+        gradeLetter:
+          type: string
+          description: Quality grade of the file as a letter between A (highest grade) and F (lowest grade)
+          example: A
+        issuesPercentage:
+          type: integer
+          format: int64
+          example: 1
+        issuesCount:
+          type: integer
+          format: int64
+          example: 1
+        loc:
+          type: integer
+          description: Lines of code of the repository
+          format: int64
+          example: 1
+        complexFilesPercentage:
+          type: integer
+          format: int64
+          example: 1
+        complexFilesCount:
+          type: integer
+          format: int64
+          example: 1
+        duplicationPercentage:
+          type: integer
+          format: int64
+          example: 1
+        repository:
+          $ref: '#/components/schemas/Repository'
+        branch:
+          description: Deprecated
+          $ref: '#/components/schemas/Branch'
+        selectedBranch:
+          $ref: '#/components/schemas/Branch'
+        coverage:
+          $ref: '#/components/schemas/Coverage'
+        goals:
+          $ref: '#/components/schemas/RepositoryQualitySettings'
+    AnalysisExpectedThreshold:
+      required:
+      - threshold
+      type: object
+      properties:
+        threshold:
+          type: number
+          description: Threshold configured for the given gate
+        minimumSeverity:
+          $ref: '#/components/schemas/SeverityLevel'
+      description: Expected threshold for the given gate
+    StandardParameterConflict:
+      required:
+      - parameters
+      - standard
+      type: object
+      properties:
+        standard:
+          $ref: '#/components/schemas/CodingStandardInfo'
+        parameters:
+          $ref: '#/components/schemas/ConfiguredParametersList'
+      description: Coding Standards and corresponding Patterns Parameters that have conflicts
+    ToolPatternsOverviewResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ToolPatternsOverview'
+    AutoconfigRunSummary:
+      description: Summary of a completed autoconfig run
+      type: object
+      properties:
+        analysisId:
+          description: The autoconfig analysis ID.
+          type: string
+          format: uuid
+          example: 72aa9244-4281-460a-a4ee-25be58d2a1ab
+        repositoryId:
+          description: Repository identifier.
+          type: integer
+          format: int64
+          example: 456789
+        durationMs:
+          description: Total duration of the run in milliseconds.
+          type: integer
+          format: int64
+          example: 42000
+        issuesBefore:
+          description: Number of issues found before autoconfig was applied.
+          type: integer
+          example: 48
+        issuesAfter:
+          description: Number of issues found after autoconfig was applied.
+          type: integer
+          example: 12
+        languageCount:
+          description: Number of languages detected in the repository.
+          type: integer
+          example: 3
+        fileCount:
+          description: Number of files analysed.
+          type: integer
+          example: 120
+        enabledPatterns:
+          description: Number of patterns enabled before and after this run.
+          $ref: '#/components/schemas/AutoconfigBeforeAfter'
+        enabledTools:
+          description: Number of tools enabled before and after this run.
+          $ref: '#/components/schemas/AutoconfigBeforeAfter'
+        issuesByCategory:
+          description: Issue counts grouped by category, before and after this run.
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AutoconfigBeforeAfter'
+        issuesBySeverity:
+          description: Issue counts grouped by severity, before and after this run.
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AutoconfigBeforeAfter'
+        recommendedPathsToIgnore:
+          description: Paths recommended to be added to the ignore list.
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoconfigRecommendedPath'
+        keyImprovements:
+          description: Human-readable highlights of the most impactful changes made by this run.
+          type: array
+          items:
+            type: string
+          example:
+          - Enabled ESLint for JavaScript/TypeScript, reducing 28 issues
+          - Raised Lizard complexity threshold from 5 to 10
+        startedAt:
+          description: When the run started.
+          type: string
+          format: date-time
+          example: '2024-06-28T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        completedAt:
+          description: When the run completed.
+          type: string
+          format: date-time
+          example: '2024-06-28T14:29:55.43Z'
+          x-scala-type: java.time.Instant
+        toolChanges:
+          description: Tools that were enabled or disabled by this run.
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoconfigToolChange'
+        patternChanges:
+          description: Patterns that were enabled, disabled, or updated by this run.
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoconfigPatternChange'
+        conflicts:
+          description: Changes skipped due to conflicts with existing coding standards.
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoconfigConflict'
+      required:
+      - analysisId
+      - repositoryId
+      - durationMs
+      - startedAt
+      - completedAt
+    Commit:
+      allOf:
+      - $ref: '#/components/schemas/CommitIdentification'
+      - required:
+        - commitTimestamp
+        - id
+        - authorName
+        - authorEmail
+        - message
+        type: object
+        properties:
+          id:
+            type: integer
+            description: Internal commit identifier
+            format: int64
+            example: 1
+          commitTimestamp:
+            type: string
+            description: Timestamp when the commit was created
+            format: date-time
+            example: '2019-05-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+          authorName:
+            type: string
+            description: Name of the commit author
+          authorEmail:
+            type: string
+            description: Email address of the commit author
+          message:
+            type: string
+            description: Commit message
+          startedAnalysis:
+            type: string
+            description: Timestamp when Codacy started the last analysis of the commit
+            format: date-time
+            example: '2022-01-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+          endedAnalysis:
+            type: string
+            description: Timestamp when Codacy finished the last analysis of the commit
+            format: date-time
+            example: '2022-01-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+          isMergeCommit:
+            type: boolean
+            description: True if the commit is a merge commit
+            example: false
+          gitHref:
+            type: string
+            description: URL to the commit on the Git provider
+            example: https://github.com/codacy/tools-for-code-review-engineers/commit/370b160aaf0ed781d707d335aa1fde20cefeabf2
+          parents:
+            type: array
+            items:
+              type: string
+              description: SHA-1 hashes of the parents of the commit
+    FileDeltaCoverageAnalysis:
+      type: object
+      properties:
+        deltaCoverage:
+          multipleOf: 0.01
+          type: number
+          description: Difference in code coverage percentage when compared to the parent commit
+          format: double
+          example: -2.35
+        totalCoverage:
+          multipleOf: 0.01
+          type: number
+          description: The total coverage percentage for a given commit
+          format: double
+          example: -2.35
+      description: Coverage changes for a file between two commits
+    IssuesOverviewResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/IssuesOverview'
+    ToolPatternsOverview:
+      required:
+      - counts
+      type: object
+      properties:
+        counts:
+          $ref: '#/components/schemas/ToolPatternsOverviewCounts'
+      description: Overview of the patterns in a tool
+    RepositoryWithAnalysisListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepositoryWithAnalysis'
+    CategoryIssues:
+      required:
+      - categoryId
+      - categoryType
+      - categoryName
+      - numberOfIssues
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+          example: 1
+        categoryType:
+          type: string
+        categoryName:
+          type: string
+        numberOfIssues:
+          type: integer
+          format: int64
+          example: 100
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    Count:
+      required:
+      - name
+      - total
+      type: object
+      properties:
+        name:
+          type: string
+        total:
+          type: integer
+          format: int32
+    CommitWithBranches:
+      allOf:
+      - $ref: '#/components/schemas/Commit'
+      - type: object
+        properties:
+          branches:
+            type: array
+            description: List of branches containing the commit
+            items:
+              $ref: '#/components/schemas/Branch'
+    IssuesOverviewCounts:
+      required:
+      - authors
+      - categories
+      - languages
+      - levels
+      - tags
+      - patterns
+      - potentialFalsePositives
+      type: object
+      properties:
+        categories:
+          type: array
+          description: Number of issues per category
+          items:
+            $ref: '#/components/schemas/Count'
+        languages:
+          type: array
+          description: Number of issues per language
+          items:
+            $ref: '#/components/schemas/Count'
+        levels:
+          type: array
+          description: Number of issues per severity level
+          items:
+            $ref: '#/components/schemas/Count'
+        tags:
+          type: array
+          description: Number of tags per code pattern
+          items:
+            $ref: '#/components/schemas/Count'
+        patterns:
+          type: array
+          description: Number of issues per code pattern
+          items:
+            $ref: '#/components/schemas/PatternsCount'
+        authors:
+          type: array
+          description: Number of issues per commit author
+          items:
+            $ref: '#/components/schemas/Count'
+        potentialFalsePositives:
+          type: array
+          description: 'Breakdown of issues by false-positive probability relative to the configured threshold.
+
+            Contains two entries named `equalOrAboveThreshold` and `belowThreshold`.
+
+            '
+          items:
+            $ref: '#/components/schemas/Count'
+      description: Overview of the issues in a repository
+    AutoconfigRecommendedPath:
+      description: A path recommended to be added to the repository ignore list.
+      type: object
+      properties:
+        path:
+          description: The path to ignore.
+          type: string
+          example: src/generated
+        reason:
+          description: Reason the path is recommended for ignoring.
+          type: string
+          example: Contains only auto-generated files with 312 issues and no manual changes
+      required:
+      - path
+      - reason
+    DeltaType:
+      type: string
+      description: Specifies if the issue was added or fixed by the commit
+      example: Added
+      enum:
+      - Added
+      - Fixed
+      x-ms-enum:
+        name: DeltaType
+    Permission:
+      type: string
+      enum:
+      - admin
+      - write
+      - read
+      x-ms-enum:
+        name: Permission
+    ConfigurePattern:
+      required:
+      - enabled
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The pattern's id.
+          example: ESLint_@typescript-eslint_no-shadow
+        enabled:
+          type: boolean
+          description: Whether to enable or disable the pattern.
+          example: true
+        parameters:
+          $ref: '#/components/schemas/ConfiguredParametersList'
+      description: A pattern to enable or disable.
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+  parameters:
+    enabledPatternParam:
+      name: enabled
+      in: query
+      description: Filter by pattern status. Set to `true` to return only enabled patterns, or `false` to return only disabled patterns
+      schema:
+        type: boolean
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    branchNameParam:
+      name: branch
+      in: query
+      description: 'Name of a [repository branch enabled on Codacy](https://docs.codacy.com/repositories-configure/managing-branches/),
+
+        as returned by the endpoint [listRepositoryBranches](#listrepositorybranches).
+
+        By default, uses the main branch defined on the Codacy repository settings.
+
+        '
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: master
+      x-ms-parameter-location: method
+    recommendedPatternParam:
+      name: recommended
+      in: query
+      description: Filter by recommended status. Set to `true` to return only recommended patterns, or `false` to return only non-recommended patterns
+      schema:
+        type: boolean
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+    commitUuidParam:
+      name: commitUuid
+      in: path
+      description: UUID or SHA identifier of the source commit
+      required: true
+      schema:
+        type: string
+    directionParam:
+      name: direction
+      in: query
+      description: Sort direction. Possible values are 'asc' (ascending) or 'desc' (descending).
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: desc
+      x-ms-parameter-location: method
+    patternIdParam:
+      name: patternId
+      in: path
+      description: Pattern identifier
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: ScalaStyle_BlockImportChecker
+      x-ms-parameter-location: method
+    severityLevelsParam:
+      name: severityLevels
+      in: query
+      description: Filter by a comma-separated list of code pattern severity levels. Valid values are `Error`, `High`, `Warning`, and `Info`.
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Error,Warning
+      x-ms-parameter-location: method
+    filesSearchFilter:
+      name: search
+      in: query
+      description: Filter files that include this string anywhere in their relative path
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: file.js
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    searchParam:
+      name: search
+      in: query
+      description: Filter results by searching for this string
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: my-repository-name
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    resultDataIdParam:
+      name: issueId
+      in: path
+      description: Identifier of an open issue
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 1
+      x-ms-parameter-location: method
+    onlyPotentialParam:
+      name: onlyPotential
+      in: query
+      description: Set to `true` to return only potential issues
+      schema:
+        type: boolean
+        x-ms-parameter-location: method
+      example: 'true'
+      x-ms-parameter-location: method
+    issueParam:
+      name: issueId
+      in: path
+      description: Issue identifier
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 1
+      x-ms-parameter-location: method
+    matchesStackParam:
+      name: matchesStack
+      in: query
+      description: Filter repository code patterns by whether they match the repository stack.
+      schema:
+        type: boolean
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+    repositoryNameParam:
+      name: repositoryName
+      in: path
+      description: Repository name on the Git provider organization
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: awesome-repo
+      x-ms-parameter-location: method
+    daysParam:
+      name: days
+      in: query
+      description: Number of days of data to return (1-365, defaults to 31)
+      schema:
+        maximum: 365
+        minimum: 1
+        type: integer
+        format: int32
+        default: 31
+        x-ms-parameter-location: method
+      example: 31
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    pullRequestNumberParam:
+      name: pullRequestNumber
+      in: path
+      description: Pull request number
+      required: true
+      schema:
+        type: integer
+        format: int32
+        x-ms-parameter-location: method
+      example: 738490
+      x-ms-parameter-location: method
+    commitUuid:
+      name: commitUuid
+      in: path
+      description: UUID or SHA string that identifies the commit
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 2957025d42e8daadf937d4044516f991d21deea4
+      x-ms-parameter-location: method
+    patternsSortParam:
+      name: sort
+      in: query
+      description: Field used to sort the tool's code patterns. Valid values are `category`, `recommended`, and `severity`.
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: category
+      x-ms-parameter-location: method
+    commitId:
+      name: commitId
+      in: path
+      description: Identifier of the commit
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: '123412645234'
+      x-ms-parameter-location: method
+    repositoriesParam:
+      name: repositories
+      in: query
+      description: '**Deprecated:** Use [searchOrganizationRepositoriesWithAnalysis](#searchorganizationrepositorieswithanalysis) instead.'
+      deprecated: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy-eslint,codacy-pmd
+      x-ms-parameter-location: method
+    segmentsParam:
+      name: segments
+      in: query
+      description: Filter by a comma-separated list of segment identifiers
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 1,2,3
+      x-ms-parameter-location: method
+    categoriesParam:
+      name: categories
+      in: query
+      description: 'Filter by a comma-separated list of code pattern categories. Valid values are `Security`, `ErrorProne`, `CodeStyle`, `Compatibility`, `UnusedCode`, `Complexity`, `Comprehensibility`, `Documentation`, `BestPractice`, and `Performance`.
+
+        '
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Security,ErrorProne
+      x-ms-parameter-location: method
+    issueStatusParam:
+      name: status
+      in: query
+      description: Filter issues by status. Valid values are `all`, `new`, or `fixed`.
+      schema:
+        type: string
+        enum:
+        - all
+        - new
+        - fixed
+        x-ms-parameter-location: method
+        x-ms-enum:
+          name: IssueStatus
+      example: all
+      x-ms-parameter-location: method
+      x-ms-enum:
+        name: IssueStatus
+    textQueryParam:
+      name: textQuery
+      in: query
+      description: 'Filter pull requests by a free-text search matched, case-insensitively, against the
+
+        pull request title or the author''s handle.
+
+        '
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: fix flaky test
+      x-ms-parameter-location: method
+    targetBranchParam:
+      name: targetBranch
+      in: query
+      description: 'Filter pull requests by the name of their target branch.
+
+        Pull requests targeting any other branch are excluded from the results.
+
+        By default, pull requests targeting any branch are returned.
+
+        '
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: main
+      x-ms-parameter-location: method
+    toolUuidParam:
+      name: toolUuid
+      in: path
+      description: Unique identifier (UUID) for the tool
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 847feb32-9ff2-11ea-bb37-0242ac130002
+      x-ms-parameter-location: method
+    languagesFilterParam:
+      name: languages
+      in: query
+      description: Comma-separated list of programming languages to filter results by
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Scala,Java,Javascript
+      x-ms-parameter-location: method
+    tagsParam:
+      name: tags
+      in: query
+      description: Filter by a comma-separated list of pattern tags
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: React,Angular
+      x-ms-parameter-location: method
+  responses:
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+    BadGateway:
+      description: Bad Gateway
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadGateway'
+      x-ms-error-response: true
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TooManyRequests'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+  requestBodies:
+    searchIgnoredIssuesFilter:
+      description: Only return issues matching these filters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SearchRepositoryIgnoredIssuesBody'
+    searchIssuesFilter:
+      description: Only return issues matching these filters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SearchRepositoryIssuesBody'
+      required: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

@@ -1,0 +1,974 @@
+openapi: 3.2.0
+info:
+  title: Codacy Configuration API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Configuration
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/follow:
+    post:
+      tags:
+      - Configuration
+      summary: Follow a repository that was already added to Codacy
+      operationId: followAddedRepository
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddedStateResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    delete:
+      tags:
+      - Configuration
+      summary: Unfollow a repository
+      operationId: unfollowRepository
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/repository:
+    get:
+      tags:
+      - Configuration
+      summary: Get quality settings for the specific repository
+      operationId: getQualitySettingsForRepository
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryQualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    put:
+      tags:
+      - Configuration
+      summary: Update quality goals settings for the specific repository
+      operationId: updateRepositoryQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: The new value for the quality goals of the repository
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RepositoryQualitySettings'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryQualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: updatedQualitySettings
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/ssh-user-key:
+    post:
+      tags:
+      - Configuration
+      summary: Regenerate the user SSH key that Codacy uses to clone the repository
+      description: Codacy automatically adds the new public user SSH key to the user account on the Git provider. Using a user SSH key is recommended if your repository includes submodules.
+      operationId: regenerateUserSshKey
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshKeySettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/ssh-repository-key:
+    post:
+      tags:
+      - Configuration
+      summary: Regenerate the SSH key that Codacy uses to clone the repository
+      description: Codacy automatically adds the new public SSH key to the repository on the Git provider.
+      operationId: regenerateRepositorySshKey
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshKeySettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/stored-ssh-key:
+    get:
+      tags:
+      - Configuration
+      summary: Get the public SSH key for the repository
+      description: The returned key is the most recently generated and can be either a user or repository SSH key.
+      operationId: getRepositoryPublicSshKey
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SshKeySettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/sync:
+    post:
+      tags:
+      - Configuration
+      summary: Synchronize repository name and visibility with Git provider
+      operationId: syncRepositoryWithProvider
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncProviderSettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/analysis:
+    get:
+      tags:
+      - Configuration
+      summary: Get the status of the repository setting **Run analysis on your build server**
+      operationId: getBuildServerAnalysisSetting
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildServerAnalysisSettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    patch:
+      tags:
+      - Configuration
+      summary: Update the status of the repository setting **Run analysis on your build…
+      operationId: updateBuildServerAnalysisSetting
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: New value for the repository setting **Run analysis on your build server**
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuildServerAnalysisSettingRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildServerAnalysisSettingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: targetBuildServerAnalysisSetting
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/commits:
+    get:
+      tags:
+      - Configuration
+      summary: Get quality settings for the commits of a repository
+      description: '`diffCoverageThreshold` is never returned because this threshold isn''t currently supported for commits.'
+      operationId: getCommitQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    put:
+      tags:
+      - Configuration
+      summary: Update quality settings for the commits of a repository
+      operationId: updateCommitQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: The new value for the quality settings of commits in a repository
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QualityGate'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: updatedQualitySettings
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/commits/reset:
+    post:
+      tags:
+      - Configuration
+      summary: Reset quality settings for the commits of a repository to Codacy’s default…
+      operationId: resetCommitsQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/pull-requests/reset:
+    post:
+      tags:
+      - Configuration
+      summary: Reset quality settings for the pull requests of a repository to Codacy’s…
+      operationId: resetPullRequestsQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/repository/reset:
+    post:
+      tags:
+      - Configuration
+      summary: Reset quality settings for the repository to Codacy’s default values
+      operationId: resetRepositoryQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryQualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/quality/pull-requests:
+    get:
+      tags:
+      - Configuration
+      summary: Get quality settings for the pull requests of a repository
+      operationId: getPullRequestQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+    put:
+      tags:
+      - Configuration
+      summary: Update quality settings for the pull requests of a repository
+      operationId: updatePullRequestQualitySettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: The new value for the quality settings of pull requests in the repository
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QualityGate'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitySettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: repository
+      x-codegen-request-body-name: updatedQualitySettings
+  /configuration/status:
+    get:
+      tags:
+      - Configuration
+      summary: Get configuration status
+      operationId: getConfigurationStatus
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationStatusResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      x-jvm-package: configuration
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    QualitySettingsWithGatePolicy:
+      required:
+      - qualityGate
+      type: object
+      properties:
+        qualityGate:
+          $ref: '#/components/schemas/QualityGate'
+        repositoryGatePolicyInfo:
+          $ref: '#/components/schemas/RepositoryGatePolicy'
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    AddedStateResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AddedState'
+    SshKeySettingResponse:
+      required:
+      - publicSshKey
+      type: object
+      properties:
+        publicSshKey:
+          type: string
+          description: Public SSH key
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    QualityGate:
+      type: object
+      properties:
+        issueThreshold:
+          required:
+          - threshold
+          type: object
+          properties:
+            threshold:
+              minimum: 0
+              type: integer
+              format: int32
+              example: 1
+            minimumSeverity:
+              $ref: '#/components/schemas/SeverityLevel'
+          description: The quality gate will fail if there are new issues of the specified severity over this threshold (if no severity is specified all severity levels are considered). This value cannot be negative
+        securityIssueThreshold:
+          minimum: 0
+          type: integer
+          description: The quality gate will fail if the number of new security issues is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+        securityIssueMinimumSeverity:
+          $ref: '#/components/schemas/SeverityLevel'
+        duplicationThreshold:
+          type: integer
+          description: The quality gate will fail if there are new duplicated blocks over this threshold
+          format: int32
+          example: 1
+        coverageThreshold:
+          maximum: 1
+          type: integer
+          description: Deprecated, use `coverageThresholdWithDecimals` instead
+          format: int32
+          example: 1
+        coverageThresholdWithDecimals:
+          type: number
+          description: The quality gate will fail if coverage percentage varies less than this threshold. This value should be at most 1.00
+          format: double
+          example: -0.02
+        diffCoverageThreshold:
+          maximum: 100
+          minimum: 0
+          type: integer
+          description: The quality gate will fail if diff coverage is under this threshold. This value should be at least 0 and at most 100
+          format: int32
+          example: 70
+        complexityThreshold:
+          minimum: 0
+          type: integer
+          description: The quality gate will fail if the complexity value is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    AddedState:
+      type: string
+      description: 'Added state of the repository on Codacy. Valid values are `NotAdded` (the repository was not added to Codacy), `Added` (the repository was added to Codacy), or `Following` (the current user is following a repository added to Codacy).
+
+        '
+      example: Added
+      enum:
+      - NotAdded
+      - Added
+      - Following
+      x-ms-enum:
+        name: AddedState
+    BuildServerAnalysisSettingResponse:
+      required:
+      - buildServerAnalysisSetting
+      type: object
+      properties:
+        buildServerAnalysisSetting:
+          type: boolean
+          description: 'If true, Codacy waits for your build server to upload the results of the local analysis before resuming the analysis of your commits.
+
+            If false, Codacy analyzes your commits directly on its cloud infrastructure.
+
+            '
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    SyncProviderSettingResponse:
+      required:
+      - name
+      - visibility
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the repository
+          example: codacy-eslint
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+    BuildServerAnalysisSettingRequest:
+      required:
+      - buildServerAnalysisSetting
+      type: object
+      properties:
+        buildServerAnalysisSetting:
+          type: boolean
+          description: 'If true, Codacy waits for your build server to upload the results of the local analysis before resuming the analysis of your commits.
+
+            If false, Codacy analyzes your commits directly on its cloud infrastructure.
+
+            '
+    Visibility:
+      type: string
+      description: Visibility of the repository
+      example: Private
+      enum:
+      - Public
+      - Private
+      - LoginPublic
+      x-ms-enum:
+        name: Visibility
+    RepositoryQualitySettingsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RepositoryQualitySettings'
+    MethodNotAllowed:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: MethodNotAllowed
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    RepositoryGatePolicy:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier of the gate policy
+          format: int64
+        name:
+          type: string
+          description: Name of the gate policy
+      description: Gate policy the repository is following.
+    ConfigurationStatusResponse:
+      type: object
+      properties:
+        statuses:
+          type: array
+          items:
+            type: string
+        metadata:
+          required:
+          - firstSignupDone
+          type: object
+          properties:
+            firstSignupDone:
+              type: boolean
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    QualitySettingsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/QualitySettingsWithGatePolicy'
+    RepositoryQualitySettings:
+      type: object
+      properties:
+        maxIssuePercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of issues is over this threshold
+          format: int32
+          example: 1
+        maxDuplicatedFilesPercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of duplication of files is over this threshold
+          format: int32
+          example: 1
+        minCoveragePercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the coverage percentage is under this threshold
+          format: int32
+          example: 1
+        maxComplexFilesPercentage:
+          type: integer
+          description: The repository will be considered unhealthy if the percentage of complexity of files is over this threshold
+          format: int32
+          example: 1
+        fileDuplicationBlockThreshold:
+          minimum: 0
+          type: integer
+          description: A file in this repository will be considered duplicated when the number of cloned blocks is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+        fileComplexityValueThreshold:
+          minimum: 0
+          type: integer
+          description: A file in this repository will be considered complex when its complexity value is over this threshold. This value cannot be negative
+          format: int32
+          example: 1
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    SeverityLevel:
+      type: string
+      description: Issue severity level. These values map to our UI as follows - Info to Minor, Warning to Medium, High to High, Error to Critical.
+      example: Error
+      enum:
+      - Info
+      - Warning
+      - High
+      - Error
+      x-ms-enum:
+        name: SeverityLevel
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    MethodNotAllowed:
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MethodNotAllowed'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    repositoryNameParam:
+      name: repositoryName
+      in: path
+      description: Repository name on the Git provider organization
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: awesome-repo
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

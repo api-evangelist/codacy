@@ -1,81 +1,2172 @@
 openapi: 3.2.0
 info:
   title: Codacy Security API
-  description: Codacy API v3 for managing organizations, repositories, issues, pull requests, coverage, security, and quality settings on the Codacy automated code quality and security platform. All authenticated endpoints use an account API token passed in the api-token header.
-  termsOfService: https://www.codacy.com/terms
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
   contact:
-    name: Codacy Support
+    name: Codacy Team
     url: https://www.codacy.com
-    email: support@codacy.com
-  version: '3.0'
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
 servers:
 - url: https://api.codacy.com/api/v3
-  description: Codacy Cloud API v3
 security:
-- api-token: []
+- ApiKeyAuth: []
 tags:
 - name: Security
-  description: Repository SSH key administration.
 paths:
-  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/stored-ssh-key:
+  /organizations/{provider}/{remoteOrganizationName}/security/items:
     get:
-      operationId: getRepositoryPublicSshKey
       tags:
       - Security
-      summary: Get the repository's stored public SSH key
+      summary: List security and risk management items for an organization
+      description: '**Deprecated:** Use searchSecurityItems instead. Repository filtering is limited to 100 names.'
+      deprecated: true
+      operationId: listSecurityItems
       parameters:
-      - $ref: '#/components/parameters/provider'
-      - $ref: '#/components/parameters/remoteOrganizationName'
-      - $ref: '#/components/parameters/repositoryName'
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/repositoriesParam'
+      - $ref: '#/components/parameters/srmStatusParam'
+      - $ref: '#/components/parameters/srmPriorityParam'
+      - $ref: '#/components/parameters/srmSecurityCategoryParam'
+      - $ref: '#/components/parameters/srmScanTypeParam'
       responses:
         '200':
-          description: The stored public SSH key.
+          description: Returns security and risk management items.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SshKeyResponse'
+                $ref: '#/components/schemas/SrmItemsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+  /organizations/{provider}/{remoteOrganizationName}/security/items/{srmItemId}/ignore:
+    post:
+      tags:
+      - Security
+      summary: Ignore a single item with an optional comment
+      operationId: ignoreSecurityItem
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/srmItemIdParam'
+      requestBody:
+        description: Request body of ignore item information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IgnoreSRMItemBody'
+        required: true
+      responses:
+        '200':
+          description: Returns a security and risk management item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SrmItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+      x-codegen-request-body-name: ignoreSecurityItemBody
+  /organizations/{provider}/{remoteOrganizationName}/security/items/{srmItemId}/unignore:
+    post:
+      tags:
+      - Security
+      summary: Unignore a single item (only previously ignored items can be unignored)
+      operationId: unignoreSecurityItem
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/srmItemIdParam'
+      responses:
+        '200':
+          description: Returns a security and risk management item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SrmItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+  /organizations/{provider}/{remoteOrganizationName}/security/items/{srmItemId}:
+    get:
+      tags:
+      - Security
+      summary: Get a single security and risk management finding
+      operationId: getSecurityItem
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/srmItemIdParam'
+      responses:
+        '200':
+          description: Returns security and risk management items.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SrmItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+  /organizations/{provider}/{remoteOrganizationName}/security/items/search:
+    post:
+      tags:
+      - Security
+      summary: List security and risk management items for an organization
+      operationId: searchSecurityItems
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/srmItemsSortByParam'
+      - $ref: '#/components/parameters/directionParam'
+      requestBody:
+        description: Request body with items filters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSRMItems'
+        required: false
+      responses:
+        '200':
+          description: Returns security and risk management items.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SrmItemsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+      x-codegen-request-body-name: searchSecurityItemsBody
+  /organizations/{provider}/{remoteOrganizationName}/security/dashboard:
+    get:
+      tags:
+      - Security
+      summary: Get metrics for the security and risk management dashboard
+      description: '**Deprecated:** Use searchSecurityDashboard instead. Repository filtering is limited to 100 names.'
+      deprecated: true
+      operationId: getSecurityDashboard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoriesParam'
+      - $ref: '#/components/parameters/srmPriorityParam'
+      - $ref: '#/components/parameters/srmSecurityCategoryParam'
+      - $ref: '#/components/parameters/srmScanTypeParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SRMDashboardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+    post:
+      tags:
+      - Security
+      summary: Get metrics for the security and risk management dashboard
+      operationId: searchSecurityDashboard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Request body with dashboard filters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSRMDashboard'
+        required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SRMDashboardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+      x-codegen-request-body-name: searchSecurityDashboardBody
+  /organizations/{provider}/{remoteOrganizationName}/security/dashboard/repositories/search:
+    post:
+      tags:
+      - Security
+      summary: List repositories with security findings
+      description: If no filter is specified, only the 10 repositories with the most findings are returned.
+      operationId: searchSecurityDashboardRepositories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Request body with filters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSRMDashboardRepositories'
+        required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SRMDashboardRepositoriesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+      x-codegen-request-body-name: searchSecurityDashboardRepositoriesBody
+  /organizations/{provider}/{remoteOrganizationName}/security/dashboard/history/search:
+    post:
+      tags:
+      - Security
+      summary: Get the evolution of security findings over time
+      operationId: searchSecurityDashboardHistory
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Request body with filters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSRMDashboardHistory'
+        required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SRMDashboardHistoryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+      x-codegen-request-body-name: searchSecurityDashboardHistoryBody
+  /organizations/{provider}/{remoteOrganizationName}/security/dashboard/categories/search:
+    post:
+      tags:
+      - Security
+      summary: List security categories with findings
+      description: If no filter is specified, only the 10 categories with the most findings are returned.
+      operationId: searchSecurityDashboardCategories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Request body with filters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSRMDashboardCategories'
+        required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SRMDashboardCategoriesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+      x-codegen-request-body-name: searchSecurityDashboardCategoriesBody
+  /organizations/{provider}/{remoteOrganizationName}/security/tools/dast/{toolName}/reports:
+    post:
+      tags:
+      - Security
+      summary: Upload dynamic application security testing (DAST) scan report generated by the…
+      operationId: uploadDASTReport
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - name: remoteOrganizationName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: toolName
+        in: path
+        description: The tool used to generate the DAST results
+        required: true
+        schema:
+          type: string
+          enum:
+          - ZAP
+          x-ms-enum:
+            name: DastTool
+        x-ms-enum:
+          name: DastTool
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              - reportFormat
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: The file containing DAST results
+                  format: binary
+                reportFormat:
+                  type: string
+                  description: The format the report is provided in
+                  enum:
+                  - json
+                  x-ms-enum:
+                    name: DastToolResultsFormat
+        required: true
+      responses:
+        '200':
+          description: Report successfully uploaded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SRMDASTReportUploadResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+  /organizations/{provider}/{remoteOrganizationName}/security/dast/reports:
+    get:
+      tags:
+      - Security
+      summary: List uploaded DAST scan reports and their state
+      description: Results are sorted by submission date, from latest to earliest.
+      operationId: listDastReports
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SRMDastReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+  /organizations/{provider}/{remoteOrganizationName}/security/managers:
+    get:
+      tags:
+      - Security
+      summary: List organization admins and security managers
+      operationId: listSecurityManagers
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Returns security managers, including organization admins.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityManagersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+    post:
+      tags:
+      - Security
+      summary: Assign the Security Manager role to an organization member
+      operationId: postSecurityManager
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: User ID of the organization member to be promoted to security manager.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SecurityManagerBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+      x-codegen-request-body-name: securityManagerBody
+  /organizations/{provider}/{remoteOrganizationName}/security/managers/{userId}:
+    delete:
+      tags:
+      - Security
+      summary: Revoke the Security Manager role from an organization member
+      operationId: deleteSecurityManager
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+  /organizations/{provider}/{remoteOrganizationName}/security/repositories:
+    get:
+      tags:
+      - Security
+      summary: List organization repositories that have security issues
+      operationId: listSecurityRepositories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/segmentsParam'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityRepositoriesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+  /organizations/{provider}/{remoteOrganizationName}/security/categories:
+    get:
+      tags:
+      - Security
+      summary: List security subcategories that have security issues
+      operationId: listSecurityCategories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityCategoriesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+  /organizations/{provider}/{remoteOrganizationName}/security/sla:
+    get:
+      tags:
+      - Security
+      summary: Get the SLA configuration for an organization
+      operationId: getSLAConfig
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SLAConfigResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+    put:
+      tags:
+      - Security
+      summary: Update the SLA configuration for an organization
+      operationId: updateSLAConfig
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: SLA Configuration Values
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SLAConfigBody'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SLAConfigResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: security
+  /security/dependencies/ossf/scorecard:
+    post:
+      tags:
+      - Security
+      summary: Get the OSSF Scorecard for a repository
+      x-jvm-package: security
+      operationId: getOssfScorecard
+      requestBody:
+        $ref: '#/components/requestBodies/ossfScorecardRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OssfScorecardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    provider:
-      name: provider
-      in: path
-      required: true
-      description: Git provider code (gh, ghe, gl, gle, bb, bbe).
-      schema:
-        type: string
-        enum:
-        - gh
-        - ghe
-        - gl
-        - gle
-        - bb
-        - bbe
-    repositoryName:
-      name: repositoryName
-      in: path
-      required: true
-      description: Repository name on the Git provider.
-      schema:
-        type: string
-    remoteOrganizationName:
-      name: remoteOrganizationName
-      in: path
-      required: true
-      description: Organization name on the Git provider.
-      schema:
-        type: string
   schemas:
-    SshKeyResponse:
+    SearchSRMDashboardHistory:
+      type: object
+      properties:
+        repositories:
+          type: array
+          description: Repository names to filter by.
+          items:
+            type: string
+        segments:
+          type: array
+          description: Segments ids to filter by.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            format: int64
+      description: Request body to filter the evolution of security findings over time.
+    SrmItem:
+      required:
+      - dueAt
+      - id
+      - itemSource
+      - itemSourceId
+      - openedAt
+      - priority
+      - status
+      - title
+      type: object
+      properties:
+        id:
+          type: string
+          description: Item ID internal to Codacy.
+          format: uuid
+          example: ba7c836d-85f8-4617-9a95-ac6f00af1d30
+        itemSource:
+          $ref: '#/components/schemas/SrmSource'
+        itemSourceId:
+          type: string
+          description: Original source item ID.
+          example: '764334'
+        title:
+          type: string
+          description: Human-readable title of the item.
+          example: Codacy quality - critical security issue 764334
+        repository:
+          type: string
+          example: codacy-docs
+        openedAt:
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+          x-scala-type: java.time.Instant
+        closedAt:
+          type: string
+          format: date-time
+          example: '2017-08-21T17:32:28Z'
+          x-scala-type: java.time.Instant
+        dueAt:
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+          x-scala-type: java.time.Instant
+        ignored:
+          $ref: '#/components/schemas/SrmIgnoredBody'
+        priority:
+          type: string
+          example: Critical
+          enum:
+          - Low
+          - Medium
+          - High
+          - Critical
+        status:
+          type: string
+          example: Overdue
+          enum:
+          - Overdue
+          - OnTrack
+          - DueSoon
+          - ClosedOnTime
+          - ClosedLate
+          - Ignored
+        htmlUrl:
+          type: string
+          description: Link to the item's underlying issue
+          example: https://app.codacy.com/gh/test-org/test-repo/issues?resultDataId=12345
+        projectKey:
+          type: string
+          description: Jira project key of the item's underlying issue
+          example: PUL
+        securityCategory:
+          type: string
+          description: The category of a security item identified by Codacy
+          example: Cryptography
+        scanType:
+          type: string
+          description: The type of scan that identified the item.
+          example: SAST, SCA, ContainerSCA, Secrets, IaC, CICD, License, PenTesting, DAST, CSPM
+        summary:
+          type: string
+          description: Brief description of the issue. Specific to penetration testing issues.
+          example: Modern web application design incorporates a Same-Origin Policy (SOP) in order to restrict interactions between scripts loaded on the origin and resources hosted on other origins.
+        cvssScore:
+          type: number
+          description: CVSS (Common Vulnerability Scoring System) score representing the severity of the vulnerability. Specific to penetration testing issues.
+          format: float
+          example: 0.42
+        cvssVector:
+          type: string
+          description: 'CVSS (Common Vulnerability Scoring System) scoring vector, including various metrics detailing the nature and impact of the vulnerability. Specific to penetration testing issues.
+
+            '
+          example: CVSS:3.0/AV:A/AC:H/PR:L/UI:R/S:C/C:L/I:L/A:L/E:U/MUI:N
+        cwe:
+          type: string
+          description: CWE (Common Weakness Enumeration) software vulnerability identifier. Specific to penetration testing issues.
+          example: CWE-122
+        cve:
+          type: string
+          description: 'A list of CVE (Common Vulnerabilities and Exposures) identifiers. Most of the time the array will contain only one single ID, but there are niche instances where there can be multiple ones.
+
+            '
+          example: CVE-1970-1234
+        affectedVersion:
+          type: string
+          description: Indicates the version when this vulnerability was first detected in your codebase
+          example: 1.0.0
+        fixedVersion:
+          type: array
+          description: Indicates the version (tag, or commit SHA) when this vulnerability was fixed
+          items:
+            type: string
+          example:
+          - 1.0.1
+        application:
+          type: string
+          description: Applicable for issues identified by DAST scanning. A URL identifying the affected application.
+          example: https://example.com
+        affectedTargets:
+          type: string
+          description: 'List of targets affected by the security issue, determined dynamically based on the target type. Includes URLs, app names with operating systems for mobile apps, SSIDs for wireless, hostnames, full names for social engineering targets, and various combinations of hostnames and IP addresses for other targets. Cannot guarantee a specific format. Specific to penetration testing issues.
+
+            '
+          example: https://example.com
+        additionalInfo:
+          type: string
+          description: Additional information about the issue.
+          example: 'The following directives either allow wildcard sources (or ancestors), are not defined, or are overly broadly defined: script-src, style-src, img-src, connect-src, frame-src, font-src, media-src, object-src, manifest-src, worker-src, form-action. The directive(s): form-action are among the directives that do not fallback to default-src, missing/excluding them is the same as allowing anything.
+
+            '
+        likelihood:
+          type: string
+          description: Specific to penetration testing issues.
+          example: Low
+          enum:
+          - Low
+          - Medium
+          - High
+          - not_applicable
+        effortToFix:
+          type: string
+          description: Specific to penetration testing issues.
+          example: High
+          enum:
+          - Low
+          - Medium
+          - High
+          - not_applicable
+        remediation:
+          type: string
+          description: Recommended steps to fix the security issue. Specific to penetration testing issues.
+          example: Always ensure that the 'Access-Control-Allow-Origin' only allows specific origins.
+        dastTargetUrls:
+          type: string
+          description: Specifies the target URLs that were scanned.
+        imageName:
+          type: string
+          description: Name of the scanned container image
+        imageTag:
+          type: string
+          description: Tag of the scanned container image
+        dependencyChains:
+          $ref: '#/components/schemas/DependencyChains'
+        advisoryInformation:
+          $ref: '#/components/schemas/AdvisoryInformation'
+      description: Security and risk management item of an organization.
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    SRMDashboard:
+      required:
+      - closedLate
+      - closedOnTime
+      - dueSoon
+      - onTrack
+      - openCICD
+      - openCSPM
+      - openContainerSCA
+      - openCritical
+      - openDAST
+      - openHigh
+      - openIaC
+      - openLicense
+      - openLow
+      - openMedium
+      - openPenTesting
+      - openSAST
+      - openSCA
+      - openScanNotAttributed
+      - openSecrets
+      - overdue
+      - totalClosed
+      - totalNewThisWeek
+      - totalOpen
+      type: object
+      properties:
+        totalOpen:
+          type: integer
+          format: int32
+        totalNewThisWeek:
+          type: integer
+          format: int32
+        totalClosed:
+          type: integer
+          format: int32
+        onTrack:
+          type: integer
+          format: int32
+        dueSoon:
+          type: integer
+          format: int32
+        overdue:
+          type: integer
+          format: int32
+        closedOnTime:
+          type: integer
+          format: int32
+        closedLate:
+          type: integer
+          format: int32
+        openCritical:
+          type: integer
+          description: Number of open security issues with Critical severity.
+          format: int32
+        openHigh:
+          type: integer
+          description: Number of open security issues with High severity.
+          format: int32
+        openMedium:
+          type: integer
+          description: Number of open security issues with Medium severity.
+          format: int32
+        openLow:
+          type: integer
+          description: Number of open security issues with Low severity.
+          format: int32
+        openSAST:
+          type: integer
+          description: Number of open security issues identified by a SAST scan.
+          format: int32
+        openSCA:
+          type: integer
+          description: Number of open security issues identified by an SCA scan.
+          format: int32
+        openContainerSCA:
+          type: integer
+          description: Number of open security issues identified by a ContainerSCA scan.
+          format: int32
+        openSecrets:
+          type: integer
+          description: Number of open security issues identified by a Secrets scan.
+          format: int32
+        openIaC:
+          type: integer
+          description: Number of open security issues identified by an IaC scan.
+          format: int32
+        openCICD:
+          type: integer
+          description: Number of open security issues identified by a CICD scan.
+          format: int32
+        openLicense:
+          type: integer
+          description: Number of open security issues identified by a License scan.
+          format: int32
+        openPenTesting:
+          type: integer
+          description: Number of open security issues identified by a PenTesting scan.
+          format: int32
+        openDAST:
+          type: integer
+          description: Number of open security issues identified by a DAST scan.
+          format: int32
+        openCSPM:
+          type: integer
+          description: Number of open security issues identified by a CSPM scan.
+          format: int32
+        openScanNotAttributed:
+          type: integer
+          description: Number of open security issues which do not have an attributed scan type.
+          format: int32
+      description: Metrics for the security and risk management dashboard.
+    SRMDASTReportUploadResponse:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the uploaded report
+          example: 847feb32-9ff2-11ea-bb37-0242ac130002
+      description: Metadata useful to identify the report upload.
+    SearchSRMItems:
+      type: object
+      properties:
+        repositories:
+          type: array
+          description: Repository names to filter by.
+          items:
+            type: string
+        priorities:
+          type: array
+          description: Security issue priorities to filter by. See [SrmPriority](#tocssrmpriority) for valid values.
+          items:
+            type: string
+        statuses:
+          type: array
+          description: Security issue status to filter by. See [SrmStatus](#tocssrmstatus) for valid values.
+          items:
+            type: string
+        categories:
+          type: array
+          description: Security categories to filter by. Use `_other_` to search for issues that don't have a security category.
+          items:
+            type: string
+        scanTypes:
+          type: array
+          description: Scan types to filter by.
+          example:
+          - SAST
+          - SCA
+          - ContainerSCA
+          - Secrets
+          - IaC
+          - CICD
+          - License
+          - PenTesting
+          - DAST
+          - CSPM
+          items:
+            type: string
+        segments:
+          type: array
+          description: Segments ids to filter by.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            format: int64
+        dastTargetUrls:
+          type: array
+          description: Filter containing a list of Dast target urls.
+          items:
+            type: string
+        searchText:
+          type: string
+          description: Text to search for in security items.
+        containerImage:
+          $ref: '#/components/schemas/ContainerImageFilter'
+      description: Request body to filter the security issues of an organization.
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    SRMDashboardHistoryResponse:
+      required:
+      - data
       type: object
       properties:
         data:
-          type: object
-          properties:
-            publicKey:
-              type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/SRMHistoryDataPoint'
+      description: Evolution of security findings over time.
+    RepositorySummary:
+      required:
+      - name
+      - owner
+      - provider
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          description: Codacy identifier for this repository.
+          format: int64
+          example: 45738
+        provider:
+          $ref: '#/components/schemas/Provider'
+        owner:
+          type: string
+          description: Name of the organization that owns the repository.
+          example: codacy
+        name:
+          type: string
+          description: Name of the repository.
+          example: codacy-eslint
+      description: Essential information to describe a repository.
+    SRMDastReportResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SRMDastReport'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+      description: A page of DAST reports submitted to Codacy.
+    AdvisoryInformation:
+      description: Enrichment extracted for the associated advisory, such as vulnerable entry-point functions
+      type: object
+      required:
+      - advisoryId
+      - vulnerableFunctions
+      properties:
+        advisoryId:
+          type: string
+          description: The advisory identifier
+          example: CVE-2024-24786
+        vulnerableFunctions:
+          type: array
+          description: The vulnerable functions of the advisory.
+          items:
+            type: string
+          example:
+          - Unmarshal
+          - UnmarshalOptions.Unmarshal
+        publishedAt:
+          type: string
+          format: date-time
+          x-scala-type: java.time.Instant
+          description: When the advisory was published, as reported by OSV.
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    SecurityManagersResponse:
+      required:
+      - data
+      - pagination
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SecurityManager'
+      description: Security manager list sorted by organization admin status first and then alphabetically
+    SearchSRMDashboard:
+      type: object
+      properties:
+        repositories:
+          type: array
+          description: Repository names to filter by.
+          items:
+            type: string
+        priorities:
+          type: array
+          description: Security issue priorities to filter by. See [SrmPriority](#tocssrmpriority) for valid values.
+          items:
+            type: string
+            enum:
+            - Low
+            - Medium
+            - High
+            - Critical
+        categories:
+          type: array
+          description: Security categories to filter by. Use `_other_` to search for issues that don't have a security category.
+          items:
+            type: string
+        scanTypes:
+          type: array
+          description: Scan types to filter by.
+          example:
+          - SAST
+          - SCA
+          - ContainerSCA
+          - Secrets
+          - IaC
+          - CICD
+          - License
+          - PenTesting
+          - DAST
+          - CSPM
+          items:
+            type: string
+        segments:
+          type: array
+          description: Segments ids to filter by.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            format: int64
+      description: Request body to filter the metrics of the security issues dashboard of an organization.
+    DependencyChains:
+      type: array
+      description: 'Dependency chains showing how the vulnerable package is reached. Each chain is an ordered list of package identifiers from the root package down to the vulnerable package. Only present for SCA findings.
+
+        '
+      items:
+        type: array
+        items:
+          type: string
+      example:
+      - - root-app
+        - lodash
+        - vulnerable-pkg
+    OssfScorecardCheck:
+      type: object
+      description: An OSSF Scorecard check.
+      properties:
+        name:
+          type: string
+          description: The name of the check.
+        score:
+          type: number
+          format: float
+          description: The score of the check.
+        reason:
+          type: string
+          description: The reason for the score.
+        details:
+          type: array
+          items:
+            type: string
+            description: The details of the check.
+        documentation:
+          $ref: '#/components/schemas/OssfScorecardDocumentation'
+        severity:
+          $ref: '#/components/schemas/OssfScorecardSeverity'
+      required:
+      - name
+      - score
+      - reason
+      - details
+      - documentation
+      - severity
+    SrmIgnoredBody:
+      required:
+      - at
+      - authorId
+      - authorName
+      - reason
+      type: object
+      properties:
+        at:
+          type: string
+          format: date-time
+          example: '2017-08-21T17:32:28Z'
+          x-scala-type: java.time.Instant
+        authorId:
+          type: integer
+          description: Id of user who ignored issue
+          format: int64
+          example: 42
+        authorName:
+          type: string
+          description: Name of the user who ignored the item
+          example: John Doe
+        reason:
+          type: string
+          description: Reason for ignoring the item
+          example: False positive
+      description: Contains information about who ignored an SRM item
+    SLAConfig:
+      type: object
+      description: SLA configuration of an organization.
+      properties:
+        criticalSla:
+          type: integer
+          format: int32
+          description: Amount of time, in days, to handle critical severity security issues.
+        highSla:
+          type: integer
+          format: int32
+          description: Amount of time, in days, to handle high severity security issues.
+        mediumSla:
+          type: integer
+          format: int32
+          description: Amount of time, in days, to handle medium severity security issues.
+        lowSla:
+          type: integer
+          format: int32
+          description: Amount of time, in days, to handle low severity security issues.
+      required:
+      - criticalSla
+      - highSla
+      - mediumSla
+      - lowSla
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    Provider:
+      type: string
+      description: Git provider hosting the repository
+      example: gh
+    SRMRepositoryIssueCount:
+      required:
+      - critical
+      - high
+      - id
+      - low
+      - medium
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Codacy repository id.
+          format: int64
+        name:
+          type: string
+          description: Repository name.
+          example: important-repo
+        critical:
+          type: integer
+          description: Number of open issues with 'Critical' severity.
+          format: int32
+        high:
+          type: integer
+          description: Number of open issues with 'High' severity.
+          format: int32
+        medium:
+          type: integer
+          description: Number of open issues with 'Medium' severity.
+          format: int32
+        low:
+          type: integer
+          description: Number of open issues with 'Low' severity.
+          format: int32
+      description: Open issue counts for a repository, aggregated by severity.
+    SearchSRMDashboardRepositories:
+      type: object
+      properties:
+        repositories:
+          type: array
+          description: Repository names to filter by.
+          items:
+            type: string
+        segments:
+          type: array
+          description: Segments ids to filter by.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            format: int64
+      description: Request body to filter the search for the list of organization repositories with security findings.
+    SRMCategoryIssueCount:
+      required:
+      - name
+      - total
+      type: object
+      properties:
+        name:
+          type: string
+          description: Security category name.
+          example: Cryptography
+        total:
+          type: integer
+          description: Total number of open issues for the given security category.
+          format: int32
+      description: Open issue counts for a security category.
+    SRMDastReport:
+      required:
+      - createdAt
+      - generatedAt
+      - id
+      - organizationId
+      - state
+      - tool
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: string
+          description: The report internal id.
+          format: uuid
+          example: 9a4f2183-c2a8-4f38-abe9-1041c5dc9b05
+        organizationId:
+          type: integer
+          description: Codacy's organization identifier.
+          format: int64
+          example: 12455
+        createdAt:
+          type: string
+          description: When the report was created on Codacy's platform.
+          format: date-time
+          example: '2024-03-14T06:54:42.869673Z'
+          x-scala-type: java.time.Instant
+        updatedAt:
+          type: string
+          description: When the report was last updated on Codacy's platform.
+          format: date-time
+          example: '2024-03-14T06:54:42.869673Z'
+          x-scala-type: java.time.Instant
+        generatedAt:
+          type: string
+          description: When the report was originally generated.
+          format: date-time
+          example: '2024-03-14T06:54:42.869673Z'
+          x-scala-type: java.time.Instant
+        state:
+          type: string
+          description: The report's current processing state.
+          example: InProgress
+          enum:
+          - InProgress
+          - Success
+          - Failure
+        tool:
+          type: string
+          description: The DAST scanning tool used to generate the report.
+          enum:
+          - ZAP
+          x-ms-enum:
+            name: DastTool
+        failureReason:
+          type: string
+          description: The reason the report failed to be processed. This field is only defined when state is 'Failure'.
+          example: Unrecognized report format.
+      description: A dynamic application security testing (DAST) report.
+    SearchSRMDashboardCategories:
+      type: object
+      properties:
+        repositories:
+          type: array
+          description: Repository names to filter by.
+          items:
+            type: string
+        segments:
+          type: array
+          description: Segments ids to filter by.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            format: int64
+      description: Request body to filter the search for the list of security categories with findings.
+    OssfScorecardDocumentation:
+      type: object
+      description: OSSF scorecard check documentation for a given repository.
+      properties:
+        url:
+          type: string
+          description: The URL of the documentation.
+          example: https://github.com/ossf/scorecard/blob/40576783fda6698350fcbbeaea760ff827433034/docs/checks.md#code-review
+        short:
+          type: string
+          description: The short documentation of the check.
+          example: Determines if the project requires human code review before pull requests (aka merge requests) are merged.
+      required:
+      - url
+      - short
+    SrmItemResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SrmItem'
+      description: Response with a security and risk management item.
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    SRMHistoryDataPoint:
+      required:
+      - fixedCritical
+      - fixedHigh
+      - fixedLow
+      - fixedMedium
+      - ignoredCritical
+      - ignoredHigh
+      - ignoredLow
+      - ignoredMedium
+      - newCritical
+      - newHigh
+      - newLow
+      - newMedium
+      - openCritical
+      - openHigh
+      - openLow
+      - openMedium
+      - since
+      - unignoredCritical
+      - unignoredHigh
+      - unignoredLow
+      - unignoredMedium
+      - until
+      type: object
+      properties:
+        since:
+          type: string
+          description: Beginning of the time interval (inclusive).
+          format: date-time
+          example: '2024-03-04T00:00:00Z'
+          x-scala-type: java.time.Instant
+        until:
+          type: string
+          description: End of the time interval (exclusive).
+          format: date-time
+          example: '2024-03-11T00:00:00Z'
+          x-scala-type: java.time.Instant
+        newCritical:
+          type: integer
+          description: Number of security findings with Critical severity, introduced during the time interval
+          format: int32
+        newHigh:
+          type: integer
+          description: Number of security findings with High severity, introduced during the time interval
+          format: int32
+        newMedium:
+          type: integer
+          description: Number of security findings with Medium severity, introduced during the time interval
+          format: int32
+        newLow:
+          type: integer
+          description: Number of security findings with Low severity, introduced during the time interval
+          format: int32
+        fixedCritical:
+          type: integer
+          description: Number of security findings with Critical severity, fixed during the time interval
+          format: int32
+        fixedHigh:
+          type: integer
+          description: Number of security findings with High severity, fixed during the time interval
+          format: int32
+        fixedMedium:
+          type: integer
+          description: Number of security findings with Medium severity, fixed during the time interval
+          format: int32
+        fixedLow:
+          type: integer
+          description: Number of security findings with Low severity, fixed during the time interval
+          format: int32
+        openCritical:
+          type: integer
+          description: Number of open security findings with Critical severity, at the beginning of the time interval
+          format: int32
+        openHigh:
+          type: integer
+          description: Number of open security findings with High severity, at the beginning of the time interval
+          format: int32
+        openMedium:
+          type: integer
+          description: Number of open security findings with Medium severity, at the beginning of the time interval
+          format: int32
+        openLow:
+          type: integer
+          description: Number of open security findings with Low severity, at the beginning of the time interval
+          format: int32
+        ignoredCritical:
+          type: integer
+          description: Number of ignored security findings with Critical severity, at the beginning of the time interval
+          format: int32
+        ignoredHigh:
+          type: integer
+          description: Number of ignored security findings with High severity, at the beginning of the time interval
+          format: int32
+        ignoredMedium:
+          type: integer
+          description: Number of ignored security findings with Medium severity, at the beginning of the time interval
+          format: int32
+        ignoredLow:
+          type: integer
+          description: Number of ignored security findings with Low severity, at the beginning of the time interval
+          format: int32
+        unignoredCritical:
+          type: integer
+          description: Number of unignored security findings with Critical severity, at the beginning of the time interval
+          format: int32
+        unignoredHigh:
+          type: integer
+          description: Number of unignored security findings with High severity, at the beginning of the time interval
+          format: int32
+        unignoredMedium:
+          type: integer
+          description: Number of unignored security findings with Medium severity, at the beginning of the time interval
+          format: int32
+        unignoredLow:
+          type: integer
+          description: Number of unignored security findings with Low severity, at the beginning of the time interval
+          format: int32
+      description: Totals for open, new, and fixed security findings during the given time interval
+    OssfScorecardSeverity:
+      type: string
+      description: The severity of a check, according to OSSF Scorecard. (https://github.com/ossf/scorecard?tab=readme-ov-file#scorecard-checks)
+      enum:
+      - Critical
+      - High
+      - Medium
+      - Low
+      - Unknown
+    ContainerImageFilter:
+      type: object
+      description: 'Filter for container scanning items. The image `name` is required;
+
+        `tag` is optional. Filtering by tag alone (without name) is not allowed.
+
+        '
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Container image name to filter by (e.g. `nginx`).
+        tag:
+          type: string
+          description: Optional image tag (e.g. `1.25.3`).
+    SRMDashboardRepositoriesResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SRMRepositoryIssueCount'
+      description: List of repositories with their respective issue count.
+    SLAConfigBody:
+      type: object
+      description: Request body for updating an SLA configuration.
+      required:
+      - slaConfig
+      properties:
+        slaConfig:
+          $ref: '#/components/schemas/SLAConfig'
+    SecurityManagerBody:
+      required:
+      - userId
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: User ID of the organization member to be promoted to security manager.
+          format: int64
+          example: 867842577
+      description: Assign or revoke the Security Manager role for an organization member.
+    SLAConfigResponse:
+      type: object
+      description: Response body for getting SLA configuration for a given organization.
+      properties:
+        slaConfig:
+          $ref: '#/components/schemas/SLAConfig'
+      required:
+      - slaConfig
+    OssfScorecardResponse:
+      type: object
+      description: Response body to fetch OSSF Scorecard information.
+      properties:
+        data:
+          $ref: '#/components/schemas/OssfScorecard'
+      required:
+      - data
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    OssfScorecard:
+      type: object
+      description: OSSF Scorecard information for a repository.
+      properties:
+        score:
+          type: number
+          format: float
+          description: The overall OSSF Scorecard score.
+        date:
+          type: string
+          description: The date of the scorecard.
+        checks:
+          type: array
+          description: The list of OSSF Scorecard checks.
+          items:
+            $ref: '#/components/schemas/OssfScorecardCheck'
+        failingCheckCount:
+          type: integer
+          format: int32
+          description: The number of failing checks.
+        passingCheckCount:
+          type: integer
+          format: int32
+          description: The number of passing checks.
+      required:
+      - score
+      - checks
+      - date
+      - failingCheckCount
+      - passingCheckCount
+    SecurityManager:
+      required:
+      - createdAt
+      - email
+      - userId
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: User ID internal to Codacy.
+          format: int64
+          example: 867842577
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: example@codacy.com
+        createdAt:
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+          x-scala-type: java.time.Instant
+      description: Organization admin or security manager.
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    SRMDashboardCategoriesResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SRMCategoryIssueCount'
+      description: List of security categories with their respective issue count.
+    SrmSource:
+      type: string
+      example: Codacy
+      enum:
+      - Codacy
+      - Jira
+      - PenTest
+      - ZAP
+      - Trivy
+    SecurityRepositoriesResponse:
+      required:
+      - data
+      - pagination
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepositorySummary'
+      description: List of repositories that have security issues.
+    SRMDashboardResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SRMDashboard'
+      description: Metrics for the security and risk management dashboard.
+    OssfScorecardUrlRequest:
+      type: object
+      description: Request body to fetch OSSF Scorecard information by URL.
+      properties:
+        url:
+          type: string
+          description: The URL of the repository to fetch OSSF Scorecard information for.
+          example: https://www.github.com/codacy/codacy
+        purl:
+          type: string
+          description: The PURL of the dependency to fetch OSSF Scorecard information for.
+          example: maven:ch.qos.logback:logback-classic:1.2.3
+    IgnoreSRMItemBody:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: 'The reason why we ignore an issue.
+
+            Must be one of `AcceptedUse`, `FalsePositive`, `NotExploitable`, `TestCode`, `ExternalCode`
+
+            '
+        comment:
+          type: string
+          description: Comment describing why we ignore an issue
+      description: Request body with information of who ignored an SRM item
+    SecurityCategoriesResponse:
+      required:
+      - data
+      - pagination
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            type: string
+            example: Cryptography
+      description: List of security categories that have security issues.
+    SrmItemsResponse:
+      required:
+      - data
+      - pagination
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SrmItem'
+      description: Security and risk management item list, sorted by due date descending.
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    srmItemsSortByParam:
+      name: sort
+      in: query
+      description: Field to sort SRM items by
+      schema:
+        type: string
+        enum:
+        - Status
+        - DetectedAt
+        x-ms-parameter-location: method
+      example: Status
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    userId:
+      name: userId
+      in: path
+      description: Identifier of the organization member
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 1
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    segmentsParam:
+      name: segments
+      in: query
+      description: Filter by a comma-separated list of segment identifiers
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 1,2,3
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    srmPriorityParam:
+      name: priority
+      in: query
+      description: Security issue priorities to filter by. See [SrmPriority](#tocssrmpriority) for valid values.
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - Low
+          - Medium
+          - High
+          - Critical
+        x-ms-parameter-location: method
+      example: priority=Critical&priority=High
+      x-ms-parameter-location: method
+    srmItemIdParam:
+      name: srmItemId
+      in: path
+      description: Identifier of the security and risk management item
+      required: true
+      schema:
+        type: string
+        format: uuid
+        x-ms-parameter-location: method
+      example: 80f64371-e6bc-4d9b-b022-7c873cc5e39f
+      x-ms-parameter-location: method
+    srmScanTypeParam:
+      name: scanType
+      in: query
+      description: Security scan type to filter by
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        x-ms-parameter-location: method
+      example: scanType=DAST&scanType=CICD
+      x-ms-parameter-location: method
+    repositoriesParam:
+      name: repositories
+      in: query
+      description: '**Deprecated:** Use [searchOrganizationRepositoriesWithAnalysis](#searchorganizationrepositorieswithanalysis) instead.'
+      deprecated: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy-eslint,codacy-pmd
+      x-ms-parameter-location: method
+    srmSecurityCategoryParam:
+      name: category
+      in: query
+      description: Security categories to filter by. Use `_other_` to search for issues that don't have a security category.
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        x-ms-parameter-location: method
+      example: category=Cryptography&category=OutdatedDependencies
+      x-ms-parameter-location: method
+    srmStatusParam:
+      name: status
+      in: query
+      description: Security issue status to filter by. See [SrmStatus](#tocssrmstatus) for valid values.
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - Overdue
+          - OnTrack
+          - DueSoon
+          - ClosedOnTime
+          - ClosedLate
+          - Ignored
+        x-ms-parameter-location: method
+      example: status=Overdue&status=OnTrack
+      x-ms-parameter-location: method
+    directionParam:
+      name: direction
+      in: query
+      description: Sort direction. Possible values are 'asc' (ascending) or 'desc' (descending).
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: desc
+      x-ms-parameter-location: method
+  requestBodies:
+    ossfScorecardRequest:
+      description: Request body for OSSF Scorecard analysis
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OssfScorecardUrlRequest'
+      required: true
   securitySchemes:
-    api-token:
+    ApiKeyAuth:
       type: apiKey
-      in: header
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
       name: api-token
-      description: Account API token created in your Codacy account settings.
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

@@ -1,0 +1,1108 @@
+openapi: 3.2.0
+info:
+  title: Codacy Metrics API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Metrics
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/metrics/start:
+    post:
+      tags:
+      - Metrics
+      summary: Start collecting metrics for an organization
+      description: 'Start data collection for missing metrics.
+
+        The organization must have metrics support enabled.'
+      operationId: initiateMetricsForOrganization
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricsFilter'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+  /organizations/{provider}/{remoteOrganizationName}/metrics/ready:
+    get:
+      tags:
+      - Metrics
+      summary: Retrieve metrics that are ready for an organization
+      description: Retrieve the list of metrics that have completed data collection for an organization.
+      operationId: readyMetricsForOrganization
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Ready metrics for the Organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationReadyMetricsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+  /organizations/{provider}/{remoteOrganizationName}/metrics/{metricName}/latest:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve the latest value of a metric
+      description: 'Retrieve the latest value for an aggregating metric (e.g., open issues).
+
+
+        **Note:** It does not work for accumulating metrics, such as fixed issues'
+      operationId: retrieveLatestMetricValue
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricFilter'
+        required: true
+      responses:
+        '200':
+          description: The latest value of the requested metric
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricValueResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: metricFilterBody
+  /organizations/{provider}/{remoteOrganizationName}/metrics/{metricName}/latest-grouped:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve the latest metric values grouped by dimension
+      description: 'Retrieve an array of the latest values for an aggregating metric, based on the `groupBy` options.
+
+        The `groupBy` can be `organization`, `repository`, or a valid dimension for the requested metric.
+
+
+        **Note:**
+
+        - It does not work for accumulating metrics, such as fixed issues'
+      operationId: retrieveLatestMetricGroupedValues
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupMetricFilter'
+        required: true
+      responses:
+        '200':
+          description: A grouping of the latest values for the requested metric
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeriodGroupedMetricValuesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: groupMetricFilter
+  /organizations/{provider}/{remoteOrganizationName}/metrics/{metricName}/period:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve metric value for a specific period
+      description: 'Retrieve the value for a metric for a specific period, identified by its start date.
+
+
+        **Notes:**
+
+        - Aggregating metrics provide the average value.
+
+        - Accumulating metrics provide the sum, representing the total historical change.'
+      operationId: retrieveValueForPeriod
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeriodMetricFilterBody'
+        required: true
+      responses:
+        '200':
+          description: The value of the requested metric
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricValueResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: periodMetricFilterBody
+  /organizations/{provider}/{remoteOrganizationName}/metrics/{metricName}/period-grouped:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve metric values for a specific period grouped by dimension
+      description: 'Retrieve an array of values for a metric for a specific period, identified by its start date,
+
+        grouped according to the `groupBy` field. The `groupBy` can be `organization`, `repository`, or a
+
+        valid dimension for the requested metric.
+
+
+        **Notes:**
+
+        - Aggregating metrics provide the average value.
+
+        - Accumulating metrics provide the sum, representing the total historical change.'
+      operationId: retrieveGroupedValuesForPeriod
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeriodGroupMetricFilterBody'
+        required: true
+      responses:
+        '200':
+          description: The value of the requested metric
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeriodGroupedMetricValuesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: periodGroupMetricFilterBody
+  /organizations/{provider}/{remoteOrganizationName}/metrics/{metricName}/timerange:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve metric values for a time range
+      description: 'Retrieve a specific metric''s values for a given time range. The response includes values grouped by
+
+        period date and optionally by an additional `groupBy` parameter. The `groupBy` can be `organization`,
+
+        `repository`, or a valid dimension for the requested metric.
+
+
+        **Notes:**
+
+        - Aggregating metrics provide the average value.
+
+        - Accumulating metrics provide the sum, representing the total historical change.
+
+        - `period` can be used to control the time granularity of returned data (`day`, `week`, `month`). If omitted, the backend chooses a default.'
+      operationId: retrieveTimerangeMetricValues
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimerangeMetricFilterBody'
+        required: true
+      responses:
+        '200':
+          description: The value of the requested metric
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimerangeMetricValuesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: timerangeMetricFilterBody
+  /enterprises/{provider}/{enterpriseName}/metrics/ready:
+    get:
+      tags:
+      - Metrics
+      summary: Retrieve metrics that are ready for each organization in an enterprise
+      description: Retrieve the list of metrics that have completed data collection for each organization in the enterprise.
+      operationId: readyMetricsForEnterprise
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/enterpriseNameParam'
+      responses:
+        '200':
+          description: Ready metrics for the Organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyMetricsForEnterpriseResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+  /enterprises/{provider}/{enterpriseName}/metrics/{metricName}/latest:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve latest metric values for all organizations in an enterprise
+      description: 'Retrieve the latest value for each organization in an enterprise for an aggregating metric (e.g., open issues).
+
+
+        **Note:** It does not work for accumulating metrics, such as fixed issues'
+      operationId: retrieveLatestMetricValueForEnterprise
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/enterpriseNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnterpriseMetricFilter'
+      responses:
+        '200':
+          description: The latest value of the requested metric for each organization in enterprise
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricValueResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: metricFilterBody
+  /enterprises/{provider}/{enterpriseName}/metrics/{metricName}/latest-grouped:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve latest metric values grouped by dimension for all organizations in an…
+      description: 'Retrieve an array of the latest values for an aggregating metric for each organization in an enterprise,
+
+        based on the `groupBy` options.
+
+        The `groupBy` can be `organization` or a valid dimension for the requested metric.
+
+
+        **Note:**
+
+        - It does not work for accumulating metrics, such as fixed issues
+
+        - It does not allow grouping by repository (disabled)'
+      operationId: retrieveLatestMetricGroupedValuesForEnterprise
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/enterpriseNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnterpriseGroupMetricFilter'
+        required: true
+      responses:
+        '200':
+          description: A grouping of the latest values for the requested metric for each organization in enterprise
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeriodGroupedMetricValuesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: groupMetricFilter
+  /enterprises/{provider}/{enterpriseName}/metrics/{metricName}/period:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve metric values for a specific period for all organizations in an…
+      description: 'Retrieve the value for a metric for each organization in an enterprise, for a specific period, identified by its start date.
+
+
+        **Notes:**
+
+        - Aggregating metrics provide the average value.
+
+        - Accumulating metrics provide the sum, representing the total historical change.
+
+        - It does not allow grouping by repository (disabled)'
+      operationId: retrieveValueForPeriodForEnterprise
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/enterpriseNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnterprisePeriodMetricFilterBody'
+        required: true
+      responses:
+        '200':
+          description: The value of the requested metric for each organization in enterprise
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricValueResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: periodMetricFilterBody
+  /enterprises/{provider}/{enterpriseName}/metrics/{metricName}/period-grouped:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve metric values grouped by dimension for a specific period for all…
+      description: 'Retrieve an array of values for a metric for each organization in an enterprise,
+
+        for a specific period, identified by its start date, grouped according to the `groupBy` field.
+
+        The `groupBy` can be `organization` or a valid dimension for the requested metric.
+
+
+        **Notes:**
+
+        - Aggregating metrics provide the average value.
+
+        - Accumulating metrics provide the sum, representing the total historical change.
+
+        - It does not allow grouping by repository (disabled)'
+      operationId: retrieveGroupedValuesForPeriodForEnterprise
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/enterpriseNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnterprisePeriodGroupMetricFilterBody'
+        required: true
+      responses:
+        '200':
+          description: The value of the requested metric for each organization in enterprise
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeriodGroupedMetricValuesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: periodGroupMetricFilterBody
+  /enterprises/{provider}/{enterpriseName}/metrics/{metricName}/timerange:
+    post:
+      tags:
+      - Metrics
+      summary: Retrieve metric values for a time range for all organizations in an enterprise
+      description: 'Retrieve a specific metric''s values for each organization in an enterprise, for a given time range. The response includes values grouped by
+
+        period date and optionally by an additional `groupBy` parameter. The `groupBy` can be `organization` or a valid dimension for the requested metric.
+
+
+        **Notes:**
+
+        - Aggregating metrics provide the average value.
+
+        - Accumulating metrics provide the sum, representing the total historical change.
+
+        - It does not allow grouping by repository (disabled)
+
+        - `period` can be used to control the time granularity of returned data (`day`, `week`, `month`). If omitted, the backend chooses a default.'
+      operationId: retrieveTimerangeMetricValuesForEnterprise
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/enterpriseNameParam'
+      - $ref: '#/components/parameters/metricNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnterpriseTimerangeMetricFilterBody'
+        required: true
+      responses:
+        '200':
+          description: The value of the requested metric for each organization in enterprise
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimerangeMetricValuesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: metrics
+      x-codegen-request-body-name: timerangeMetricFilterBody
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    MetricGroupBy:
+      required:
+      - groupBy
+      type: object
+      properties:
+        groupBy:
+          type: array
+          description: 'Values can be `organization`, `repository`, or a dimension type. Supported dimension values will depend
+
+            on the metric.
+
+
+            Dimension allocation:
+
+            - For `OpenIssues`, `NewIssues` & `FixedIssues`, the dimensions are `category` and `severity`
+
+            '
+          items:
+            type: string
+        sortDirection:
+          type: string
+        limit:
+          type: integer
+    OrganizationReadyMetrics:
+      required:
+      - organizationId
+      - provider
+      - organizationName
+      - readyMetrics
+      type: object
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        provider:
+          $ref: '#/components/schemas/Provider'
+        organizationName:
+          type: string
+          description: The name of the organization to which the results belong.
+        readyMetrics:
+          type: array
+          items:
+            type: string
+        startedAt:
+          type: string
+          format: date-time
+          x-scala-type: java.time.Instant
+    MetricValue:
+      required:
+      - value
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        latestValue:
+          type: number
+          format: double
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    TimerangeMetricValue:
+      required:
+      - date
+      - value
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+          x-scala-type: java.time.LocalDate
+        group:
+          $ref: '#/components/schemas/MetricGroup'
+        value:
+          type: number
+          format: double
+        latestValue:
+          type: number
+          format: double
+    MetricsFilter:
+      type: object
+      required:
+      - metrics
+      properties:
+        metrics:
+          type: array
+          items:
+            type: string
+    EnterprisePeriodGroupMetricFilterBody:
+      required:
+      - date
+      - groupBy
+      - period
+      - filter
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/EnterpriseMetricFilter'
+        groupBy:
+          $ref: '#/components/schemas/MetricGroupBy'
+        date:
+          type: string
+          format: date-time
+          x-scala-type: java.time.LocalDate
+        period:
+          $ref: '#/components/schemas/PeriodEnum'
+    EnterpriseTimerangeMetricFilterBody:
+      required:
+      - from
+      - groupBy
+      - to
+      - filter
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/EnterpriseMetricFilter'
+        groupBy:
+          $ref: '#/components/schemas/MetricGroupBy'
+        from:
+          type: string
+          format: date-time
+          x-scala-type: java.time.LocalDate
+        to:
+          type: string
+          format: date-time
+          x-scala-type: java.time.LocalDate
+        period:
+          $ref: '#/components/schemas/PeriodEnum'
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    EnterpriseGroupMetricFilter:
+      required:
+      - groupBy
+      - filter
+      type: object
+      properties:
+        groupBy:
+          $ref: '#/components/schemas/MetricGroupBy'
+        filter:
+          $ref: '#/components/schemas/EnterpriseMetricFilter'
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    EnterpriseReadyMetrics:
+      required:
+      - organizationId
+      - organizationName
+      - readyMetrics
+      type: object
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+        organizationName:
+          type: string
+        readyMetrics:
+          type: array
+          items:
+            type: string
+        startedAt:
+          type: string
+          format: date-time
+          x-scala-type: java.time.Instant
+    Provider:
+      type: string
+      description: Git provider hosting the repository
+      example: gh
+    EnterpriseMetricFilter:
+      required:
+      - enterpriseEntityFilter
+      type: object
+      properties:
+        dimensionsFilter:
+          type: array
+          items:
+            $ref: '#/components/schemas/DimensionsFilter'
+    PeriodGroupMetricFilterBody:
+      required:
+      - date
+      - filter
+      - groupBy
+      - period
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/MetricFilter'
+        groupBy:
+          $ref: '#/components/schemas/MetricGroupBy'
+        date:
+          type: string
+          format: date-time
+          x-scala-type: java.time.LocalDate
+        period:
+          $ref: '#/components/schemas/PeriodEnum'
+    GroupedMetricValue:
+      required:
+      - group
+      - value
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/MetricGroup'
+        value:
+          type: number
+          format: double
+        latestValue:
+          type: number
+    EnterprisePeriodMetricFilterBody:
+      required:
+      - filter
+      - date
+      - period
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/EnterpriseMetricFilter'
+        date:
+          type: string
+          format: date-time
+          x-scala-type: java.time.LocalDate
+        period:
+          $ref: '#/components/schemas/PeriodEnum'
+    TimerangeMetricFilterBody:
+      required:
+      - filter
+      - from
+      - groupBy
+      - to
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/MetricFilter'
+        groupBy:
+          $ref: '#/components/schemas/MetricGroupBy'
+        from:
+          type: string
+          format: date-time
+          x-scala-type: java.time.LocalDate
+        to:
+          type: string
+          format: date-time
+          x-scala-type: java.time.LocalDate
+        period:
+          $ref: '#/components/schemas/PeriodEnum'
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    MetricValueResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MetricValue'
+    OrganizationReadyMetricsResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/OrganizationReadyMetrics'
+    PeriodMetricFilterBody:
+      required:
+      - date
+      - filter
+      - period
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/MetricFilter'
+        date:
+          type: string
+          format: date-time
+          x-scala-type: java.time.LocalDate
+        period:
+          $ref: '#/components/schemas/PeriodEnum'
+    PeriodEnum:
+      type: string
+      example: week
+      enum:
+      - day
+      - week
+      - month
+    TimerangeMetricValuesResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimerangeMetricValue'
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    DimensionsFilter:
+      required:
+      - dimension
+      - value
+      type: object
+      properties:
+        dimension:
+          type: string
+        value:
+          type: string
+    PeriodGroupedMetricValuesResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupedMetricValue'
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    MetricFilter:
+      required:
+      - entityFilter
+      type: object
+      properties:
+        entityFilter:
+          $ref: '#/components/schemas/EntityFilter'
+        dimensionsFilter:
+          type: array
+          items:
+            $ref: '#/components/schemas/DimensionsFilter'
+    EntityFilter:
+      type: object
+      properties:
+        repositories:
+          type: array
+          items:
+            type: string
+        segmentIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    GroupMetricFilter:
+      required:
+      - filter
+      - groupBy
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/MetricFilter'
+        groupBy:
+          $ref: '#/components/schemas/MetricGroupBy'
+    MetricGroup:
+      type: object
+      properties:
+        organization:
+          type: string
+        repository:
+          type: string
+        dimensions:
+          type: array
+          items:
+            type: string
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    ReadyMetricsForEnterpriseResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnterpriseReadyMetrics'
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    enterpriseNameParam:
+      name: enterpriseName
+      in: path
+      description: Enterprise name (slug)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: my-enterprise
+      x-ms-parameter-location: method
+    metricNameParam:
+      name: metricName
+      in: path
+      description: Name of the metric to retrieve. Get all available metrics using [readyMetricsForOrganization](#readymetricsfororganization)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: openissues
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

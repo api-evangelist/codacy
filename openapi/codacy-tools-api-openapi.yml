@@ -1,0 +1,710 @@
+openapi: 3.2.0
+info:
+  title: Codacy Tools API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Tools
+paths:
+  /tools:
+    get:
+      tags:
+      - Tools
+      summary: Retrieve the list of tools
+      operationId: listTools
+      parameters:
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      x-jvm-package: tools
+  /tools/{toolUuid}/patterns:
+    get:
+      tags:
+      - Tools
+      summary: Retrieve the list of tool patterns
+      operationId: listPatterns
+      parameters:
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - name: enabled
+        in: query
+        description: Filter by enabled status. Set to `true` to return only enabled patterns, or `false` to return only disabled patterns.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Successful operations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatternListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      x-jvm-package: tools
+  /tools/{toolUuid}/patterns/{patternId}/organizations/{provider}/{remoteOrganizationName}/feedback:
+    post:
+      tags:
+      - Tools
+      summary: Add feedback relating to the tool pattern
+      description: Add feedback relating to the tool pattern.
+      operationId: addPatternFeedback
+      parameters:
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/patternIdParam'
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddEnrichedPatternFeedbackBody'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      x-jvm-package: tools
+  /tools/{toolUuid}/patterns/{patternId}:
+    get:
+      tags:
+      - Tools
+      summary: Retrieve a tool pattern
+      description: Get the definition of a specific pattern
+      operationId: getPattern
+      parameters:
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/patternIdParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatternResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      x-jvm-package: tools
+  /duplicationTools:
+    get:
+      tags:
+      - Tools
+      summary: Retrieve the list of duplication tools
+      operationId: listDuplicationTools
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DuplicationToolListResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      x-jvm-package: tools
+  /metricsTools:
+    get:
+      tags:
+      - Tools
+      summary: Retrieve the list of metrics tools
+      operationId: listMetricsTools
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsToolListResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      x-jvm-package: tools
+components:
+  schemas:
+    Tool:
+      description: Codacy tool that can flag patterns/issues on projects
+      allOf:
+      - $ref: '#/components/schemas/ToolReference'
+      - required:
+        - clientSide
+        - configurable
+        - configurationFilenames
+        - dockerImage
+        - enabledByDefault
+        - languages
+        - needsCompilation
+        - shortName
+        - standalone
+        - version
+        type: object
+        properties:
+          version:
+            type: string
+            description: Original tool version used by the Codacy tool wrapper
+            example: 6.8.0
+          shortName:
+            type: string
+            description: Tool unique short name, must contain alphanumeric characters only and no spaces
+            example: eslint
+          documentationUrl:
+            type: string
+            description: Original tool documentation URL
+            example: http://eslint.org/docs/rules/
+          sourceCodeUrl:
+            type: string
+            description: Codacy tool wrapper source code URL
+            example: https://github.com/codacy/codacy-eslint
+          prefix:
+            type: string
+            description: Tool prefix used to ensure pattern names are unique
+            example: ESLint_
+          needsCompilation:
+            type: boolean
+            description: Tool requires compilation to run
+            example: false
+          configurationFilenames:
+            type: array
+            description: Tool configuration filename
+            example:
+            - .eslintrc.js
+            - .eslintrc.yaml
+            items:
+              type: string
+          description:
+            type: string
+            description: Tool description
+            example: ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code. In many ways, it is similar to JSLint and JSHint with a few exceptions
+          dockerImage:
+            type: string
+            description: Docker image used to launch tool
+            example: codacy/codacy-eslint:2.20.19
+          languages:
+            type: array
+            description: List of languages that the tool supports
+            example:
+            - JavaScript
+            items:
+              type: string
+          clientSide:
+            type: boolean
+            description: True if the tool is supposed to run on the client's machine and the results sent to Codacy
+            example: true
+          standalone:
+            type: boolean
+            description: True if the client-side tool runs stand-alone outside of the CLI
+            example: true
+          enabledByDefault:
+            type: boolean
+            description: True if the tool is enabled by default for new projects (not required)
+            example: true
+          configurable:
+            type: boolean
+            description: True if the tool is configurable on Codacy's UI
+            example: true
+    DuplicationToolListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DuplicationTool'
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    ToolReference:
+      required:
+      - name
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: Tool unique identifier
+          example: 847feb32-9ff2-11ea-bb37-0242ac130002
+        name:
+          type: string
+          description: Name of the tool
+          example: ESLint
+      description: Details of the tool that found the issue
+    Pattern:
+      description: Code pattern that a Codacy tool can use to find issues
+      allOf:
+      - $ref: '#/components/schemas/PatternDetails'
+      - required:
+        - enabled
+        - parameters
+        type: object
+        properties:
+          description:
+            type: string
+            description: Short description of the code pattern
+            example: Enforce getter and setter pairs in objects and classes
+          explanation:
+            type: string
+            description: Full description of the code pattern, in CommonMark
+            example: Accessor pairs description
+          enabled:
+            type: boolean
+            description: True if the code pattern is on by default for new repositories
+            example: true
+          languages:
+            type: array
+            description: List of languages that the code pattern supports
+            example:
+            - JavaScript
+            items:
+              type: string
+          timeToFix:
+            type: integer
+            description: Average time to fix an issue detected by the code pattern, in minutes
+            format: int32
+            example: 5
+          parameters:
+            $ref: '#/components/schemas/ParameterList'
+          rationale:
+            type: string
+            description: Rationale for the pattern
+          solution:
+            type: string
+            description: Pattern suggested solution
+          goodExamples:
+            type: array
+            description: List of good examples for the pattern
+            items:
+              type: string
+          badExamples:
+            type: array
+            description: List of bad examples for the pattern
+            items:
+              type: string
+          tags:
+            type: array
+            description: Tags associated with the pattern
+            items:
+              type: string
+    PatternDetails:
+      required:
+      - category
+      - id
+      - level
+      - severityLevel
+      type: object
+      properties:
+        id:
+          type: string
+          description: Pattern identifier (unique per tool)
+          example: accessor-pairs
+        title:
+          type: string
+          description: Pattern title
+        category:
+          type: string
+          description: Pattern category
+          example: Security
+        subCategory:
+          type: string
+          description: Pattern subcategory (optional since some patterns might not have a subcategory)
+          example: XSS
+        level:
+          type: string
+          description: Deprecated, use `severityLevel` instead
+          example: Error
+          enum:
+          - Info
+          - Warning
+          - High
+          - Error
+          x-ms-enum:
+            name: SeverityLevel
+        severityLevel:
+          $ref: '#/components/schemas/SeverityLevel'
+      description: Details of the pattern that was identified in the issue
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    AddEnrichedPatternFeedbackBody:
+      type: object
+      required:
+      - reactionFeedback
+      properties:
+        reactionFeedback:
+          type: boolean
+          description: 'True if the enriched pattern in
+
+            mention is considered good/relevant by the user
+
+            '
+        feedback:
+          type: string
+          description: 'Feedback from the user to describe why enriched pattern
+
+            is not considered good/relevant
+
+            '
+    DuplicationTool:
+      required:
+      - dockerImage
+      - languages
+      type: object
+      properties:
+        dockerImage:
+          type: string
+          description: Docker image used to launch tool
+          example: codacy/codacy-duplication-pmdcpd:1.0.0
+        languages:
+          type: array
+          description: List of languages that the tool supports
+          items:
+            type: string
+      description: Codacy tool that can detect duplication on projects
+    ToolListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tool'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    PatternListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    MetricsToolListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsTool'
+    ParameterList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Parameter'
+    Parameter:
+      required:
+      - default
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the parameter
+          example: getWithoutSet
+        description:
+          type: string
+          description: Description of the parameter
+          example: getWithoutSet
+        default:
+          type: string
+          description: Default value of the parameter
+          example: 'true'
+      description: Parameter to configure a code pattern
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    PatternResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Pattern'
+    MetricsTool:
+      required:
+      - dockerImage
+      - languages
+      type: object
+      properties:
+        dockerImage:
+          type: string
+          description: Docker image used to launch tool
+          example: codacy/codacy-metrics-cloc:1.0.0
+        languages:
+          type: array
+          description: List of languages that the tool supports
+          items:
+            type: string
+      description: Codacy tool that calculates metrics on projects
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    SeverityLevel:
+      type: string
+      description: Issue severity level. These values map to our UI as follows - Info to Minor, Warning to Medium, High to High, Error to Critical.
+      example: Error
+      enum:
+      - Info
+      - Warning
+      - High
+      - Error
+      x-ms-enum:
+        name: SeverityLevel
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    toolUuidParam:
+      name: toolUuid
+      in: path
+      description: Unique identifier (UUID) for the tool
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 847feb32-9ff2-11ea-bb37-0242ac130002
+      x-ms-parameter-location: method
+    patternIdParam:
+      name: patternId
+      in: path
+      description: Pattern identifier
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: ScalaStyle_BlockImportChecker
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

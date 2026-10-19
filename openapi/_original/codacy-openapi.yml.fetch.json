@@ -1,0 +1,12 @@
+{
+ "url": "https://api.codacy.com/api/api-docs/swagger.yaml",
+ "final": "https://api.codacy.com/api/api-docs/swagger.yaml",
+ "status": 200,
+ "content_type": "text/x-yaml",
+ "bytes": 684462,
+ "sha256": "df3244a80d59db31ef84a4da0b862a6f951a85789859c60bb6fb2ad7fe89e210",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

@@ -1,0 +1,808 @@
+openapi: 3.2.0
+info:
+  title: Codacy Jira API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: JIRA
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/integrations/jira/tickets:
+    post:
+      tags:
+      - JIRA
+      summary: Create a Jira ticket
+      description: '**Deprecated:** Use createJiraTicket instead.'
+      deprecated: true
+      operationId: createJiraTicketDeprecated
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        description: Create Ticket Fields
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateJiraTicketDeprecatedBody'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateJiraTicketResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: jira
+  /organizations/{provider}/{remoteOrganizationName}/integrations/jira/tickets:
+    get:
+      tags:
+      - JIRA
+      summary: Get Jira tickets for a Codacy element
+      operationId: getJiraTickets
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/elementTypeParam'
+      - $ref: '#/components/parameters/elementIdParam'
+      responses:
+        '200':
+          description: List of Jira tickets for a specific Codacy element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetJiraTicketsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: jira
+    post:
+      tags:
+      - JIRA
+      summary: Create a Jira ticket
+      operationId: createJiraTicket
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Create Ticket Fields
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateJiraTicketBody'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateJiraTicketResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: jira
+  /organizations/{provider}/{remoteOrganizationName}/integrations/jira/tickets/{jiraTicketIdentifier}:
+    delete:
+      tags:
+      - JIRA
+      summary: Unlink a Jira ticket from a repository
+      operationId: unlinkRepositoryJiraTicket
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/jiraTicketIdentifierParam'
+      requestBody:
+        description: Unlink Jira Ticket Element Identification
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnlinkRepositoryJiraTicketBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: jira
+  /organizations/{provider}/{remoteOrganizationName}/integrations/jira/projects:
+    get:
+      tags:
+      - JIRA
+      summary: Get available Jira projects for the organization
+      operationId: getAvailableJiraProjects
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableJiraProjectsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: jira
+  /organizations/{provider}/{remoteOrganizationName}/integrations/jira/projects/{jiraProjectId}/issueTypes:
+    get:
+      tags:
+      - JIRA
+      summary: Get available issue types for a Jira project
+      operationId: getJiraProjectIssueTypes
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/jiraProjectIdParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JiraProjectIssueTypesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: jira
+  ? /organizations/{provider}/{remoteOrganizationName}/integrations/jira/projects/{jiraProjectId}/issueTypes/{jiraIssueTypeId}/fields
+  : get:
+      tags:
+      - JIRA
+      summary: Get available fields by issue type for a Jira project
+      operationId: getJiraProjectIssueFields
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/jiraProjectIdParam'
+      - $ref: '#/components/parameters/jiraIssueTypeIdParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JiraProjectIssueFieldsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: jira
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    CreateJiraTicketElement:
+      type: object
+      required:
+      - elementId
+      properties:
+        elementId:
+          type: string
+        repositoryName:
+          type: string
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    PaginationInfoLong:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int64
+      description: Cursor-based pagination information to obtain more items
+    JiraProjectIssueType:
+      required:
+      - id
+      - name
+      - isSubtask
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        isSubtask:
+          type: boolean
+        iconUrl:
+          type: string
+    ElementType:
+      type: string
+      enum:
+      - issue
+      - finding
+      - file
+      - dependency
+    BadGateway:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadGateway
+    CreateJiraTicketResponse:
+      description: Create ticket response
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/JiraTicket'
+    UnlinkRepositoryJiraTicketBody:
+      type: object
+      required:
+      - elementType
+      - elementId
+      properties:
+        elementType:
+          $ref: '#/components/schemas/ElementType'
+        elementId:
+          type: string
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    CreateJiraTicketDeprecatedBody:
+      type: object
+      required:
+      - elementType
+      - elementIds
+      - jiraProjectId
+      - issueTypeId
+      - summary
+      - description
+      properties:
+        elementType:
+          $ref: '#/components/schemas/ElementType'
+        elementIds:
+          type: array
+          items:
+            type: string
+        jiraProjectId:
+          type: integer
+          format: int64
+        issueTypeId:
+          type: integer
+          format: int64
+        summary:
+          type: string
+        description:
+          type: string
+          description: JIRA description written in Atlassian Document Format https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/#json-schema
+        dueDate:
+          type: string
+          format: date
+          description: Optional due date in YYYY-MM-DD format
+    JiraTicket:
+      type: object
+      required:
+      - id
+      - key
+      - summary
+      - status
+      - assignee
+      - link
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        summary:
+          type: string
+        assignee:
+          type: string
+        link:
+          type: string
+        status:
+          type: object
+          required:
+          - key
+          - labels
+          - color
+          properties:
+            key:
+              type: string
+            labels:
+              type: array
+              items:
+                type: string
+            color:
+              type: string
+    GetJiraTicketsResponse:
+      description: Jira tickets retrieval response
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/JiraTicket'
+    JiraProject:
+      required:
+      - id
+      - key
+      - name
+      - avatarUrl
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        key:
+          type: string
+        name:
+          type: string
+        avatarUrl:
+          type: string
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    JiraProjectIssueFieldsResponse:
+      description: A response with a list of possible fields for a Jira project issue type.
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/JiraProjectIssueField'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoLong'
+    AvailableJiraProjectsResponse:
+      description: A response with a list of available projects.
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/JiraProject'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoLong'
+    JiraProjectIssueTypesResponse:
+      description: A response with a list of issue types for a Jira project.
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/JiraProjectIssueType'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoLong'
+    CreateJiraTicketBody:
+      type: object
+      required:
+      - elementType
+      - jiraProjectId
+      - createJiraTicketElements
+      - issueTypeId
+      - summary
+      - description
+      properties:
+        elementType:
+          $ref: '#/components/schemas/ElementType'
+        jiraProjectId:
+          type: integer
+          format: int64
+        createJiraTicketElements:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateJiraTicketElement'
+        issueTypeId:
+          type: integer
+          format: int64
+        summary:
+          type: string
+        description:
+          type: string
+          description: JIRA description written in Atlassian Document Format https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/#json-schema
+        dueDate:
+          type: string
+          format: date
+          description: Optional due date in YYYY-MM-DD format
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    JiraProjectIssueField:
+      required:
+      - fieldId
+      - name
+      - key
+      - required
+      - hasDefaultValue
+      type: object
+      properties:
+        fieldId:
+          type: string
+        name:
+          type: string
+        key:
+          type: string
+        required:
+          type: boolean
+        hasDefaultValue:
+          type: boolean
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+    BadGateway:
+      description: Bad Gateway
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadGateway'
+      x-ms-error-response: true
+  parameters:
+    repositoryNameParam:
+      name: repositoryName
+      in: path
+      description: Repository name on the Git provider organization
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: awesome-repo
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    jiraTicketIdentifierParam:
+      name: jiraTicketIdentifier
+      in: path
+      description: Unique identifier of the Jira ticket
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 12345678
+      x-ms-parameter-location: method
+    searchParam:
+      name: search
+      in: query
+      description: Filter results by searching for this string
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: my-repository-name
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    elementIdParam:
+      name: elementId
+      in: query
+      description: Unique identifier of the Codacy element
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: '12345678'
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    jiraIssueTypeIdParam:
+      name: jiraIssueTypeId
+      in: path
+      description: Identifier of a Jira project issue type
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: '123351656'
+      x-ms-parameter-location: method
+    elementTypeParam:
+      name: elementType
+      in: query
+      description: Type of Codacy element to filter by
+      required: true
+      schema:
+        type: string
+        enum:
+        - issue
+        - finding
+        - file
+        - dependency
+        x-ms-parameter-location: method
+        x-ms-enum:
+          name: ElementType
+      example: issue
+      x-ms-parameter-location: method
+      x-ms-enum:
+        name: ElementType
+    jiraProjectIdParam:
+      name: jiraProjectId
+      in: path
+      description: Identifier of a Jira project
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 123351656
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

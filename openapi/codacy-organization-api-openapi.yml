@@ -1,0 +1,2611 @@
+openapi: 3.2.0
+info:
+  title: Codacy Organization API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Organization
+paths:
+  /organizations/{provider}/{remoteOrganizationName}:
+    get:
+      tags:
+      - Organization
+      summary: Get organization
+      operationId: getOrganization
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationWithMetaResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+    delete:
+      tags:
+      - Organization
+      summary: Delete organization
+      operationId: deleteOrganization
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        $ref: '#/components/requestBodies/churnFeedbackParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/billing:
+    get:
+      tags:
+      - Organization
+      summary: Get detailed information about organization billing
+      operationId: organizationDetailedBilling
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationBillingInformationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+    post:
+      tags:
+      - Organization
+      summary: Update the information about organization billing
+      operationId: updateOrganizationDetailedBilling
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        $ref: '#/components/requestBodies/billingDetailsUpdateRequest'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/billing/card:
+    get:
+      tags:
+      - Organization
+      summary: Get card information about organization billing
+      operationId: organizationBillingCard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+    post:
+      tags:
+      - Organization
+      summary: Add a card to the organization
+      description: Add a card to the organization relying on the token provided by Stripe /v1/tokens
+      operationId: organizationBillingAddCard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        $ref: '#/components/requestBodies/cardCreationRequest'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/billing/estimation:
+    get:
+      tags:
+      - Organization
+      summary: Get a billing estimation
+      operationId: organizationBillingEstimation
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/paymentPlanCodeParam'
+      - name: promoCode
+        in: query
+        description: Optional promotional code to apply to the billing estimation.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingEstimationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/billing/change-plan:
+    post:
+      tags:
+      - Organization
+      summary: Change the plan of an organization
+      description: Available plan codes can be retrieved using listPaymentPlans
+      operationId: changeOrganizationPlan
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        $ref: '#/components/requestBodies/changePlanRequest'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/billing/sync:
+    post:
+      tags:
+      - Organization
+      summary: Sync the information about organization billing
+      operationId: syncMarketplaceBilling
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      deprecated: true
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/integrations/providerSettings/apply:
+    post:
+      tags:
+      - Organization
+      summary: Apply default settings to all repositories
+      operationId: applyProviderSettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/integrations/providerSettings:
+    get:
+      tags:
+      - Organization
+      summary: Get Git provider settings
+      operationId: getProviderSettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderIntegrationSettingsBody'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+    patch:
+      tags:
+      - Organization
+      summary: Create or update Git provider settings
+      operationId: updateProviderSettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderIntegrationSettingsPatchBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+      x-codegen-request-body-name: providerIntegrationSettingsBody
+  /organizations/{provider}/{remoteOrganizationName}/repositories:
+    get:
+      tags:
+      - Organization
+      summary: List organization repositories for the authenticated user
+      description: 'For Bitbucket you must URL encode the cursor before using it in subsequent API calls, as the pagination comes directly from the Git provider.
+
+        This endpoint may return more results than those specified in the limit parameter.
+
+
+        **Note:** When applied to public repositories, this operation does not require authentication.'
+      operationId: listOrganizationRepositories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/repositoryFilterParam'
+      - $ref: '#/components/parameters/languagesFilterParam'
+      - $ref: '#/components/parameters/stackTagsFilterParam'
+      - $ref: '#/components/parameters/segmentsParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepositoryListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+  /onboarding/organizations/{provider}/{remoteOrganizationName}/progress:
+    get:
+      tags:
+      - Organization
+      summary: Retrieve the onboarding progress of an organization
+      operationId: retrieveOrganizationOnboardingProgress
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationOnboardingProgressResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/analysisConfigurationMinimumPermission:
+    patch:
+      tags:
+      - Organization
+      summary: Configure what your organization members can do across the Codacy platform
+      description: Define the lowest permission level that can configure patterns, configure which file extensions and branches are analyzed, and ignore issues and files
+      operationId: patchOrganizationSettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: New permission level
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MembershipPrivilegesBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+      x-codegen-request-body-name: permissionLevel
+  /organizations/{provider}/{remoteOrganizationName}/joinMode:
+    post:
+      tags:
+      - Organization
+      summary: Update the join mode of an organization
+      operationId: updateJoinMode
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: New join mode of the organization
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinModeRequest'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+      x-codegen-request-body-name: joinMode
+  /organizations/{provider}/{remoteOrganizationName}/people/leave/check:
+    get:
+      tags:
+      - Organization
+      summary: Check if the user can leave the organization
+      description: Check if the user can leave the organization or returns the reasons why they can not.
+      operationId: checkIfUserCanLeave
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveOrgCheckResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/join:
+    get:
+      tags:
+      - Organization
+      summary: List requests to join an organization
+      description: Endpoint to list requests to join an organization by provider and organization name
+      operationId: listOrganizationJoinRequests
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/searchParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRequestsToJoinResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+    post:
+      tags:
+      - Organization
+      summary: Join an organization
+      description: Endpoint to join an organization by provider and name
+      operationId: joinOrganization
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JoinResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+    delete:
+      tags:
+      - Organization
+      summary: Decline requests to join an organization
+      description: Decline requests to join an organization by specifying the provider, organization name, and the user emails to be rejected.
+      operationId: declineRequestsToJoinOrganization
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        $ref: '#/components/requestBodies/emailListParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/join/{accountIdentifier}:
+    delete:
+      tags:
+      - Organization
+      summary: Delete a request to join an organization
+      description: Delete a request to join an organization by provider, name, and user ID
+      operationId: deleteOrganizationJoinRequest
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/accountIdentifierParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations:
+    post:
+      tags:
+      - Organization
+      summary: Add an organization to Codacy
+      description: Add an organization from a Git provider to Codacy
+      operationId: addOrganization
+      requestBody:
+        description: Information of the organization to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOrganizationBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOrganizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+      x-codegen-request-body-name: addOrganizationParameter
+  /user/billing/sync:
+    post:
+      tags:
+      - Organization
+      summary: Sync the information about user's organization billing
+      operationId: syncUserMarketplaceBilling
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/settings/sync:
+    post:
+      tags:
+      - Organization
+      summary: Synchronize Codacy organization name with the Git provider
+      operationId: syncOrganizationName
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncProviderSettingOrganizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/settings/submodules/check:
+    get:
+      tags:
+      - Organization
+      summary: Check if the submodules option is enabled for the organization
+      operationId: checkSubmodules
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckSubmodulesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/integrations/jira:
+    get:
+      summary: Get the Jira integration of the organization
+      tags:
+      - Organization
+      operationId: getJiraIntegration
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JiraIntegrationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+    put:
+      summary: Create or update the Jira integration of the organization
+      tags:
+      - Organization
+      operationId: createOrUpdateJiraIntegration
+      parameters:
+      - $ref: '#/components/parameters/oauthCodeParam'
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JiraIntegrationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+    delete:
+      summary: Delete the Jira integration of the organization and associated resources
+      tags:
+      - Organization
+      operationId: deleteJiraIntegration
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/integrations/slack:
+    get:
+      summary: Get the Slack integration of the organization
+      tags:
+      - Organization
+      operationId: getSlackIntegration
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlackIntegrationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+    put:
+      summary: Create or update the Slack integration of the organization
+      tags:
+      - Organization
+      operationId: createOrUpdateSlackIntegration
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlackIntegrationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlackIntegrationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+      x-codegen-request-body-name: slackIntegrationRequestBody
+    delete:
+      summary: Delete the Slack integration of the organization and associated resources
+      tags:
+      - Organization
+      operationId: deleteSlackIntegration
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: organization
+  /organizations/{provider}/{remoteOrganizationName}/audit:
+    get:
+      tags:
+      - Organization
+      summary: Retrieve the audit logs for the organization
+      description: Only available on Business plan. Requires organization admin or organization manager role.
+      operationId: listAuditLogsForOrganization
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/fromParam'
+      - $ref: '#/components/parameters/toParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: audit
+components:
+  schemas:
+    RepositorySummary:
+      required:
+      - name
+      - owner
+      - provider
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          description: Codacy identifier for this repository.
+          format: int64
+          example: 45738
+        provider:
+          $ref: '#/components/schemas/Provider'
+        owner:
+          type: string
+          description: Name of the organization that owns the repository.
+          example: codacy
+        name:
+          type: string
+          description: Name of the repository.
+          example: codacy-eslint
+      description: Essential information to describe a repository.
+    OrganizationProductBillingPlan:
+      required:
+      - product
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/CodacyProduct'
+        plan:
+          $ref: '#/components/schemas/Billing'
+    RepositoryListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Repository'
+    JoinStatus:
+      type: string
+      enum:
+      - member
+      - pendingMember
+      - remoteMember
+      x-ms-enum:
+        name: JoinStatus
+    ProviderIntegrationSettingsBody:
+      required:
+      - aiEnhancedComments
+      - commitStatus
+      - pullRequestComment
+      - pullRequestSummary
+      - availableSettings
+      type: object
+      properties:
+        commitStatus:
+          type: boolean
+          description: Toggle the feature "Status checks"
+        pullRequestComment:
+          type: boolean
+          description: Toggle the feature "Issue annotations"
+        pullRequestSummary:
+          type: boolean
+          description: Toggle the feature "Issue summaries"
+        coverageSummary:
+          type: boolean
+          description: Toggle the feature "Coverage summary" (GitHub only)
+        suggestions:
+          type: boolean
+          description: Toggle the feature "Suggested fixes" (GitHub only)
+        aiEnhancedComments:
+          type: boolean
+          description: 'Toggle the feature "AI-enhanced comments". If "Suggested fixes" (GitHub only) is also enabled, then the AI-enhanced comments also provide suggested fixes. This is an experimental feature.
+
+            '
+        aiPullRequestReviewer:
+          type: boolean
+          description: 'Toggle the feature "AI Pull Request Reviewer" (GitHub only). When enabled, Codacy will use AI to review pull requests and provide comments on code quality and potential issues. This is an experimental feature.
+
+            '
+        aiPullRequestReviewerAutomatic:
+          type: boolean
+          description: 'Toggle the feature "AI Pull Request Reviewer Automatic" (GitHub only). When enabled, Codacy will use AI to review pull requests and provide comments on code quality and potential issues automatically once, subsequent reviews will have to be explicitly requested.
+
+            '
+        pullRequestUnifiedSummary:
+          type: boolean
+          description: 'Toggle the feature "Pull Request Unified Summary" (GitHub only). When enabled, Codacy provides a unified summary (coverage and analysis).
+
+            '
+        availableSettings:
+          type: array
+          description: List of available settings for the Git provider integration
+          items:
+            type: string
+            example: GitHubCoverageSummary
+      description: Default settings for Git provider integrations with a list of available settings
+    MembershipPrivilegesBody:
+      type: object
+      properties:
+        permission:
+          $ref: '#/components/schemas/MembershipPrivileges'
+      description: 'Minimum permission level regarding configuring patterns, configuring which file extensions and branches are analyzed, and ignoring issues and files
+
+        '
+    PaymentRequired:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: PaymentRequired
+    OrganizationPaywall:
+      required:
+      - organizationDashboard
+      type: object
+      properties:
+        organizationDashboard:
+          type: boolean
+          example: true
+    BadGateway:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadGateway
+    MembershipPrivileges:
+      type: string
+      enum:
+      - RepoAdmin
+      - RepoWrite
+      - RepoRead
+      x-ms-enum:
+        name: MembershipPrivileges
+    ChurnFeedback:
+      required:
+      - cancelReason
+      - joinReason
+      type: object
+      properties:
+        joinReason:
+          $ref: '#/components/schemas/Reason'
+        cancelReason:
+          $ref: '#/components/schemas/Reason'
+    ListRequestsToJoinResponse:
+      required:
+      - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestToJoin'
+    BillingEstimation:
+      type: object
+      required:
+      - perSeatCents
+      - seats
+      - taxes
+      - subTotalCents
+      - totalCents
+      - nextBilling
+      - isMonthly
+      properties:
+        perSeatCents:
+          type: integer
+          format: int32
+        seats:
+          type: integer
+          format: int32
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxEstimation'
+        discountCents:
+          type: integer
+          format: int32
+        subTotalCents:
+          type: integer
+          format: int64
+        totalCents:
+          type: integer
+          format: int64
+        nextBilling:
+          type: string
+          format: date-time
+          x-scala-type: java.time.Instant
+        isMonthly:
+          type: boolean
+    OrganizationBillingInformation:
+      required:
+      - numberOfPurchasedSeats
+      - numberOfSeats
+      - paymentPlan
+      - plan
+      - priceInCents
+      - subscriptions
+      - taxes
+      type: object
+      properties:
+        numberOfSeats:
+          type: integer
+          format: int32
+          example: 42
+        numberOfPurchasedSeats:
+          type: integer
+          format: int32
+          example: 100
+        paymentPlan:
+          $ref: '#/components/schemas/Billing'
+        plan:
+          $ref: '#/components/schemas/PaymentPlan'
+        paymentGateway:
+          $ref: '#/components/schemas/PaymentProvider'
+        priceInCents:
+          type: integer
+          description: Final price paid in cents, containing all taxes if applicable. For example, 12020 represents $120.20.
+          format: int32
+          example: 12020
+        pricePerSeatInCents:
+          type: integer
+          description: Final price paid per seat in cents, containing all taxes if applicable. For example, 1405 represents $14.05.
+          format: int32
+          example: 1405
+        nextPaymentDate:
+          type: string
+          description: 'Date the current billing period ends. For a renewing subscription, this is the next payment
+
+            date. For a subscription that has been canceled and will not renew, this is the date access
+
+            to the plan and its premium features ends. Empty for plans that don''t have a billing period,
+
+            such as the open-source plan
+
+            '
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        invoiceDetails:
+          required:
+          - firstName
+          - lastName
+          - email
+          - country
+          - vat
+          - address
+          - zip
+          - state
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+              description: Invoice email address
+              format: email
+              example: codacy@codacy.com
+            country:
+              type: string
+              description: Country code
+              example: PT
+            vat:
+              type: string
+              description: VAT or equivalent tax number depending on your location
+              example: PT999999999
+            address:
+              type: string
+              description: Invoice address
+              example: Av. João Crisóstomo, nº31 - 6º, 1050-125 Lisboa
+            zip:
+              type: string
+              description: Postal code or ZIP code
+              example: 1050-125
+            state:
+              type: string
+              description: State, province, or administrative region
+              example: Lisbon
+        taxes:
+          type: array
+          description: Taxes included in the final price priceInCents.
+          items:
+            $ref: '#/components/schemas/Tax'
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationProductBillingPlan'
+    Repository:
+      allOf:
+      - $ref: '#/components/schemas/RepositorySummary'
+      - required:
+        - addedState
+        - languages
+        - problems
+        - standards
+        - visibility
+        type: object
+        properties:
+          fullPath:
+            type: string
+            description: Full path of the repository on the Git provider
+            example: codacy/codacy-eslint
+          visibility:
+            $ref: '#/components/schemas/Visibility'
+          remoteIdentifier:
+            type: string
+            description: Unique identifier of the repository on the Git provider
+            example: '3'
+          lastUpdated:
+            type: string
+            description: Timestamp when the repository was last updated. See [Git provider documentation](https://docs.codacy.com/organizations/organization-overview/#last-updated-repositories) for details.
+            format: date-time
+            example: '2019-05-07T14:29:13.43Z'
+            x-scala-type: java.time.Instant
+          permission:
+            $ref: '#/components/schemas/Permission'
+          problems:
+            type: array
+            items:
+              $ref: '#/components/schemas/RepositoryProblem'
+          languages:
+            type: array
+            description: List of the languages in the repository
+            example:
+            - Java
+            - Scala
+            - CSS
+            items:
+              type: string
+          stack:
+            $ref: '#/components/schemas/RepositoryStack'
+          defaultBranch:
+            $ref: '#/components/schemas/Branch'
+          badges:
+            $ref: '#/components/schemas/Badges'
+          codingStandardId:
+            type: integer
+            description: '**Deprecated:** Use `standards` field instead. Coding standard identifier.'
+            deprecated: true
+            format: int64
+          codingStandardName:
+            type: string
+            description: '**Deprecated:** Use `standards` field instead. Coding standard name.'
+            deprecated: true
+          standards:
+            type: array
+            description: List of the coding standard identifiers and names
+            items:
+              $ref: '#/components/schemas/CodingStandardInfo'
+          addedState:
+            $ref: '#/components/schemas/AddedState'
+          gatePolicyId:
+            type: integer
+            description: Identifier of the gate policy the repository is following. If not defined, the repository does not follow a gate policy.
+            format: int64
+          gatePolicyName:
+            type: string
+            description: Name of the gate policy the repository is following. Present only if the gatePolicyId is defined.
+    OrganizationWithMetaResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/OrganizationWithMeta'
+    JoinModeRequest:
+      required:
+      - joinMode
+      type: object
+      properties:
+        joinMode:
+          $ref: '#/components/schemas/JoinMode'
+    CodacyProduct:
+      type: string
+      description: Codacy product
+      example: coverage
+      enum:
+      - quality
+      - coverage
+    OrganizationType:
+      type: string
+      description: The type of Organization
+      example: Organization
+      enum:
+      - Account
+      - Organization
+      x-ms-enum:
+        name: OrganizationType
+    CardResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Card'
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+    CodingStandardInfo:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier of the coding standard
+          format: int64
+        name:
+          type: string
+          description: Name of the coding standard
+      description: Coding standard identifier and name
+    Tax:
+      required:
+      - name
+      - rate
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the tax
+        rate:
+          type: number
+          description: Rate of the tax
+          format: double
+    OrganizationWithMeta:
+      required:
+      - analysisConfigurationMinimumPermission
+      - membership
+      - organization
+      - subscriptions
+      type: object
+      properties:
+        organization:
+          $ref: '#/components/schemas/Organization'
+        membership:
+          $ref: '#/components/schemas/Membership'
+        billing:
+          $ref: '#/components/schemas/Billing'
+        paywall:
+          $ref: '#/components/schemas/Paywall'
+        organizationPayWall:
+          $ref: '#/components/schemas/OrganizationPaywall'
+        analysisConfigurationMinimumPermission:
+          $ref: '#/components/schemas/Permission'
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSubscription'
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    Billing:
+      required:
+      - isPremium
+      - model
+      type: object
+      properties:
+        isPremium:
+          type: boolean
+          description: Deprecated, use subscriptions.plan.isPremium instead.
+          example: true
+        model:
+          type: string
+          example: Auto
+          enum:
+          - Auto
+          - Manual
+        code:
+          type: string
+          description: Deprecated, use subscriptions.plan.code instead.
+          example: trial
+        monthly:
+          type: boolean
+          example: true
+        price:
+          type: integer
+          format: int64
+          example: 1000
+        pricedPerUser:
+          type: boolean
+          example: true
+    OrganizationOnboardingStep:
+      required:
+      - isCompleted
+      - step
+      type: object
+      properties:
+        step:
+          type: string
+          description: Identifier of the onboarding step
+          example: addRepositories | enableStatusChecks
+        isCompleted:
+          type: boolean
+    RepositoryFilter:
+      type: string
+      description: "Filters where to fetch the repositories from:\n  * `AllSynced` - All organization's repositories in Codacy. Requires Admin access\n  * `NotSynced` - All organization's repositories fetched from provider.\n  * `Synced` - All organization's repositories that the user has access.\n"
+      enum:
+      - Synced
+      - NotSynced
+      - AllSynced
+      x-ms-enum:
+        name: RepositoryFilter
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    LeaveOrgCheckResult:
+      required:
+      - canLeave
+      - message
+      type: object
+      properties:
+        canLeave:
+          type: boolean
+          description: True if user can leave the organization
+          example: true
+        message:
+          type: string
+          example: Since you are the last organization admin of $orgName, to leave this organization you need to delete it. Please contact us through support.
+        reason:
+          $ref: '#/components/schemas/LeaveOrgProblem'
+      description: Informs if the user can leave the organization and if not, why.
+    Provider:
+      type: string
+      description: Git provider hosting the repository
+      example: gh
+    RepositoryProblem:
+      required:
+      - actions
+      - code
+      - message
+      - severity
+      type: object
+      properties:
+        message:
+          type: string
+          example: We can't analyze this repository because none of the committers are part of the organization.
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+        code:
+          type: string
+          description: A stable identifier for a problem.
+          example: failed_to_clone
+        severity:
+          type: string
+          description: The extent to which this problem affects the repository in terms of analysis execution.
+          example: all_analysis
+    PaymentPlan:
+      required:
+      - isPremium
+      - model
+      - code
+      - monthly
+      - price
+      - pricedPerUser
+      type: object
+      properties:
+        isPremium:
+          type: boolean
+          example: true
+        model:
+          type: string
+          example: Auto
+          enum:
+          - Auto
+          - Manual
+        code:
+          type: string
+          example: trial
+        monthly:
+          type: boolean
+          example: true
+        price:
+          type: integer
+          format: int64
+          example: 1000
+        pricedPerUser:
+          type: boolean
+          example: true
+        alternatePeriodCode:
+          type: string
+          description: 'Plan code for the same tier with opposite billing period (monthly <-> yearly).
+
+            When not available, fall back to default plan selection logic.
+
+            '
+          example: team-yearly
+    Badges:
+      required:
+      - coverage
+      - grade
+      type: object
+      properties:
+        grade:
+          type: string
+          description: Repository grade badge URL
+          example: https://app.codacy.com/project/badge/Grade/d992a862b1994805907ec277e16b0fda
+        coverage:
+          type: string
+          description: Repository coverage badge URL
+          example: https://app.codacy.com/project/badge/Coverage/d992a862b1994805907ec277e16b0fda
+    BillingEstimationResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/BillingEstimation'
+    JiraIntegrationResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/JiraIntegration'
+      description: A response with a Jira integration
+    RequestToJoin:
+      required:
+      - creationDate
+      - email
+      - name
+      type: object
+      properties:
+        email:
+          type: string
+          example: mail@mail.com
+        name:
+          type: string
+          example: a display name
+        numberOfCommits:
+          type: integer
+          format: int32
+        numberOfRepositories:
+          type: integer
+          format: int32
+        lastActivity:
+          type: string
+          format: date-time
+          example: '2020-01-06T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        creationDate:
+          type: string
+          format: date-time
+          example: '2020-01-06T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+    CardCreation:
+      required:
+      - cardToken
+      type: object
+      properties:
+        cardToken:
+          type: string
+    AuditResultType:
+      type: string
+      description: Result of the audit action.
+      enum:
+      - succeed
+      - failed
+      - rejected
+      x-ms-enum:
+        name: AuditResultType
+    Branch:
+      required:
+      - branchType
+      - id
+      - isDefault
+      - isEnabled
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: master
+        isDefault:
+          type: boolean
+          example: true
+        isEnabled:
+          type: boolean
+          example: true
+        lastUpdated:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        branchType:
+          type: string
+          enum:
+          - Branch
+          - PullRequest
+        lastCommit:
+          type: string
+    AuditLog:
+      required:
+      - action
+      - actor
+      - result
+      - timestamp
+      type: object
+      properties:
+        actor:
+          $ref: '#/components/schemas/AuditActor'
+        action:
+          type: string
+          description: Action performed in the event.
+          example: organizations.gatepolicies.repositories.apply
+        result:
+          $ref: '#/components/schemas/AuditResultType'
+        timestamp:
+          type: string
+          description: Timestamp when the event occurred.
+          format: date-time
+          example: '2024-06-28T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        source:
+          type: string
+          description: Source of the event. Possible values are 'UI' (Codacy app) or 'API' (Codacy API).
+          example: UI
+        repositoryName:
+          type: string
+          description: Name of the repository, if the scope of the event action is a repository
+          example: ''
+        description:
+          type: string
+          description: Description of the event.
+          example: Apply gate policy
+        details:
+          type: object
+          properties: {}
+          description: 'Details specific to the performed event action. Includes the JSON-format body of the performed request, and any additional information related to that action.
+
+            '
+          example: '{"link":["repo-one"],"unlink":[]}'
+        entityId:
+          type: string
+          description: 'Identifier of the entity involved in the event. For example, the identifier of the updated gate policy in an event with the action `organizations.gatepolicies.update`.
+
+            '
+          example: '123456'
+      description: Audit log of an event performed by a Codacy user who is part of an organization.
+    Card:
+      required:
+      - maskedNumber
+      - last4
+      - expiryMonth
+      - expiryYear
+      - holderName
+      type: object
+      properties:
+        maskedNumber:
+          type: string
+        last4:
+          type: string
+        expiryMonth:
+          type: integer
+          format: int32
+        expiryYear:
+          type: integer
+          format: int32
+        holderName:
+          type: string
+    SyncProviderSettingOrganizationResponse:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Synced name of the organization
+          example: troubleshoot-codacy
+    UserRole:
+      type: string
+      enum:
+      - admin
+      - manager
+      - member
+      x-ms-enum:
+        name: UserRole
+    AuditActor:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email of the audit actor.
+          example: example@email.com
+        role:
+          $ref: '#/components/schemas/AuditActorRole'
+      description: Actor of the audit event.
+    JiraIntegration:
+      required:
+      - created_at
+      - instance_id
+      - instance_name
+      - organization_id
+      - updated_at
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: Codacy organization ID
+          format: int64
+          example: 867842577
+        instance_id:
+          type: string
+          description: Jira cloud ID of the organization
+          example: 1324a887-45db-1bf4-1e99-ef0ff456d421
+        instance_name:
+          type: string
+          description: Name of the Jira instance that Codacy has access to
+          example: codacy
+        created_at:
+          type: string
+          format: date-time
+          example: '2020-11-09T09:10:00Z'
+          x-scala-type: java.time.Instant
+        updated_at:
+          type: string
+          format: date-time
+          example: '2020-11-09T09:10:00Z'
+          x-scala-type: java.time.Instant
+      description: Details of a Jira integration for the security and risk management feature.
+    RepositoryStack:
+      required:
+      - commitUuid
+      - stackTags
+      - discoveredAt
+      type: object
+      properties:
+        commitUuid:
+          type: string
+          description: Commit UUID where the repository stack was discovered.
+          example: 2f4d2d3f9a7d4e9f8d0fbb4f2f7d2e1b4a5c6d7e
+        stackTags:
+          type: array
+          description: Prefixed stack tags detected for the repository.
+          example:
+          - fwk:react
+          - tool:eslint
+          items:
+            type: string
+        discoveredAt:
+          type: string
+          description: Timestamp when the repository stack was discovered.
+          format: date-time
+          example: '2026-08-25T15:10:00Z'
+          x-scala-type: java.time.Instant
+    AddedState:
+      type: string
+      description: 'Added state of the repository on Codacy. Valid values are `NotAdded` (the repository was not added to Codacy), `Added` (the repository was added to Codacy), or `Following` (the current user is following a repository added to Codacy).
+
+        '
+      example: Added
+      enum:
+      - NotAdded
+      - Added
+      - Following
+      x-ms-enum:
+        name: AddedState
+    SlackIntegration:
+      required:
+      - created_at
+      - organization_id
+      - updated_at
+      - webhook_url
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: Codacy organization ID
+          format: int64
+          example: 867842577
+        webhook_url:
+          pattern: https:\/\/hooks\.slack\.com\/services\/T[a-zA-Z0-9_]{8,10}\/B[a-zA-Z0-9_]{8,10}\/[a-zA-Z0-9_]{24}
+          type: string
+          description: Slack Incoming Webhook URL to post notifications to.
+          example: https://hooks.slack.com/services/REDACTED
+        created_at:
+          type: string
+          format: date-time
+          example: '2020-11-09T09:10:00Z'
+          x-scala-type: java.time.Instant
+        updated_at:
+          type: string
+          format: date-time
+          example: '2020-11-09T09:10:00Z'
+          x-scala-type: java.time.Instant
+      description: Details of a Slack integration.
+    OrganizationOnboardingProgressResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          description: Completeness status of each onboarding step
+          items:
+            $ref: '#/components/schemas/OrganizationOnboardingStep'
+    AddOrganizationResponse:
+      required:
+      - organization
+      type: object
+      properties:
+        organization:
+          $ref: '#/components/schemas/Organization'
+        warnings:
+          type: array
+          items:
+            type: string
+    JoinMode:
+      type: string
+      enum:
+      - auto
+      - adminAuto
+      - request
+      x-ms-enum:
+        name: JoinMode
+    Visibility:
+      type: string
+      description: Visibility of the repository
+      example: Private
+      enum:
+      - Public
+      - Private
+      - LoginPublic
+      x-ms-enum:
+        name: Visibility
+    AddOrganizationBody:
+      required:
+      - name
+      - provider
+      - remoteIdentifier
+      - type
+      type: object
+      properties:
+        provider:
+          $ref: '#/components/schemas/Provider'
+        remoteIdentifier:
+          type: string
+        name:
+          type: string
+          example: FooOrganization
+        type:
+          $ref: '#/components/schemas/OrganizationType'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodacyProduct'
+    SlackIntegrationRequest:
+      required:
+      - webhook_url
+      type: object
+      properties:
+        webhook_url:
+          pattern: https:\/\/hooks\.slack\.com\/services\/T[a-zA-Z0-9_]{8,10}\/B[a-zA-Z0-9_]{8,10}\/[a-zA-Z0-9_]{24}
+          type: string
+          description: Slack Incoming Webhook URL to post notifications to.
+          example: https://hooks.slack.com/services/REDACTED
+      description: The request body to create or update the Slack integration of the organization.
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    SlackIntegrationResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SlackIntegration'
+    OrganizationBillingPlan:
+      required:
+      - code
+      - isPremium
+      type: object
+      properties:
+        isPremium:
+          type: boolean
+        code:
+          type: string
+    PaymentProvider:
+      type: string
+      enum:
+      - stripe
+      - chargebee
+      - direct
+      - github
+    ProductPaywall:
+      required:
+      - securityDashboard
+      type: object
+      properties:
+        securityDashboard:
+          type: boolean
+          example: true
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    OrganizationBillingInformationResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/OrganizationBillingInformation'
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    AuditActorRole:
+      type: string
+      description: Role of the audit actor.
+      example: repositoryAdmin
+      enum:
+      - repositoryRead
+      - repositoryWrite
+      - repositoryAdmin
+      - organizationMember
+      - organizationManager
+      - organizationAdmin
+      x-ms-enum:
+        name: Role
+    ProductSubscription:
+      required:
+      - product
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/CodacyProduct'
+        plan:
+          $ref: '#/components/schemas/OrganizationBillingPlan'
+        paywall:
+          $ref: '#/components/schemas/ProductPaywall'
+    LeaveOrgProblem:
+      required:
+      - actions
+      - code
+      type: object
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+        code:
+          type: string
+          description: A stable identifier for a problem.
+          example: last_admin_credit
+    JoinResponse:
+      required:
+      - joinStatus
+      - organizationIdentifier
+      type: object
+      properties:
+        organizationIdentifier:
+          type: integer
+          format: int64
+        joinStatus:
+          $ref: '#/components/schemas/JoinStatus'
+    ChangePlan:
+      type: object
+      required:
+      - code
+      properties:
+        code:
+          type: string
+          description: The code that uniquely identifies the payment plan
+        promoCode:
+          type: string
+    Membership:
+      required:
+      - userRole
+      type: object
+      properties:
+        userRole:
+          $ref: '#/components/schemas/UserRole'
+    BillingDetailsUpdate:
+      type: object
+      required:
+      - firstName
+      - lastName
+      - billingEmail
+      - country
+      - vat
+      - address
+      - zip
+      - state
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        billingEmail:
+          type: string
+        country:
+          type: string
+        vat:
+          type: string
+        address:
+          type: string
+        zip:
+          type: string
+        state:
+          type: string
+    CheckSubmodulesResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: boolean
+          description: True if the submodules option is enabled for the organization, false otherwise
+    TaxEstimation:
+      type: object
+      required:
+      - name
+      - rate
+      - valueDollars
+      properties:
+        name:
+          type: string
+        rate:
+          type: number
+          format: double
+        valueDollars:
+          type: number
+          format: double
+    Reason:
+      required:
+      - notes
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+        notes:
+          type: array
+          items:
+            type: string
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    ProviderIntegrationSettingsPatchBody:
+      type: object
+      properties:
+        commitStatus:
+          type: boolean
+          description: Toggle the feature "Status checks"
+        pullRequestComment:
+          type: boolean
+          description: Toggle the feature "Issue annotations"
+        pullRequestSummary:
+          type: boolean
+          description: Toggle the feature "Issue summaries"
+        coverageSummary:
+          type: boolean
+          description: Toggle the feature "Coverage summary" (GitHub only)
+        suggestions:
+          type: boolean
+          description: Toggle the feature "Suggested fixes" (GitHub only)
+        aiEnhancedComments:
+          type: boolean
+          description: 'Toggle the feature "AI-enhanced comments". If "Suggested fixes" (GitHub only) is also enabled, then the AI-enhanced comments also provide suggested fixes.
+
+            '
+        aiPullRequestReviewer:
+          type: boolean
+          description: 'Toggle the feature "AI Pull Request Reviewer" (GitHub only). When enabled, Codacy will use AI to review pull requests and provide comments on code quality and potential issues.
+
+            '
+        aiPullRequestReviewerAutomatic:
+          type: boolean
+          description: 'Toggle the feature "AI Pull Request Reviewer Automatic" (GitHub only). When enabled, Codacy will use AI to review pull requests and provide comments on code quality and potential issues automatically once, subsequent reviews will have to be explicitly requested.
+
+            '
+        pullRequestUnifiedSummary:
+          type: boolean
+          description: 'Toggle the feature "Pull Request Unified Summary" (GitHub only). When enabled, Codacy provides a unified summary (coverage and analysis).
+
+            '
+      description: Default settings for Git provider integrations
+    MethodNotAllowed:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: MethodNotAllowed
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    Paywall:
+      required:
+      - organizationDashboard
+      - securityDashboard
+      type: object
+      properties:
+        organizationDashboard:
+          type: boolean
+          description: Deprecated, use OrganizationPaywall instead.
+          example: true
+        securityDashboard:
+          type: boolean
+          description: Deprecated, use subscriptions.paywall.securityDashboard instead.
+          example: true
+      description: Deprecated, use ProductPaywall and OrganizationPaywall instead.
+    Permission:
+      type: string
+      enum:
+      - admin
+      - write
+      - read
+      x-ms-enum:
+        name: Permission
+    Organization:
+      required:
+      - name
+      - provider
+      - remoteIdentifier
+      - singleProviderLogin
+      - type
+      - hasDastAccess
+      - dastTargetsLimit
+      - hasScaEnabled
+      - imageSbomEnabled
+      type: object
+      properties:
+        identifier:
+          type: integer
+          format: int64
+        remoteIdentifier:
+          type: string
+        name:
+          type: string
+          example: FooOrganization
+        avatar:
+          type: string
+          example: someRandomLink.com
+        created:
+          type: string
+          format: date-time
+          example: '2019-05-07T14:29:13.43Z'
+          x-scala-type: java.time.Instant
+        provider:
+          $ref: '#/components/schemas/Provider'
+        joinMode:
+          $ref: '#/components/schemas/JoinMode'
+        type:
+          $ref: '#/components/schemas/OrganizationType'
+        joinStatus:
+          $ref: '#/components/schemas/JoinStatus'
+        singleProviderLogin:
+          type: boolean
+        hasDastAccess:
+          type: boolean
+        dastTargetsLimit:
+          type: integer
+          format: int32
+        hasScaEnabled:
+          type: boolean
+        imageSbomEnabled:
+          type: boolean
+        hasAiInventoryEnabled:
+          type: boolean
+        hasWebhooksEnabled:
+          type: boolean
+        hasFalsePositiveAccess:
+          type: boolean
+        hasSilentFalsePositiveDetection:
+          type: boolean
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+  responses:
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    PaymentRequired:
+      description: PaymentRequired
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaymentRequired'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+    BadGateway:
+      description: Bad Gateway
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadGateway'
+      x-ms-error-response: true
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    MethodNotAllowed:
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MethodNotAllowed'
+      x-ms-error-response: true
+  parameters:
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    fromParam:
+      name: from
+      in: query
+      description: Starting timestamp of audit logs in unix epoch milliseconds. Defaults to the earliest available time if not provided.
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 1720446021296
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    searchParam:
+      name: search
+      in: query
+      description: Filter results by searching for this string
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: my-repository-name
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    oauthCodeParam:
+      name: oauthCode
+      in: query
+      description: The OAuth code to allow authentication as the user installing the Jira App.
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 6nGtF5eij1YuEqQXr7L9OxA0RLHZ21tEQNZq1DZJzuY
+      x-ms-parameter-location: method
+    paymentPlanCodeParam:
+      name: paymentPlanCode
+      in: query
+      description: Payment plan code (available codes can be retrieved using [listPaymentPlans](#listpaymentplans))
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+        example: standard-team
+      x-ms-parameter-location: method
+    toParam:
+      name: to
+      in: query
+      description: Ending timestamp of audit logs in unix epoch milliseconds. Defaults to the current time if not provided.
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 1726233785428
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    accountIdentifierParam:
+      name: accountIdentifier
+      in: path
+      description: Unique identifier for the account
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+    stackTagsFilterParam:
+      name: stackTags
+      in: query
+      description: Comma-separated list of detected stack tags to filter repositories by
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: fwk:react,lib:lodash,tool:eslint
+      x-ms-parameter-location: method
+    repositoryFilterParam:
+      name: filter
+      in: query
+      description: Filter for which repositories to return. Use `Synced` for repositories the user has access to, `NotSynced` for repositories fetched from the provider, or `AllSynced` for all organization repositories (requires admin access)
+      schema:
+        $ref: '#/components/schemas/RepositoryFilter'
+      example: Synced
+      x-ms-parameter-location: method
+      x-ms-enum:
+        name: RepositoryFilter
+    segmentsParam:
+      name: segments
+      in: query
+      description: Filter by a comma-separated list of segment identifiers
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 1,2,3
+      x-ms-parameter-location: method
+    languagesFilterParam:
+      name: languages
+      in: query
+      description: Comma-separated list of programming languages to filter results by
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Scala,Java,Javascript
+      x-ms-parameter-location: method
+  requestBodies:
+    emailListParam:
+      description: List of emails
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+      required: true
+    billingDetailsUpdateRequest:
+      description: New billing information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingDetailsUpdate'
+      required: true
+    cardCreationRequest:
+      description: Request to add a card to the organization
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CardCreation'
+      required: true
+    churnFeedbackParam:
+      description: Reasons
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChurnFeedback'
+      required: false
+    changePlanRequest:
+      description: Request to change the payment plan of an organization
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChangePlan'
+      required: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

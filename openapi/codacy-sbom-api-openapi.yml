@@ -1,0 +1,1154 @@
+openapi: 3.2.0
+info:
+  title: Codacy Sbom API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: sbom
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/sbom/dependencies/search:
+    post:
+      tags:
+      - sbom
+      summary: Return a list of SBOM dependencies, used across the organization
+      operationId: searchSbomDependencies
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      - name: sortColumn
+        in: query
+        description: Field used to sort the results. The possible values are `severity` (default, to sort by the item's severity), or `order` (to sort by the OSSF order).
+        schema:
+          type: string
+          default: severity
+          enum:
+          - severity
+          - ossfScore
+      - name: columnOrder
+        in: query
+        description: Sort direction. The possible values are `asc` (ascending) or `desc` (descending - default).
+        schema:
+          type: string
+          default: desc
+          enum:
+          - asc
+          - desc
+      requestBody:
+        description: Request body with filters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSbomDependenciesBody'
+        required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchSbomDependenciesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: sbom
+      x-codegen-request-body-name: searchSbomDependenciesBody
+  /organizations/{provider}/{remoteOrganizationName}/sbom/dependencies/repositories/search:
+    post:
+      tags:
+      - sbom
+      summary: Return a paginated list of repositories where a version of the specified SBOM…
+      operationId: searchRepositoriesOfSbomDependency
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        description: Request body with filters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRepositoriesOfSbomDependencyBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchRepositoriesOfSbomDependencyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: sbom
+      x-codegen-request-body-name: searchRepositoriesOfSbomDependencyBody
+  /organizations/{provider}/{remoteOrganizationName}/sbom/repositories/search:
+    post:
+      tags:
+      - sbom
+      summary: List repositories with SBOM dependency information
+      operationId: searchSbomRepositories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        description: Request body with filters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSbomRepositoriesBody'
+        required: false
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future.
+              schema:
+                type: string
+                enum:
+                - experimental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchSbomRepositoriesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+      x-jvm-package: sbom
+      x-codegen-request-body-name: searchSbomRepositoriesBody
+  /organizations/{provider}/{remoteOrganizationName}/projects/{repositoryName}/sbom:
+    get:
+      x-jvm-package: sbom
+      tags:
+      - sbom
+      summary: Get a presigned URL for the latest SBOM of the repository
+      operationId: getRepositorySbomPresignedUrl
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SbomPresignResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /organizations/{provider}/{remoteOrganizationName}/image-sboms:
+    post:
+      x-jvm-package: sbom
+      tags:
+      - sbom
+      summary: Upload an SBOM for a Docker image
+      operationId: uploadImageSbom
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                sbom:
+                  type: string
+                  description: SBOM file (SPDX or CycloneDX format)
+                  format: binary
+                imageName:
+                  type: string
+                  description: Name of the Docker image
+                tag:
+                  type: string
+                  description: Tag of the Docker image
+                repositoryName:
+                  type: string
+                  description: Repository name
+                environment:
+                  type: string
+                  description: Environment where the image is deployed
+              required:
+              - sbom
+              - imageName
+              - tag
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /organizations/{provider}/{remoteOrganizationName}/image-sboms/{imageName}:
+    delete:
+      tags:
+      - sbom
+      summary: Delete all SBOMs for a given image
+      operationId: deleteImageSboms
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/imageNameParam'
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: sbom
+  /organizations/{provider}/{remoteOrganizationName}/image-sboms/{imageName}/tags/{tag}:
+    delete:
+      tags:
+      - sbom
+      summary: Delete SBOM for a given image/tag combination
+      operationId: deleteImageTag
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/imageNameParam'
+      - $ref: '#/components/parameters/imageTagParam'
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: sbom
+  /organizations/{provider}/{remoteOrganizationName}/images:
+    get:
+      x-jvm-package: sbom
+      tags:
+      - sbom
+      summary: List Docker images for an organization
+      operationId: listOrganizationImages
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListImagesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /organizations/{provider}/{remoteOrganizationName}/images/{imageName}/tags:
+    get:
+      x-jvm-package: sbom
+      tags:
+      - sbom
+      summary: List Docker image tags for an organization
+      operationId: listImageTags
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/imageNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListImageTagsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    RepositorySummaryOfSbomDependency:
+      required:
+      - id
+      - name
+      - licenses
+      - licensesDetails
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The identifier of the repository.
+          format: int64
+        name:
+          type: string
+          description: The name of the repository.
+        dependencyVersion:
+          type: string
+          description: The exact version of the dependency this repository is using.
+        highestFindingSeverity:
+          type: string
+          description: The highest severity of the findings found for this dependency in this repository.
+        licenses:
+          type: array
+          items:
+            type: string
+            x-scala-type: String
+          description: Deprecated use licensesDetails instead
+          deprecated: true
+        licensesDetails:
+          type: array
+          description: Detailed license information for the dependency used in this repository.
+          items:
+            $ref: '#/components/schemas/LicensesDetails'
+      description: Summary of a repository where a given dependency is used.
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    ListImageTagsResponse:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageTagSummary'
+      required:
+      - pagination
+      - data
+    DependenciesOverviewOfSbomRepositories:
+      required:
+      - filteredDependenciesCount
+      - filteredRepositoriesCount
+      - totalDependenciesCount
+      - totalRepositoriesCount
+      type: object
+      properties:
+        totalRepositoriesCount:
+          type: integer
+          description: The total number of repositories for which there is dependency information. This number does not change with filtering.
+          format: int32
+        filteredRepositoriesCount:
+          type: integer
+          description: The total number of filtered repositories for which there is dependency information.
+          format: int32
+        totalDependenciesCount:
+          type: integer
+          description: 'The total number of dependencies found across repositories for which there is dependency information. If the same dependency is used in multiple repositories, it will be counted multiple times. This number does not change with filtering.
+
+            '
+          format: int64
+        filteredDependenciesCount:
+          type: integer
+          description: 'The total number of filtered dependencies found across repositories for which there is dependency information. If the same dependency is used in multiple repositories, it will be counted multiple times.
+
+            '
+          format: int64
+      description: Overview of dependencies used across repositories.
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    LicensesDetails:
+      type: object
+      description: Detailed information about a license.
+      properties:
+        name:
+          type: string
+          description: The name of the license.
+        url:
+          type: string
+          description: The license's official page.
+        isOsiApproved:
+          type: boolean
+          description: Whether the license is OSI approved.
+        isFsfLibre:
+          type: boolean
+          description: Whether the license is FSF libre.
+        riskCategory:
+          $ref: '#/components/schemas/LicenseRiskCategory'
+          description: The license risk category.
+        isDerivedByAi:
+          type: boolean
+          description: Whether the license details were derived by AI.
+    SearchSbomDependenciesBody:
+      type: object
+      description: Request body for searching dependencies.
+      properties:
+        text:
+          type: string
+          description: Text search query. Matches against SBOM component fields (purl, full_name).
+        repositories:
+          type: array
+          description: Repository names to filter by.
+          items:
+            type: string
+        segments:
+          type: array
+          description: Segments ids to filter by.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            format: int64
+        findingSeverities:
+          type: array
+          description: Finding severities to filter by. Possible values are `Critical`, `High`, `Medium`, `Low`.
+          items:
+            $ref: '#/components/schemas/FindingSeverity'
+        riskCategories:
+          type: array
+          description: License Risk categories to filter by.
+          items:
+            $ref: '#/components/schemas/LicenseRiskCategory'
+    LicenseRiskCategory:
+      type: string
+      description: The risk category of a license.
+      enum:
+      - Forbidden
+      - Restricted
+      - Reciprocal
+      - Notice
+      - Permissive
+      - Unencumbered
+      - Unknown
+    OpenFindingsCount:
+      required:
+      - open
+      - severity
+      type: object
+      properties:
+        severity:
+          type: string
+          description: The findings' severity.
+        open:
+          type: integer
+          description: The number of open findings.
+          format: int32
+      description: The open findings count for a given severity.
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    NotImplemented:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotImplemented
+    RepositoriesOverviewOfSbomDependency:
+      type: object
+      required:
+      - fullName
+      - filteredVersionsCount
+      - totalRepositoriesCount
+      - filteredRepositoriesCount
+      properties:
+        name:
+          type: string
+          description: The dependency name.
+          example: logback-classic
+        fullName:
+          type: string
+          description: The dependency full name.
+          example: maven/ch.qos.logback/logback-classic
+        purl:
+          type: string
+          description: The purl of the dependency.
+          example: maven:ch.qos.logback:logback-classic:1.2.3
+        ossfScore:
+          type: number
+          description: The ossf score of the dependency.
+          format: double
+        latestVersion:
+          type: string
+          description: The latest version of this dependency that is being used across filtered repositories.
+          example: 10.1.2
+        oldestVersion:
+          type: string
+          description: The oldest version of this dependency that is being used across filtered repositories.
+          example: 1.2.3
+        totalVersionsCount:
+          type: integer
+          description: How many dependency versions are being used across repositories. This number does not change with filtering.
+          format: int32
+        filteredVersionsCount:
+          type: integer
+          description: How many dependency versions are being used across the filtered repositories.
+          format: int32
+        totalRepositoriesCount:
+          type: integer
+          description: How many repositories are using a version of this dependency. This number does not change with filtering.
+          format: int32
+        filteredRepositoriesCount:
+          type: integer
+          description: How many repositories matching the filters are using a version of this dependency.
+          format: int32
+      description: Overview of how a dependency is used across repositories.
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    DependenciesSummaryOfSbomRepository:
+      required:
+      - dependenciesCount
+      - dependenciesFindings
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The identifier of the repository.
+          format: int64
+        name:
+          type: string
+          description: The name of the repository.
+        dependenciesCount:
+          minimum: 0
+          type: integer
+          description: The number of dependencies this repository has, including indirect dependencies
+          format: int32
+        dependenciesFindings:
+          type: array
+          description: An array containing the open findings count, per severity, found for this repository's dependencies
+          items:
+            $ref: '#/components/schemas/OpenFindingsCount'
+      description: Summary of the dependencies of a repository.
+    SbomPresignResponse:
+      description: Response containing a presigned URL to download the repository SBOM.
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Presigned S3 URL to download the SBOM JSON.
+      required:
+      - url
+    SbomDependenciesOverview:
+      required:
+      - filteredDependenciesCount
+      - filteredRepositoriesCount
+      - totalDependenciesCount
+      - totalRepositoriesCount
+      type: object
+      properties:
+        totalRepositoriesCount:
+          type: integer
+          description: The total number of repositories for which there is dependency information. This number does not change with filtering.
+          format: int32
+        filteredRepositoriesCount:
+          type: integer
+          description: The total number of filtered repositories for which there is dependency information.
+          format: int32
+        totalDependenciesCount:
+          type: integer
+          description: 'The total number of dependencies found across repositories for which there is dependency information. If the same dependency is used in multiple repositories, it will be counted multiple times. This number does not change with filtering.
+
+            '
+          format: int64
+        filteredDependenciesCount:
+          type: integer
+          description: 'The total number of filtered dependencies found across repositories for which there is dependency information. If the same dependency is used in multiple repositories, it will be counted multiple times.
+
+            '
+          format: int64
+      description: Overview of a search dependencies request.
+    ImageSummary:
+      type: object
+      properties:
+        imageName:
+          type: string
+          description: The name of the Docker image
+          example: codacy/service-a
+        latestTag:
+          type: string
+          description: The most recently uploaded tag for this image
+          example: 1.0.0
+        lastSbomUploaded:
+          type: string
+          format: date-time
+          description: Timestamp when the last SBOM was uploaded
+          x-scala-type: java.time.Instant
+        lastSbomGenerated:
+          type: string
+          format: date-time
+          description: Timestamp when the last SBOM was generated
+          x-scala-type: java.time.Instant
+        tagCount:
+          type: integer
+          format: int32
+          description: Number of tags uploaded for this image
+          example: 12
+      required:
+      - imageName
+      - tagCount
+    BadGateway:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadGateway
+    ImagesUsage:
+      type: object
+      properties:
+        imageTags:
+          type: integer
+          format: int32
+          description: Number of image tags uploaded across the organization, counted against the limit
+          example: 750
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of image tags allowed for the organization
+          example: 1000
+      required:
+      - imageTags
+      - limit
+    SearchRepositoriesOfSbomDependencyResponse:
+      required:
+      - data
+      - overview
+      - pagination
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepositorySummaryOfSbomDependency'
+        overview:
+          $ref: '#/components/schemas/RepositoriesOverviewOfSbomDependency'
+      description: Response body for searching the repositories where a given dependency is used.
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    ListImagesResponse:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageSummary'
+        usage:
+          $ref: '#/components/schemas/ImagesUsage'
+      required:
+      - pagination
+      - data
+      - usage
+    SearchSbomRepositoriesResponse:
+      required:
+      - data
+      - overview
+      - pagination
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DependenciesSummaryOfSbomRepository'
+        overview:
+          $ref: '#/components/schemas/DependenciesOverviewOfSbomRepositories'
+      description: Response body for searching repositories with dependency information.
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    SearchSbomDependenciesResponse:
+      required:
+      - data
+      - overview
+      - pagination
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SbomDependencySummary'
+        overview:
+          $ref: '#/components/schemas/SbomDependenciesOverview'
+      description: Response body for searching dependencies.
+    SearchRepositoriesOfSbomDependencyBody:
+      type: object
+      required:
+      - dependencyFullName
+      description: Request body for searching the repositories where a dependency is used.
+      properties:
+        dependencyFullName:
+          type: string
+          description: The full name of the dependency to search for.
+        repositoriesFilter:
+          type: array
+          description: Repository names to filter by.
+          items:
+            type: string
+    FindingSeverity:
+      type: string
+      description: Finding severity level. Possible values are `Critical`, `High`, `Medium`, `Low`.
+      example: Critical
+      enum:
+      - Critical
+      - High
+      - Medium
+      - Low
+      x-ms-enum:
+        name: FindingSeverity
+    ImageTagSummary:
+      type: object
+      properties:
+        imageName:
+          type: string
+          description: The name of the Docker image
+          example: codacy/service-a
+        tag:
+          type: string
+          description: Tag of the Docker image
+        environment:
+          type: string
+          description: Environment where the image is deployed
+        repositoryId:
+          type: integer
+          format: int64
+          description: The repository id associated with this image tag
+        repositoryName:
+          type: string
+          description: The repository name associated with this image tag
+        generatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the SBOM for this image tag was generated
+          x-scala-type: java.time.Instant
+        uploadedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the SBOM was uploaded to the system
+          x-scala-type: java.time.Instant
+        scanStatus:
+          type: string
+          deprecated: true
+          format: date-time
+          description: '**Deprecated:** Use `lastAnalysedAt` instead.
+
+            The timestamp when this image tag was last analysed.
+
+            '
+          x-scala-type: java.time.Instant
+        lastAnalysedAt:
+          type: string
+          format: date-time
+          description: The timestamp when this image tag was last analysed
+          x-scala-type: java.time.Instant
+      required:
+      - imageName
+      - tag
+      - generatedAt
+      - uploadedAt
+    SbomDependencySummary:
+      required:
+      - findings
+      - fullName
+      - repositoriesCount
+      - versionsCount
+      - licensesDetails
+      type: object
+      properties:
+        fullName:
+          type: string
+          description: The full name of the dependency.
+          example: maven/ch.qos.logback/logback-classic
+        purl:
+          type: string
+          description: The purl of the dependency.
+          example: maven:ch.qos.logback:logback-classic:1.2.3
+        ossfScore:
+          type: number
+          description: The ossf score of the dependency.
+          format: double
+        repositoriesCount:
+          minimum: 0
+          type: integer
+          description: The number of repositories where a version of this dependency is used.
+          format: int32
+        versionsCount:
+          minimum: 1
+          type: integer
+          description: The number of versions this dependency has across repositories.
+          format: int32
+        findings:
+          type: array
+          description: An array containing the open findings count, per severity, found for this dependency
+          items:
+            $ref: '#/components/schemas/OpenFindingsCount'
+        licensesDetails:
+          type: array
+          description: Detailed license information for this dependency.
+          items:
+            $ref: '#/components/schemas/LicensesDetails'
+      description: Summary of a dependency.
+    SearchSbomRepositoriesBody:
+      type: object
+      description: Request body for searching dependencies by repository.
+      example:
+      - cargo/addr2line
+      - cargo/addr2line
+      - cargo/adler
+      - cargo/ahash
+      - cargo/aho-corasi
+      - cargo/backtrace
+      - cargo/bitflags
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    NotImplemented:
+      description: Not Implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotImplemented'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+    BadGateway:
+      description: Bad Gateway
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadGateway'
+      x-ms-error-response: true
+  parameters:
+    repositoryNameParam:
+      name: repositoryName
+      in: path
+      description: Repository name on the Git provider organization
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: awesome-repo
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    imageTagParam:
+      name: tag
+      in: path
+      description: Image Tag of the SBOM Image
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    imageNameParam:
+      name: imageName
+      in: path
+      description: Image name of the SBOM Image
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

@@ -1,0 +1,1594 @@
+openapi: 3.2.0
+info:
+  title: Codacy coding standards API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: coding standards
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/ai-risk-checklist:
+    get:
+      tags:
+      - coding standards
+      summary: Get AI Risk Checklist for an organization
+      operationId: getAiRiskCheckList
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: List of AI Risk Checklist for an organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiRiskChecklistResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards:
+    get:
+      tags:
+      - coding standards
+      summary: List the coding standards for an organization, including draft coding standards
+      operationId: listCodingStandards
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: List of coding standards for an organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingStandardsListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+    post:
+      tags:
+      - coding standards
+      summary: Create a draft coding standard for an organization
+      description: To promote the draft coding standard to an effective coding standard, see promoteDraftCodingStandard.
+      operationId: createCodingStandard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/sourceRepositoryParam'
+      - $ref: '#/components/parameters/sourceCodingStandardParam'
+      requestBody:
+        description: Details of the coding standard to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCodingStandardBody'
+        required: true
+      responses:
+        '201':
+          description: Successfully created a coding standard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingStandardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          description: An unexpected error occurred while creating the coding standard
+          $ref: '#/components/responses/InternalServerError'
+          x-ms-error-response: true
+      x-jvm-package: standards
+      x-codegen-request-body-name: createCodingStandardBody
+  /organizations/{provider}/{remoteOrganizationName}/compliance-standards:
+    post:
+      tags:
+      - coding standards
+      summary: Create a compliance standard for an organization
+      operationId: createComplianceStandard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Details of the compliance standard to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateComplianceStandardBody'
+        required: true
+      responses:
+        '201':
+          description: Successfully created a compliance standard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingStandardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+          x-ms-error-response: true
+      x-jvm-package: standards
+  /organizations/{provider}/{remoteOrganizationName}/presets-standards:
+    post:
+      tags:
+      - coding standards
+      summary: Create a coding standard for an organization choosing from a series of presets
+      operationId: createCodingStandardPreset
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Details of the coding standard to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCodingStandardPresetBody'
+        required: true
+      responses:
+        '201':
+          description: Successfully created a coding standard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingStandardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          description: An unexpected error occurred while creating the coding standard
+          $ref: '#/components/responses/InternalServerError'
+          x-ms-error-response: true
+      x-jvm-package: standards
+      x-codegen-request-body-name: createCodingStandardPresetBody
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}:
+    get:
+      tags:
+      - coding standards
+      summary: Get a coding standard
+      operationId: getCodingStandard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingStandardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+    delete:
+      tags:
+      - coding standards
+      summary: Delete a coding standard
+      operationId: deleteCodingStandard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          description: An unexpected error occurred while deleting a coding standard
+          $ref: '#/components/responses/InternalServerError'
+          x-ms-error-response: true
+      x-jvm-package: standards
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}/duplicate:
+    post:
+      tags:
+      - coding standards
+      summary: Duplicate a coding standard
+      operationId: duplicateCodingStandard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingStandardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}/tools:
+    get:
+      tags:
+      - coding standards
+      summary: List tools in a coding standard
+      operationId: listCodingStandardTools
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingStandardToolsListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          description: An unexpected error occurred while listing the tools of the coding standard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          x-ms-error-response: true
+      x-jvm-package: standards
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}/setDefault:
+    post:
+      tags:
+      - coding standards
+      summary: Set the default coding standard for an organization
+      operationId: setDefaultCodingStandard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetDefaultCodingStandardBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+      x-codegen-request-body-name: setDefaultCodingStandard
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}/tools/{toolUuid}/patterns:
+    get:
+      tags:
+      - coding standards
+      summary: List the code patterns configured for a tool in a coding standard
+      operationId: listCodingStandardPatterns
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/languagesFilterParam'
+      - $ref: '#/components/parameters/categoriesParam'
+      - $ref: '#/components/parameters/severityLevelsParam'
+      - $ref: '#/components/parameters/tagsParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/enabledPatternParam'
+      - $ref: '#/components/parameters/recommendedPatternParam'
+      - $ref: '#/components/parameters/patternsSortParam'
+      - $ref: '#/components/parameters/directionParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfiguredPatternsListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}/tools/{toolUuid}/patterns/overview:
+    get:
+      tags:
+      - coding standards
+      summary: Get patterns overview for a coding standard tool
+      operationId: codingStandardToolPatternsOverview
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/languagesFilterParam'
+      - $ref: '#/components/parameters/categoriesParam'
+      - $ref: '#/components/parameters/severityLevelsParam'
+      - $ref: '#/components/parameters/tagsParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/enabledPatternParam'
+      - $ref: '#/components/parameters/recommendedPatternParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolPatternsOverviewResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}/tools/{toolUuid}/patterns/update:
+    post:
+      tags:
+      - coding standards
+      summary: Bulk update the code patterns of a tool in a coding standard
+      description: Use filters to specify the code patterns to update, or omit the filters to update all code patterns.
+      operationId: updateCodingStandardPatterns
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      - $ref: '#/components/parameters/languagesFilterParam'
+      - $ref: '#/components/parameters/categoriesParam'
+      - $ref: '#/components/parameters/severityLevelsParam'
+      - $ref: '#/components/parameters/tagsParam'
+      - $ref: '#/components/parameters/searchParam'
+      - $ref: '#/components/parameters/recommendedPatternParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePatternsBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+      x-codegen-request-body-name: updateCodingStandardPatternsBody
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}/tools/{toolUuid}:
+    patch:
+      tags:
+      - coding standards
+      summary: Configure a tool in a draft coding standard
+      description: 'Toggle a tool and configure its code patterns in a draft coding standard.
+
+        Only the code patterns included in the body are updated, and if there are none only the enabled status of the tool is set.
+
+        You can only update draft coding standards and configure a maximum of 1000 code patterns per call.'
+      operationId: updateCodingStandardToolConfiguration
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      - $ref: '#/components/parameters/toolUuidParam'
+      requestBody:
+        $ref: '#/components/requestBodies/toolConfigurationParam'
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}/repositories:
+    get:
+      tags:
+      - coding standards
+      summary: List the repositories that are using a coding standard
+      operationId: listCodingStandardRepositories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingStandardRepositoriesListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+    patch:
+      tags:
+      - coding standards
+      summary: Apply a coding standard to a list of repositories
+      description: 'Link or unlink a coding standard to a list of repositories.
+
+        If the coding standard is a draft, the changes will only be effective when promoting the draft coding standard.'
+      operationId: applyCodingStandardToRepositories
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyCodingStandardToRepositoriesBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplyCodingStandardToRepositoriesResultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+      x-codegen-request-body-name: applyCodingStandardToRepositoriesBody
+  /organizations/{provider}/{remoteOrganizationName}/coding-standards/{codingStandardId}/promote:
+    post:
+      tags:
+      - coding standards
+      summary: Promote a draft coding standard to an effective coding standard
+      description: If the draft coding standard is marked as default, it becomes the new default coding standard. The response includes the result of applying the coding standard to the repositories.
+      operationId: promoteDraftCodingStandard
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/codingStandardIdParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplyCodingStandardToRepositoriesResultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: standards
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    CreateComplianceStandardBody:
+      required:
+      - name
+      - complianceType
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the compliance standard
+          example: AI Usage Compliance
+        complianceType:
+          $ref: '#/components/schemas/ComplianceType'
+      description: Details required to create a compliance standard
+    ApplyCodingStandardToRepositoriesResultResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ApplyCodingStandardToRepositoriesResult'
+    UpdatePatternsBody:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: True enables the code patterns, and False disables them.
+      description: Specifies the update to apply to the code patterns of a tool in a coding standard
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    RepositoryIdentification:
+      required:
+      - name
+      - repositoryId
+      type: object
+      properties:
+        repositoryId:
+          type: integer
+          description: Identifier of the repository
+          format: int64
+        name:
+          type: string
+          description: Name of the repository
+          example: codacy-eslint
+      description: Identifier and name of a repository using a coding standard
+    ConfiguredParameter:
+      required:
+      - name
+      - value
+      type: object
+      properties:
+        name:
+          type: string
+          description: Code pattern parameter name
+          example: getWithoutSet
+        value:
+          type: string
+          description: Code pattern parameter value
+          example: 'true'
+      description: Parameter to configure a code pattern for a tool
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+    CodingStandardsListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodingStandard'
+      description: List of coding standards for an organization
+    ToolConfiguration:
+      required:
+      - patterns
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: True if the tool is enabled in the repository or coding standard
+          example: true
+        patterns:
+          type: array
+          description: List of code pattern configurations
+          items:
+            $ref: '#/components/schemas/PatternConfiguration'
+      description: Configuration of a tool and its code patterns
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    Pattern:
+      description: Code pattern that a Codacy tool can use to find issues
+      allOf:
+      - $ref: '#/components/schemas/PatternDetails'
+      - required:
+        - enabled
+        - parameters
+        type: object
+        properties:
+          description:
+            type: string
+            description: Short description of the code pattern
+            example: Enforce getter and setter pairs in objects and classes
+          explanation:
+            type: string
+            description: Full description of the code pattern, in CommonMark
+            example: Accessor pairs description
+          enabled:
+            type: boolean
+            description: True if the code pattern is on by default for new repositories
+            example: true
+          languages:
+            type: array
+            description: List of languages that the code pattern supports
+            example:
+            - JavaScript
+            items:
+              type: string
+          timeToFix:
+            type: integer
+            description: Average time to fix an issue detected by the code pattern, in minutes
+            format: int32
+            example: 5
+          parameters:
+            $ref: '#/components/schemas/ParameterList'
+          rationale:
+            type: string
+            description: Rationale for the pattern
+          solution:
+            type: string
+            description: Pattern suggested solution
+          goodExamples:
+            type: array
+            description: List of good examples for the pattern
+            items:
+              type: string
+          badExamples:
+            type: array
+            description: List of bad examples for the pattern
+            items:
+              type: string
+          tags:
+            type: array
+            description: Tags associated with the pattern
+            items:
+              type: string
+    CodingStandardMeta:
+      required:
+      - enabledPatternsCount
+      - enabledToolsCount
+      - linkedRepositoriesCount
+      type: object
+      properties:
+        enabledToolsCount:
+          type: integer
+          description: Number of tools that are enabled in the coding standard
+          format: int32
+        enabledPatternsCount:
+          type: integer
+          description: Number of code patterns that are enabled in the coding standard
+          format: int32
+        linkedRepositoriesCount:
+          type: integer
+          description: Number of repositories using the coding standard
+          format: int32
+      description: Meta information about a coding standard
+    PatternDetails:
+      required:
+      - category
+      - id
+      - level
+      - severityLevel
+      type: object
+      properties:
+        id:
+          type: string
+          description: Pattern identifier (unique per tool)
+          example: accessor-pairs
+        title:
+          type: string
+          description: Pattern title
+        category:
+          type: string
+          description: Pattern category
+          example: Security
+        subCategory:
+          type: string
+          description: Pattern subcategory (optional since some patterns might not have a subcategory)
+          example: XSS
+        level:
+          type: string
+          description: Deprecated, use `severityLevel` instead
+          example: Error
+          enum:
+          - Info
+          - Warning
+          - High
+          - Error
+          x-ms-enum:
+            name: SeverityLevel
+        severityLevel:
+          $ref: '#/components/schemas/SeverityLevel'
+      description: Details of the pattern that was identified in the issue
+    ApplyCodingStandardToRepositoriesBody:
+      required:
+      - link
+      - unlink
+      type: object
+      properties:
+        link:
+          type: array
+          description: Names of the repositories to link to a coding standard
+          items:
+            type: string
+        unlink:
+          type: array
+          description: Names of the repositories to unlink from a coding standard
+          items:
+            type: string
+      description: Names of the repositories to link or unlink from a coding standard
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    CodingStandardCategoriesPresets:
+      required:
+      - bestPractices
+      - bugRisk
+      - codeStyle
+      - documentation
+      - security
+      type: object
+      properties:
+        bugRisk:
+          maximum: 4
+          minimum: 1
+          type: integer
+          format: int32
+        security:
+          maximum: 4
+          minimum: 1
+          type: integer
+          format: int32
+        bestPractices:
+          maximum: 4
+          minimum: 1
+          type: integer
+          format: int32
+        codeStyle:
+          maximum: 4
+          minimum: 1
+          type: integer
+          format: int32
+        documentation:
+          maximum: 4
+          minimum: 1
+          type: integer
+          format: int32
+      description: Settings to create a new coding standard from a series of presets
+    ToolPatternsOverviewResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ToolPatternsOverview'
+    CreateCodingStandardPresetBody:
+      required:
+      - isDefault
+      - presets
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the new coding standard
+          example: Security best practices
+        isDefault:
+          type: boolean
+          description: If true, the new coding standard becomes the default coding standard for the organization
+        presets:
+          $ref: '#/components/schemas/CodingStandardCategoriesPresets'
+      description: Details of a new coding standard. Uses presets to streamline the creation of the new coding standard
+    ConfiguredPatternsListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfiguredPattern'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+        meta:
+          $ref: '#/components/schemas/ConfiguredPatternListMeta'
+    ComplianceType:
+      type: string
+      description: The type of compliance standard
+      example: ai-risk
+      enum:
+      - ai-risk
+    ToolPatternsOverview:
+      required:
+      - counts
+      type: object
+      properties:
+        counts:
+          $ref: '#/components/schemas/ToolPatternsOverviewCounts'
+      description: Overview of the patterns in a tool
+    PatternConfiguration:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Code pattern unique identifier
+          example: ESLint_@typescript-eslint_no-shadow
+        enabled:
+          type: boolean
+          description: True if the code pattern is enabled in the repository or coding standard
+          example: true
+        parameters:
+          type: array
+          description: List of code pattern parameter configurations
+          items:
+            $ref: '#/components/schemas/ConfiguredParameter'
+      description: Code pattern configuration
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    ConfiguredPatternListMeta:
+      required:
+      - totalEnabled
+      type: object
+      properties:
+        totalEnabled:
+          type: integer
+          description: Total number of enabled patterns
+          format: int32
+          example: 35
+          default: 0
+      description: Metadata for a retrieved pattern list
+    CreateCodingStandardBody:
+      required:
+      - languages
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the new coding standard
+          example: Security best practices
+        languages:
+          type: array
+          description: List of programming languages supported by the new coding standard
+          example:
+          - Java
+          - Go
+          items:
+            type: string
+      description: Details of a new coding standard
+    ParameterList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Parameter'
+    Parameter:
+      required:
+      - default
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the parameter
+          example: getWithoutSet
+        description:
+          type: string
+          description: Description of the parameter
+          example: getWithoutSet
+        default:
+          type: string
+          description: Default value of the parameter
+          example: 'true'
+      description: Parameter to configure a code pattern
+    ApplyCodingStandardToRepositoriesResult:
+      required:
+      - failed
+      - successful
+      type: object
+      properties:
+        successful:
+          type: array
+          description: Names of the repositories that were successfully linked or unlinked from a coding standard
+          items:
+            type: string
+        failed:
+          type: array
+          description: Names of the repositories that failed to be linked or unlinked from a coding standard
+          items:
+            type: string
+      description: Result of applying a coding standard to a list of repositories
+    AiRiskCheckListItem:
+      description: An item in the AI Risk Checklist
+      type: object
+      properties:
+        key:
+          type: string
+          description: The key identifier for the checklist item
+        check:
+          type: boolean
+          description: Checks if the checklist item passes
+        number:
+          type: integer
+          format: int32
+          description: The number of repositories that have the AI policy applied
+        threshold:
+          type: integer
+          format: int32
+          description: The minimum percentage of repositories required to meet the AI policy compliance target
+        total:
+          type: integer
+          format: int32
+          description: The total number of repositories (all repositories in the organization)
+      required:
+      - key
+      - check
+    AiRiskChecklistResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiRiskCheckListItem'
+      description: List AI Risk Checklist for an organization
+    CodingStandardRepositoriesListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          description: List of repositories using a coding standard
+          items:
+            $ref: '#/components/schemas/RepositoryIdentification'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    CodingStandard:
+      required:
+      - id
+      - isDefault
+      - isDraft
+      - languages
+      - meta
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier of the coding standard
+          format: int64
+        name:
+          type: string
+          description: Name of the coding standard
+        isDraft:
+          type: boolean
+          description: True if the coding standard is a draft
+        isDefault:
+          type: boolean
+          description: True if the coding standard is the default for the organization
+        languages:
+          type: array
+          description: List of programming languages supported by the coding standard
+          items:
+            type: string
+        meta:
+          $ref: '#/components/schemas/CodingStandardMeta'
+        complianceType:
+          $ref: '#/components/schemas/ComplianceType'
+      description: Coding standard for an organization
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    ToolPatternsOverviewCounts:
+      required:
+      - categories
+      - languages
+      - severities
+      - tags
+      - totalEnabled
+      - totalRecommended
+      type: object
+      properties:
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Count'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Count'
+        severities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Count'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Count'
+        totalRecommended:
+          type: integer
+          format: int32
+        totalEnabled:
+          type: integer
+          format: int32
+      description: Overview of the patterns in a tool
+    Count:
+      required:
+      - name
+      - total
+      type: object
+      properties:
+        name:
+          type: string
+        total:
+          type: integer
+          format: int32
+    CodingStandardInfo:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier of the coding standard
+          format: int64
+        name:
+          type: string
+          description: Name of the coding standard
+      description: Coding standard identifier and name
+    SetDefaultCodingStandardBody:
+      required:
+      - isDefault
+      type: object
+      properties:
+        isDefault:
+          type: boolean
+          description: If true, sets the coding standard as the default coding standard for the organization
+      description: Toggle the default coding standard for an organization
+    CodingStandardResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CodingStandard'
+    CodingStandardToolsListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodingStandardTool'
+    ConfiguredPattern:
+      required:
+      - enabled
+      - enabledBy
+      - isCustom
+      - parameters
+      - patternDefinition
+      type: object
+      properties:
+        patternDefinition:
+          $ref: '#/components/schemas/Pattern'
+        enabled:
+          type: boolean
+          description: True if the code pattern is enabled
+          example: true
+        isCustom:
+          type: boolean
+          description: Whether the pattern is enabled outside the scope of a coding standard
+        parameters:
+          $ref: '#/components/schemas/ConfiguredParametersList'
+        enabledBy:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodingStandardInfo'
+      description: Code pattern configuration for a tool
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    SeverityLevel:
+      type: string
+      description: Issue severity level. These values map to our UI as follows - Info to Minor, Warning to Medium, High to High, Error to Critical.
+      example: Error
+      enum:
+      - Info
+      - Warning
+      - High
+      - Error
+      x-ms-enum:
+        name: SeverityLevel
+    ConfiguredParametersList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfiguredParameter'
+    CodingStandardTool:
+      required:
+      - codingStandardId
+      - isEnabled
+      - uuid
+      type: object
+      properties:
+        codingStandardId:
+          type: integer
+          description: Coding standard identifier
+          format: int64
+        uuid:
+          type: string
+          description: Unique identifier of the tool
+          example: 847feb32-9ff2-11ea-bb37-0242ac130002
+        isEnabled:
+          type: boolean
+          description: True if the tool is enabled in the coding standard
+          example: true
+      description: Information about a tool in a coding standard
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    severityLevelsParam:
+      name: severityLevels
+      in: query
+      description: Filter by a comma-separated list of code pattern severity levels. Valid values are `Error`, `High`, `Warning`, and `Info`.
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Error,Warning
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    enabledPatternParam:
+      name: enabled
+      in: query
+      description: Filter by pattern status. Set to `true` to return only enabled patterns, or `false` to return only disabled patterns
+      schema:
+        type: boolean
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+    searchParam:
+      name: search
+      in: query
+      description: Filter results by searching for this string
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: my-repository-name
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+    categoriesParam:
+      name: categories
+      in: query
+      description: 'Filter by a comma-separated list of code pattern categories. Valid values are `Security`, `ErrorProne`, `CodeStyle`, `Compatibility`, `UnusedCode`, `Complexity`, `Comprehensibility`, `Documentation`, `BestPractice`, and `Performance`.
+
+        '
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Security,ErrorProne
+      x-ms-parameter-location: method
+    sourceRepositoryParam:
+      name: sourceRepository
+      in: query
+      description: Name of a repository in the same organization to use as a template when creating the new coding standard
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+    sourceCodingStandardParam:
+      name: sourceCodingStandard
+      in: query
+      description: 'Identifier of an existing coding standard to use as a template when creating a new coding standard, including the enabled repositories and default coding standard status
+
+        '
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 1
+      x-ms-parameter-location: method
+    toolUuidParam:
+      name: toolUuid
+      in: path
+      description: Unique identifier (UUID) for the tool
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: 847feb32-9ff2-11ea-bb37-0242ac130002
+      x-ms-parameter-location: method
+    recommendedPatternParam:
+      name: recommended
+      in: query
+      description: Filter by recommended status. Set to `true` to return only recommended patterns, or `false` to return only non-recommended patterns
+      schema:
+        type: boolean
+        x-ms-parameter-location: method
+      x-ms-parameter-location: method
+    patternsSortParam:
+      name: sort
+      in: query
+      description: Field used to sort the tool's code patterns. Valid values are `category`, `recommended`, and `severity`.
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: category
+      x-ms-parameter-location: method
+    languagesFilterParam:
+      name: languages
+      in: query
+      description: Comma-separated list of programming languages to filter results by
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Scala,Java,Javascript
+      x-ms-parameter-location: method
+    tagsParam:
+      name: tags
+      in: query
+      description: Filter by a comma-separated list of pattern tags
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: React,Angular
+      x-ms-parameter-location: method
+    codingStandardIdParam:
+      name: codingStandardId
+      in: path
+      description: Coding standard identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+        x-ms-parameter-location: method
+      example: 1
+      x-ms-parameter-location: method
+    directionParam:
+      name: direction
+      in: query
+      description: Sort direction. Possible values are 'asc' (ascending) or 'desc' (descending).
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: desc
+      x-ms-parameter-location: method
+  requestBodies:
+    toolConfigurationParam:
+      description: Configuration of a tool and its code patterns
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ToolConfiguration'
+      required: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

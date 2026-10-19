@@ -1,0 +1,491 @@
+openapi: 3.2.0
+info:
+  title: Codacy Reports API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: Reports
+paths:
+  /reports/organizations/{provider}/{remoteOrganizationName}/security/items:
+    get:
+      tags:
+      - Reports
+      summary: Generate a CSV file listing all security and risk management items for an…
+      operationId: getReportSecurityItems
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: CSV file containing the security and risk management items.
+          headers:
+            Transfer-Encoding:
+              description: See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding .
+              schema:
+                type: string
+                enum:
+                - chunked
+            Content-Disposition:
+              description: See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition .
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: reports.security.streaming
+  /reports/organizations/{provider}/{remoteOrganizationName}/security/items/search:
+    post:
+      tags:
+      - Reports
+      summary: Generate a filtered CSV export of security and risk management items
+      operationId: searchReportSecurityItems
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Optional filters for the CSV export
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostReportSecurityItemsBody'
+      responses:
+        '200':
+          description: CSV file containing the filtered security and risk management items
+          headers:
+            Transfer-Encoding:
+              description: See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
+              schema:
+                type: string
+                enum:
+                - chunked
+            Content-Disposition:
+              description: See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+              schema:
+                type: string
+          content:
+            text/csv:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: reports.security.streaming
+  /reports/organizations/{provider}/{remoteOrganizationName}/sbom/dependencies/search:
+    post:
+      tags:
+      - Reports
+      summary: Search SBOM dependencies for the organization in CSV format
+      operationId: searchReportSbomDependencies
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Optional filters for report generation
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSbomDependenciesBody'
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            Transfer-Encoding:
+              description: See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
+              schema:
+                type: string
+                enum:
+                - chunked
+            Content-Disposition:
+              description: See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+              schema:
+                type: string
+          content:
+            text/csv:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: reports.sbom.streaming
+  /reports/enterprises/{provider}/{enterpriseName}/seats-csv:
+    get:
+      tags:
+      - Reports
+      x-jvm-package: reports.enterprise
+      summary: Get enterprise seats as a CSV file
+      operationId: listEnterpriseSeatsCsv
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/enterpriseNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/csv:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    SrmStatus:
+      type: string
+      example: Overdue
+      enum:
+      - Overdue
+      - OnTrack
+      - DueSoon
+      - ClosedOnTime
+      - ClosedLate
+      - Ignored
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    SearchSbomDependenciesBody:
+      type: object
+      description: Request body for searching dependencies.
+      properties:
+        text:
+          type: string
+          description: Text search query. Matches against SBOM component fields (purl, full_name).
+        repositories:
+          type: array
+          description: Repository names to filter by.
+          items:
+            type: string
+        segments:
+          type: array
+          description: Segments ids to filter by.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            format: int64
+        findingSeverities:
+          type: array
+          description: Finding severities to filter by. Possible values are `Critical`, `High`, `Medium`, `Low`.
+          items:
+            $ref: '#/components/schemas/FindingSeverity'
+        riskCategories:
+          type: array
+          description: License Risk categories to filter by.
+          items:
+            $ref: '#/components/schemas/LicenseRiskCategory'
+    LicenseRiskCategory:
+      type: string
+      description: The risk category of a license.
+      enum:
+      - Forbidden
+      - Restricted
+      - Reciprocal
+      - Notice
+      - Permissive
+      - Unencumbered
+      - Unknown
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    SrmPriority:
+      type: string
+      example: Critical
+      enum:
+      - Low
+      - Medium
+      - High
+      - Critical
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    FindingSeverity:
+      type: string
+      description: Finding severity level. Possible values are `Critical`, `High`, `Medium`, `Low`.
+      example: Critical
+      enum:
+      - Critical
+      - High
+      - Medium
+      - Low
+      x-ms-enum:
+        name: FindingSeverity
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    PostReportSecurityItemsBody:
+      type: object
+      description: Optional filters for exporting security items as CSV
+      properties:
+        repositories:
+          type: array
+          description: Repository names to filter by
+          items:
+            type: string
+        priorities:
+          type: array
+          description: Security issue priorities to filter by. See [SrmPriority](#tocssrmpriority) for valid values.
+          items:
+            $ref: '#/components/schemas/SrmPriority'
+        statuses:
+          type: array
+          description: Security issue status to filter by. See [SrmStatus](#tocssrmstatus) for valid values.
+          items:
+            $ref: '#/components/schemas/SrmStatus'
+        categories:
+          type: array
+          description: 'Security categories to filter by. Use `_other_` to search for
+
+            issues that don''t have a security category
+
+            '
+          items:
+            type: string
+        scanTypes:
+          type: array
+          description: Scan types to filter by
+          example:
+          - SAST
+          - SCA
+          - ContainerSCA
+          - Secrets
+          - IaC
+          - CICD
+          - License
+          - PenTesting
+          - DAST
+          - CSPM
+          items:
+            type: string
+        segments:
+          type: array
+          description: Segment IDs to filter by
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            format: int64
+        searchText:
+          type: string
+          description: Text to search for in security items
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    enterpriseNameParam:
+      name: enterpriseName
+      in: path
+      description: Enterprise name (slug)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: my-enterprise
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

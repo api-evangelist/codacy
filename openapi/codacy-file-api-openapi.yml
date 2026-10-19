@@ -1,0 +1,459 @@
+openapi: 3.2.0
+info:
+  title: Codacy File API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: File
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/settings/file-extensions:
+    get:
+      tags:
+      - File
+      summary: Get the list of supported file extensions associated with each language in a…
+      operationId: getFileExtensionsSettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileExtensionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      deprecated: true
+      x-jvm-package: fileExtension
+    patch:
+      tags:
+      - File
+      summary: Update the custom file extensions for a repository
+      operationId: patchFileExtensionsSettings
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileExtensionsBody'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      deprecated: true
+      x-jvm-package: fileExtension
+      x-codegen-request-body-name: FileExtensionsBody
+  /organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/files/{filePath}/content:
+    get:
+      tags:
+      - File
+      summary: Returns the content of the given file for a given commit reference.
+      operationId: getFileContent
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/repositoryNameParam'
+      - $ref: '#/components/parameters/filePathParam'
+      - $ref: '#/components/parameters/startLineParam'
+      - $ref: '#/components/parameters/endLineParam'
+      - $ref: '#/components/parameters/commitRefParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeBlockLineListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-jvm-package: fileExtension
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    PayloadTooLarge:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: PayloadTooLarge
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    FileExtensionsResponse:
+      required:
+      - languagesExtensions
+      type: object
+      properties:
+        languagesExtensions:
+          type: array
+          description: List of languages with supported extensions
+          items:
+            $ref: '#/components/schemas/FileExtensions'
+    FileExtensionsBody:
+      required:
+      - languagesExtensions
+      type: object
+      properties:
+        languagesExtensions:
+          type: array
+          description: List of custom file extensions to associate with each language for a repository
+          items:
+            $ref: '#/components/schemas/FileExtensionsUpdate'
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    UnprocessableEntity:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: UnprocessableEntity
+    CodeBlockLineListResponse:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodeBlockLine'
+    CodeBlockLine:
+      required:
+      - content
+      - number
+      type: object
+      properties:
+        number:
+          type: integer
+          description: Line number
+        content:
+          type: string
+          description: Line content
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    FileExtensions:
+      required:
+      - codacyDefaults
+      - extensions
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Language name
+        codacyDefaults:
+          type: array
+          description: Default Codacy extensions for the language
+          items:
+            type: string
+        extensions:
+          type: array
+          description: List of custom extensions for the language
+          items:
+            type: string
+      description: List of supported file extensions for a specific language
+    FileExtensionsUpdate:
+      required:
+      - extensions
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Language name
+        extensions:
+          type: array
+          description: List of custom file extensions for the language
+          items:
+            type: string
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    Conflict:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Conflict
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    PayloadTooLarge:
+      description: Content too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PayloadTooLarge'
+      x-ms-error-response: true
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conflict'
+      x-ms-error-response: true
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnprocessableEntity'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    repositoryNameParam:
+      name: repositoryName
+      in: path
+      description: Repository name on the Git provider organization
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: awesome-repo
+      x-ms-parameter-location: method
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    startLineParam:
+      name: startLine
+      in: query
+      description: Line number where the code block starts
+      schema:
+        type: integer
+        format: int32
+        x-ms-parameter-location: method
+      example: 1
+      x-ms-parameter-location: method
+    commitRefParam:
+      in: query
+      name: commitRef
+      description: A reference to a commit (branch name, tag, or commit hash). Defaults to HEAD which represents the head of the default branch.
+      required: false
+      schema:
+        type: string
+        x-ms-parameter-location: method
+        default: HEAD
+      example: main
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    endLineParam:
+      name: endLine
+      in: query
+      description: Line number where the code block ends
+      schema:
+        type: integer
+        format: int32
+        x-ms-parameter-location: method
+      example: 10
+      x-ms-parameter-location: method
+    filePathParam:
+      name: filePath
+      in: path
+      description: URL encoded path for a file from the root of the repository
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: src%2Fwhat%20ever%2Ffile.txt
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '

@@ -1,0 +1,984 @@
+openapi: 3.2.0
+info:
+  title: Codacy Aiinventory API
+  description: 'Codacy API v3 reference.
+
+
+    Import the OpenAPI 3.0.1 definition into your development tools to help bootstrap your integration with Codacy.
+
+    For more information see Using the Codacy API.'
+  contact:
+    name: Codacy Team
+    url: https://www.codacy.com
+    email: code@codacy.com
+  license:
+    name: Codacy. All rights reserved
+    url: https://www.codacy.com
+  version: 3.1.0
+servers:
+- url: https://api.codacy.com/api/v3
+security:
+- ApiKeyAuth: []
+tags:
+- name: aiinventory
+paths:
+  /organizations/{provider}/{remoteOrganizationName}/ai-inventory/providers/summaries/search:
+    post:
+      tags:
+      - aiinventory
+      summary: List AI inventory provider summaries for an organization
+      description: 'Returns a paginated list of provider summaries for an organization.
+
+        Each summary aggregates resources, references, and repositories for one AI provider,
+
+        with a per-category-group repository breakdown'
+      operationId: searchAiInventoryProviderSummaries
+      x-jvm-package: aiInventoryItems
+      x-codegen-request-body-name: searchAiInventoryProviderSummariesBody
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        description: Filters for AI inventory provider summaries
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiInventoryFilter'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiInventoryProviderSummariesResponse'
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future. Do not use it in your workflow, scripts, etc.
+              schema:
+                type: string
+                enum:
+                - experimental
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+  /organizations/{provider}/{remoteOrganizationName}/ai-inventory/providers/summary:
+    post:
+      tags:
+      - aiinventory
+      summary: Get AI inventory summary for a specific provider
+      description: 'Returns the summary for a specific AI provider (resource, reference, and
+
+        repository counts plus a per-category-group repository breakdown).
+
+        The provider name is given in the request body since it may contain spaces
+
+        or special characters (e.g. `GPT Engineer`)'
+      operationId: getAiInventoryProviderSummary
+      x-jvm-package: aiInventoryItems
+      x-codegen-request-body-name: getAiInventoryProviderSummaryBody
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Required AI provider identity and optional filters scoping the summary
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetAiInventoryProviderSummaryBody'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiInventoryProviderSummaryResponse'
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future. Do not use it in your workflow, scripts, etc.
+              schema:
+                type: string
+                enum:
+                - experimental
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+  /organizations/{provider}/{remoteOrganizationName}/ai-inventory/markers/summaries/search:
+    post:
+      tags:
+      - aiinventory
+      summary: List AI inventory marker summaries for an organization
+      description: 'Returns a paginated list of marker summaries for an organization.
+
+        Each summary represents a distinct inventory resource — a
+
+        (`categoryGroup`, `category`, `marker`) grouping — with reference and
+
+        repository counts. Typically called after picking a provider on the
+
+        provider summaries view; scope the result by passing `aiProviders`
+
+        (and/or `categoryGroups` for the tab filter) in the request body'
+      operationId: searchAiInventoryMarkerSummaries
+      x-jvm-package: aiInventoryItems
+      x-codegen-request-body-name: searchAiInventoryMarkerSummariesBody
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        description: Filters for AI inventory marker summaries
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiInventoryFilter'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiInventoryMarkerSummariesResponse'
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future. Do not use it in your workflow, scripts, etc.
+              schema:
+                type: string
+                enum:
+                - experimental
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+  /organizations/{provider}/{remoteOrganizationName}/ai-inventory/repositories/search:
+    post:
+      tags:
+      - aiinventory
+      summary: List repositories that have AI inventory items
+      description: 'Returns a paginated list of repositories that have AI inventory items
+
+        for an organization. Used to populate the Repositories filter dropdown'
+      operationId: searchAiInventoryRepositories
+      x-jvm-package: aiInventoryItems
+      x-codegen-request-body-name: searchAiInventoryRepositoriesBody
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        description: Filters to scope the returned repositories
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiInventoryFilter'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiInventoryRepositoryListResponse'
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future. Do not use it in your workflow, scripts, etc.
+              schema:
+                type: string
+                enum:
+                - experimental
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+  /organizations/{provider}/{remoteOrganizationName}/ai-inventory/repositories/summaries/search:
+    post:
+      tags:
+      - aiinventory
+      summary: List AI inventory repository summaries for an organization
+      description: 'Returns a paginated list of repository summaries for an organization.
+
+        Each summary aggregates resources, references, and AI provider counts for one repository,
+
+        with a per-category-group reference breakdown'
+      operationId: searchAiInventoryRepositorySummaries
+      x-jvm-package: aiInventoryItems
+      x-codegen-request-body-name: searchAiInventoryRepositorySummariesBody
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        description: Filters for AI inventory repository summaries
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiInventoryFilter'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiInventoryRepositorySummariesResponse'
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future. Do not use it in your workflow, scripts, etc.
+              schema:
+                type: string
+                enum:
+                - experimental
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+  /organizations/{provider}/{remoteOrganizationName}/ai-inventory/locations/summaries/search:
+    post:
+      tags:
+      - aiinventory
+      summary: List AI inventory location summaries for an organization
+      description: 'Returns a paginated list of location summaries for an organization.
+
+        Each summary represents a distinct location with an array of regions.
+
+        Location is a URI with a couple custom protocols like `repo-file` and `repo-sha`.'
+      operationId: searchAiInventoryLocationSummaries
+      x-jvm-package: aiInventoryItems
+      x-codegen-request-body-name: searchAiInventoryLocationSummariesBody
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      - $ref: '#/components/parameters/cursorParam'
+      - $ref: '#/components/parameters/limitParam'
+      requestBody:
+        description: Filters for AI inventory location summaries
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiInventoryFilter'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiInventoryLocationSummariesResponse'
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future. Do not use it in your workflow, scripts, etc.
+              schema:
+                type: string
+                enum:
+                - experimental
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+  /organizations/{provider}/{remoteOrganizationName}/ai-inventory/categories/search:
+    post:
+      tags:
+      - aiinventory
+      summary: List AI inventory categories grouped by category group
+      description: 'Returns the available inventory categories grouped by their category group.
+
+        Used to populate the Categories filter drawer'
+      operationId: searchAiInventoryCategories
+      x-jvm-package: aiInventoryItems
+      x-codegen-request-body-name: searchAiInventoryCategoriesBody
+      parameters:
+      - $ref: '#/components/parameters/providerParam'
+      - $ref: '#/components/parameters/remoteOrganizationNameParam'
+      requestBody:
+        description: Filters to scope the returned categories
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiInventoryFilter'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiInventoryCategoriesResponse'
+          headers:
+            X-Maturity:
+              description: Experimental API. Subject to change in the near future. Do not use it in your workflow, scripts, etc.
+              schema:
+                type: string
+                enum:
+                - experimental
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+components:
+  schemas:
+    NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotFound
+    ApiError:
+      required:
+      - actions
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        innerMessage:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemLink'
+    AiInventoryRepositorySummariesResponse:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiInventoryRepositorySummary'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    AiInventoryRepositorySummary:
+      type: object
+      description: 'Summary of AI inventory for a repository.
+
+        `locations` are the distinct locations containing matching inventory items;
+
+        `references` are the individual findings across those locations
+
+        '
+      required:
+      - repositoryName
+      - locationsCount
+      - referencesCount
+      properties:
+        repositoryName:
+          type: string
+          description: Name of the repository
+          example: my-service
+        locationsCount:
+          type: integer
+          format: int32
+          description: Number of distinct locations in this repository containing matching inventory items
+          example: 11
+        referencesCount:
+          type: integer
+          format: int32
+          description: Total number of inventory item references in this repository
+          example: 11
+    Forbidden:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Forbidden
+    NotImplemented:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: NotImplemented
+    BadRequest:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: BadRequest
+    GetAiInventoryProviderSummaryBody:
+      type: object
+      description: 'Required AI provider identity plus optional filters to scope the returned summary counts.
+
+        The caller must name the provider to summarize
+
+        '
+      required:
+      - aiProvider
+      properties:
+        aiProvider:
+          type: string
+          description: AI provider name to return the summary for
+          example: Claude Code
+        inventoryItemTypes:
+          type: array
+          description: Inventory item types to filter by (e.g. `tool`, `asset`)
+          items:
+            type: string
+          example:
+          - tool
+        segments:
+          type: array
+          description: Segment IDs to filter by
+          items:
+            type: integer
+            format: int64
+          example:
+          - 1
+          - 2
+          - 3
+        repositories:
+          type: array
+          description: Repository names to filter by
+          items:
+            type: string
+        categoryGroups:
+          type: array
+          description: 'Inventory category groups to filter by (e.g. `workflows`, `usage`, `mcps`).
+
+            Category groups are the higher-level buckets that group individual categories
+
+            '
+          items:
+            type: string
+          example:
+          - usage
+        categories:
+          type: array
+          description: 'Inventory categories to filter by (e.g. `code_marker`, `commits`, `branches`, `settings`, `instructions`).
+
+            Available categories grouped by category group can be retrieved from the categories endpoint
+
+            '
+          items:
+            type: string
+          example:
+          - code_marker
+    AiInventoryProviderSummary:
+      type: object
+      description: 'Summary of AI inventory for a provider. `resources` are distinct
+
+        (`categoryGroup`, `category`, `marker`) groupings; `references` are individual
+
+        inventory item findings; `repositories` are the distinct repositories where they occur
+
+        '
+      required:
+      - aiProvider
+      - resourcesCount
+      - referencesCount
+      - repositoriesCount
+      - categoryGroupBreakdown
+      properties:
+        aiProvider:
+          type: string
+          description: AI provider name
+          example: Claude Code
+        resourcesCount:
+          type: integer
+          format: int32
+          description: 'Number of distinct inventory resources for this provider.
+
+            A resource is a (`categoryGroup`, `category`, `marker`) grouping
+
+            '
+          example: 12
+        referencesCount:
+          type: integer
+          format: int32
+          description: Total number of inventory item references (individual findings) for this provider
+          example: 120
+        repositoriesCount:
+          type: integer
+          format: int32
+          description: Number of distinct repositories where items for this provider occur
+          example: 12
+        categoryGroupBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryGroupCount'
+          description: 'Per-category-group repository counts (e.g. how many repositories have
+
+            `workflows` items, how many have `usage` items)
+
+            '
+    AiInventoryLocationSummariesResponse:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiInventoryLocationSummary'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    AiInventoryFilter:
+      type: object
+      description: Common filters for AI inventory queries
+      properties:
+        inventoryItemTypes:
+          type: array
+          description: Inventory item types to filter by (e.g. `tool`, `asset`)
+          items:
+            type: string
+          example:
+          - tool
+        aiProvider:
+          type: string
+          description: AI provider name to filter by
+          example: Claude Code
+        segments:
+          type: array
+          description: Segment IDs to filter by
+          items:
+            type: integer
+            format: int64
+          example:
+          - 1
+          - 2
+          - 3
+        repositories:
+          type: array
+          description: Repository names to filter by
+          items:
+            type: string
+        categoryGroups:
+          type: array
+          description: 'Inventory category groups to filter by (e.g. `workflows`, `usage`, `mcps`).
+
+            Category groups are the higher-level buckets that group individual categories
+
+            '
+          items:
+            type: string
+          example:
+          - usage
+        categories:
+          type: array
+          description: 'Inventory categories to filter by (e.g. `code_marker`, `commits`, `branches`, `settings`, `instructions`).
+
+            Available categories grouped by category group can be retrieved from the categories endpoint
+
+            '
+          items:
+            type: string
+          example:
+          - code_marker
+        marker:
+          type: string
+          description: 'Marker text to filter by. Typically used when drilling down from a marker summary
+
+            to list its repositories or locations
+
+            '
+          example: Generated with [Claude Code]
+    AiInventoryRepositoryListResponse:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiInventoryRepositoryInfo'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    AiInventoryProviderSummaryResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/AiInventoryProviderSummary'
+    InternalServerError:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: InternalServerError
+    PaginationInfo:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: Cursor to [request the next batch of results](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+        limit:
+          type: integer
+          description: Maximum number of items returned
+          format: int32
+        total:
+          type: integer
+          description: Total number of items returned
+          format: int32
+      description: Cursor-based pagination information to obtain more items
+    AiInventoryCategoryGroup:
+      type: object
+      description: A category group with its child categories
+      required:
+      - categoryGroup
+      - categories
+      properties:
+        categoryGroup:
+          type: string
+          description: Category group name (e.g. `workflows`, `usage`, `mcps`)
+          example: usage
+        categories:
+          type: array
+          description: Categories belonging to this group
+          items:
+            type: string
+          example:
+          - code_marker
+          - commits
+          - branches
+    ProblemLink:
+      required:
+      - name
+      - url
+      type: object
+      properties:
+        name:
+          type: string
+          example: Check our documentation
+        url:
+          type: string
+          example: https://docs.codacy.com/faq/troubleshooting/why-isnt-my-public-repository-being-analyzed/
+    AiInventoryLocationSummary:
+      type: object
+      description: 'Summary for a distinct location, describing where an AI inventory item is referenced.
+
+        The caller scopes which items are included via the request filter
+
+        '
+      required:
+      - location
+      - regions
+      properties:
+        location:
+          type: string
+          description: Location URI (e.g. `repo-file:src/somefile.py`, `repo-sha:abc123`)
+          example: repo-file:src/ai/client.py
+        regions:
+          type: array
+          description: 'Regions within the location relevant to the inventory item.
+
+            Each region is a URI with its own kind prefix (e.g. `line:10`).
+
+            May be empty when the item has no region-level granularity
+
+            '
+          items:
+            type: string
+            example: line:10
+    AiInventoryProviderSummariesResponse:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiInventoryProviderSummary'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    AiInventoryMarkerSummariesResponse:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiInventoryMarkerSummary'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfo'
+    CategoryGroupCount:
+      type: object
+      description: Counts for a given categoryGroup
+      required:
+      - categoryGroup
+      - count
+      properties:
+        categoryGroup:
+          type: string
+          description: Inventory category group (e.g. `workflows`, `usage`, `mcps`)
+          example: usage
+        repositoriesCount:
+          type: integer
+          format: int32
+          description: Number of distinct repositories with items in this category group
+          example: 12
+        count:
+          type: integer
+          format: int32
+          description: Number of distinct (category, marker) pairs in this category group
+          example: 4
+    AiInventoryMarkerSummary:
+      type: object
+      description: 'Summary for a distinct inventory resource — a (`categoryGroup`, `category`, `marker`) grouping.
+
+        `references` are the individual findings across repositories for this grouping;
+
+        `repositories` are the distinct repositories containing them
+
+        '
+      required:
+      - categoryGroup
+      - category
+      - marker
+      - referencesCount
+      - repositoriesCount
+      properties:
+        categoryGroup:
+          type: string
+          description: Category group the marker belongs to (e.g. `usage`, `workflows`, `mcps`)
+          example: usage
+        category:
+          type: string
+          description: Category the marker belongs to within its category group (e.g. `code_marker`, `commits`)
+          example: code_marker
+        marker:
+          type: string
+          description: 'Marker text identifying the inventory item (e.g. a generated-by string,
+
+            a package name, a model ID)
+
+            '
+          example: Generated with [Claude Code]
+        referencesCount:
+          type: integer
+          format: int32
+          description: Total number of references (individual findings) for this marker
+          example: 4
+        repositoriesCount:
+          type: integer
+          format: int32
+          description: Number of distinct repositories containing this marker
+          example: 3
+    Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ApiError'
+      - required:
+        - code
+        - error
+        type: object
+        properties:
+          error:
+            type: string
+            default: Unauthorized
+          code:
+            type: string
+            default: Unauthorized
+    AiInventoryCategoriesResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiInventoryCategoryGroup'
+    AiInventoryRepositoryInfo:
+      type: object
+      description: A repository that has AI inventory items
+      required:
+      - name
+      - owner
+      properties:
+        name:
+          type: string
+          description: Name of the repository
+          example: codacy-website
+        owner:
+          type: string
+          description: Owner of the repository
+          example: codacy
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      x-ms-error-response: true
+    NotImplemented:
+      description: Not Implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotImplemented'
+      x-ms-error-response: true
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+      x-ms-error-response: true
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+      x-ms-error-response: true
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+      x-ms-error-response: true
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
+      x-ms-error-response: true
+  parameters:
+    remoteOrganizationNameParam:
+      name: remoteOrganizationName
+      in: path
+      description: Organization name on the Git provider
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: codacy
+      x-ms-parameter-location: method
+    cursorParam:
+      name: cursor
+      in: query
+      description: Cursor to [specify a batch of results to request](https://docs.codacy.com/codacy-api/using-the-codacy-api/#using-pagination)
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: Yms345gh==
+      x-ms-parameter-location: method
+    providerParam:
+      name: provider
+      in: path
+      description: Git provider identifier (e.g., gh for GitHub, gl for GitLab, bb for Bitbucket)
+      required: true
+      schema:
+        type: string
+        x-ms-parameter-location: method
+      example: gh
+      x-ms-parameter-location: method
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 100
+        x-ms-parameter-location: method
+      example: 20
+      x-ms-parameter-location: method
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Learn how to [generate an account API token](https://docs.codacy.com/codacy-api/api-tokens/#account-api-tokens)
+      name: api-token
+      in: header
+    ProjectTokenAuth:
+      type: apiKey
+      name: project-token
+      in: header
+      description: 'Repository API token. Accepted only by repository-scoped operations that declare it.
+
+        Create one with [createRepositoryApiToken](#createrepositoryapitoken)
+
+        '
