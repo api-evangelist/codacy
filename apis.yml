@@ -123,6 +123,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Admin
+  tags_raw:
   - admin
   properties:
   - type: OpenAPI
@@ -169,6 +171,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Analysis
+  tags_raw:
   - analysis
   properties:
   - type: OpenAPI
@@ -192,6 +196,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - App
+  tags_raw:
   - app
   properties:
   - type: OpenAPI
@@ -215,6 +221,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Billing
+  tags_raw:
   - billing
   properties:
   - type: OpenAPI
@@ -238,6 +246,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Coding Standards
+  tags_raw:
   - coding standards
   properties:
   - type: OpenAPI
@@ -261,6 +271,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Configuration
+  tags_raw:
   - configuration
   properties:
   - type: OpenAPI
@@ -284,6 +296,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - DAST
+  tags_raw:
   - dast
   properties:
   - type: OpenAPI
@@ -307,6 +321,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Enterprise
+  tags_raw:
   - enterprise
   properties:
   - type: OpenAPI
@@ -330,6 +346,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - File
+  tags_raw:
   - file
   properties:
   - type: OpenAPI
@@ -376,6 +394,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Health
+  tags_raw:
   - health
   properties:
   - type: OpenAPI
@@ -399,6 +419,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Integration
+  tags_raw:
   - integrations
   properties:
   - type: OpenAPI
@@ -422,6 +444,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Jira
+  tags_raw:
   - jira
   properties:
   - type: OpenAPI
@@ -468,6 +492,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Language
+  tags_raw:
   - languages
   properties:
   - type: OpenAPI
@@ -491,6 +517,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Metrics
+  tags_raw:
   - metrics
   properties:
   - type: OpenAPI
@@ -514,6 +542,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Organization
+  tags_raw:
   - organization
   properties:
   - type: OpenAPI
@@ -537,6 +567,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - People
+  tags_raw:
   - people
   properties:
   - type: OpenAPI
@@ -560,6 +592,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Reports
+  tags_raw:
   - reports
   properties:
   - type: OpenAPI
@@ -583,6 +617,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Repository
+  tags_raw:
   - repository
   properties:
   - type: OpenAPI
@@ -606,6 +642,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - SBOM
+  tags_raw:
   - sbom
   properties:
   - type: OpenAPI
@@ -629,6 +667,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Segments
+  tags_raw:
   - segments
   properties:
   - type: OpenAPI
@@ -652,6 +692,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Sessions
+  tags_raw:
   - session
   properties:
   - type: OpenAPI
@@ -675,6 +717,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Tools
+  tags_raw:
   - tools
   properties:
   - type: OpenAPI
@@ -698,6 +742,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Version
+  tags_raw:
   - version
   properties:
   - type: OpenAPI
@@ -721,6 +767,8 @@ apis:
   humanURL: https://docs.codacy.com/codacy-api/using-the-codacy-api/
   baseURL: https://api.codacy.com/api/v3
   tags:
+  - Webhook
+  tags_raw:
   - webhooks
   properties:
   - type: OpenAPI
