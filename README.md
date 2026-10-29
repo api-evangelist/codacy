@@ -1,4 +1,4 @@
-# Codacy (codacy)
+# Codacy
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,158 +66,130 @@
 
 Codacy is an automated code quality and security platform that analyzes commits and pull requests across 49+ languages, surfacing issues, coverage, and security findings. The Codacy API v3 lets teams manage organizations, repositories, issues, pull requests, coverage, security, and quality settings programmatically.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/codacy/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/codacy/refs/heads/main/apis.yml)
+**Areas:** Code Quality · Static Analysis · Security · Code Coverage · DevOps · Developer Tools
 
-## Tags
+## Codacy on APIs.io
 
-- Code Quality
-- Static Analysis
-- Security
-- Code Coverage
-- DevOps
+Everything profiled for Codacy is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/codacy/](https://apis.io/providers/codacy/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (8)
 
-- **Created:** 2026-06-21
-- **Modified:** 2026-06-21
+- [Codacy Account API](https://apis.io/apis/codacy/codacy-account-api/) — Authenticated user account and API token operations.
+- [Codacy Coverage API](https://apis.io/apis/codacy/codacy-coverage-api/) — Code coverage for pull requests and files.
+- [Codacy Issues API](https://apis.io/apis/codacy/codacy-issues-api/) — Static analysis issues for a repository.
+- [Codacy Organizations API](https://apis.io/apis/codacy/codacy-organizations-api/) — Git provider organizations the account belongs to.
+- [Codacy Pull Requests API](https://apis.io/apis/codacy/codacy-pull-requests-api/) — Pull request analysis, files, issues, and AI review.
+- [Codacy Quality Settings API](https://apis.io/apis/codacy/codacy-quality-settings-api/) — Quality and security gating settings for commits and pull requests.
+- [Codacy Repositories API](https://apis.io/apis/codacy/codacy-repositories-api/) — Repository management and analysis state.
+- [Codacy Security API](https://apis.io/apis/codacy/codacy-security-api/) — Repository SSH key administration.
 
-## APIs
+### Published properties
 
-### Codacy Organizations API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-List and inspect the Git provider organizations a Codacy account belongs to, manage join requests, and retrieve organization-level analysis context across GitHub, GitLab, and Bitbucket.
+#### Agentic access (1)
 
-- **Human URL:** [https://docs.codacy.com/codacy-api/using-the-codacy-api/](https://docs.codacy.com/codacy-api/using-the-codacy-api/)
-- **Base URL:** `https://api.codacy.com/api/v3`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Codacy Agentic Access](https://apis.io/agentic-access/codacy/codacy-agentic-access/)
 
-- Organizations
-- Accounts
+#### Collections (9)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://docs.codacy.com/codacy-api/using-the-codacy-api/)
-- [API Reference](https://api.codacy.com/api/api-docs)
-- [OpenAPI](openapi/codacy-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/codacy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/codacy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Codacy API](https://apis.io/collections/codacy/open-codacy/)
+- [Codacy Account API](https://apis.io/collections/codacy/open-codacy-account-api/)
+- [Codacy Account Coverage API](https://apis.io/collections/codacy/open-codacy-coverage-api/)
+- [Codacy Account Issues API](https://apis.io/collections/codacy/open-codacy-issues-api/)
+- [Codacy Account Organizations API](https://apis.io/collections/codacy/open-codacy-organizations-api/)
+- [Codacy Account Pull Requests API](https://apis.io/collections/codacy/open-codacy-pull-requests-api/)
+- [Codacy Account Quality Settings API](https://apis.io/collections/codacy/open-codacy-quality-settings-api/)
+- [Codacy Account Repositories API](https://apis.io/collections/codacy/open-codacy-repositories-api/)
+- [Codacy Account Security API](https://apis.io/collections/codacy/open-codacy-security-api/)
 
-### Codacy Repositories API
+#### Security (2)
 
-Add, follow, unfollow, and synchronize repositories with their Git provider, and retrieve per-repository analysis state including the first-analysis progress overview.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/](https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/)
-- **Base URL:** `https://api.codacy.com/api/v3`
+- [Codacy Authentication](https://apis.io/security/codacy/codacy-authentication/)
+- [Codacy Domain Security](https://apis.io/security/codacy/codacy-domain-security/)
 
-#### Tags
+#### Plans and pricing (1)
 
-- Repositories
-- Analysis
+Published plans, tiers and prices.
 
-#### Properties
+- [Codacy Plans Pricing](https://apis.io/plans/codacy/codacy-plans-pricing/)
 
-- [Documentation](https://docs.codacy.com/codacy-api/examples/adding-repositories-to-codacy-programmatically/)
-- [API Reference](https://api.codacy.com/api/api-docs)
-- [OpenAPI](openapi/codacy-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/codacy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/codacy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Rate limits (1)
 
-### Codacy Issues API
+Published request limits.
 
-Search repository issues by category and severity, view an issues overview, update issue state, ignore false positives, and bulk-ignore issues surfaced by static analysis.
+- [Codacy Rate Limits](https://apis.io/rate-limits/codacy/codacy-rate-limits/)
 
-- **Human URL:** [https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/](https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/)
-- **Base URL:** `https://api.codacy.com/api/v3`
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Issues
-- Static Analysis
-- Quality
+- [Codacy Finops](https://apis.io/finops/codacy/codacy-finops/)
 
-#### Properties
+## Where to find this API
 
-- [Documentation](https://docs.codacy.com/codacy-api/examples/obtaining-current-issues-in-repositories/)
-- [API Reference](https://api.codacy.com/api/api-docs)
-- [OpenAPI](openapi/codacy-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/codacy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/codacy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### Codacy Pull Requests API
-
-List and inspect pull requests with their analysis results, files, issues, and commits, trigger the AI Reviewer, and bypass pull-request analysis gates across an organization.
-
-- **Human URL:** [https://docs.codacy.com/codacy-api/using-the-codacy-api/](https://docs.codacy.com/codacy-api/using-the-codacy-api/)
-- **Base URL:** `https://api.codacy.com/api/v3`
-
-#### Tags
-
-- Pull Requests
-- Code Review
-- AI Reviewer
-
-#### Properties
-
-- [Documentation](https://docs.codacy.com/codacy-api/using-the-codacy-api/)
-- [API Reference](https://api.codacy.com/api/api-docs)
-- [OpenAPI](openapi/codacy-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/codacy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/codacy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Codacy Coverage API
-
-Retrieve code coverage for pull requests and individual files, inspect coverage report status, and trigger coverage reanalysis for a repository pull request.
-
-- **Human URL:** [https://docs.codacy.com/coverage-reporter/](https://docs.codacy.com/coverage-reporter/)
-- **Base URL:** `https://api.codacy.com/api/v3`
-
-#### Tags
-
-- Code Coverage
-- Pull Requests
-- Reports
-
-#### Properties
-
-- [Documentation](https://docs.codacy.com/coverage-reporter/)
-- [API Reference](https://api.codacy.com/api/api-docs)
-- [OpenAPI](openapi/codacy-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/codacy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/codacy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Codacy Security API
-
-Manage repository quality and security gating settings for commits and pull requests, and administer repository SSH keys used for secure source access.
-
-- **Human URL:** [https://docs.codacy.com/organizations/security-monitor/](https://docs.codacy.com/organizations/security-monitor/)
-- **Base URL:** `https://api.codacy.com/api/v3`
-
-#### Tags
-
-- Security
-- SAST
-- Quality Settings
-
-#### Properties
-
-- [Documentation](https://docs.codacy.com/organizations/security-monitor/)
-- [API Reference](https://api.codacy.com/api/api-docs)
-- [OpenAPI](openapi/codacy-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/codacy.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/codacy.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/codacy)
-- [LinkedIn](https://www.linkedin.com/company/codacy)
 - [Website](https://www.codacy.com)
 - [Documentation](https://docs.codacy.com)
-- [Plans](plans/codacy-plans-pricing.yml)
-- [Rate Limits](rate-limits/codacy-rate-limits.yml)
-- [Fin Ops](finops/codacy-finops.yml)
+- [Blog](https://blog.codacy.com/rss.xml)
+- [GitHub](https://github.com/codacy)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 25.4** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 44.8 |
+| Contract governance | 0.0 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 31.0 |
+| Access clarity | 7.9 |
+
+**Agent readiness 17.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 11.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/codacy/](https://apis.io/providers/codacy/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Codacy: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/codacy/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
